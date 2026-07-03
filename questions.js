@@ -86,6 +86,23 @@ const QUESTIONS = {
     "Ako vyzerá tvoj ideálny dôchodok s nami dvoma?",
     "Ak by sme mohli zmeniť jednu vec na našom životnom štýle hneď teraz, čo by to bolo?",
     "Čo ťa najviac napĺňa optimizmom, keď myslíš na našu spoločnú budúcnosť?"
+  ],
+  nocna: [
+    "Ktorá časť tvojho tela je najcitlivejšia na môj dotyk a chcel/a by si, aby som sa jej venoval/a viac?",
+    "Čo ťa na mne v posteli dokáže najrýchlejšie a najspoľahlivejšie vzrušiť?",
+    "Máš nejakú erotickú fantáziu, o ktorej sme sa ešte nikdy nerozprávali, ale chcel/a by si ju vyskúšať?",
+    "Ktorý náš spoločný intímny moment alebo milovanie považuješ za najvášnivejšie?",
+    "Čo môžem urobiť pre to, aby si sa počas našich intímnych chvíľ cítil/a úplne uvoľnene a slobodne?",
+    "Aká vôňa, osvetlenie alebo hudba v tebe najspoľahlivejšie prebúdza chuť na milovanie?",
+    "Čo je podľa teba najdôležitejšie na to, aby sme si udržali vášeň a sexuálnu iskru aj po rokoch?",
+    "Ktorý druh dotyku alebo pohladenia ti najviac chýba, keď sme od seba dlhšie preč?",
+    "Existuje nejaké neobvyklé miesto (mimo spálne), kde by si chcel/a zažiť spontánnu blízkosť?",
+    "Ako vyzerá tvoja predstava dokonalej, vášnivej noci pre nás dvoch?",
+    "Aký typ spodnej bielizne, oblečenia alebo vzhľadu na mne považuješ za najviac sexy?",
+    "Kedy si si naposledy uvedomil/a, že ma divoko túžiš pobozkať a dotknúca sa ma?",
+    "Čo sa ti na našom milostnom živote najviac páči a v akej oblasti by si chcel/a viac experimentovať?",
+    "Čo pre teba znamená spojenie medzi citovou blízkosťou a telesnou intimitou? Sú pre teba prepojené?",
+    "Existuje nejaké zranenie z minulosti alebo obava, ktorá ti bráni plne sa uvoľniť v našej intimite?"
   ]
 };
 

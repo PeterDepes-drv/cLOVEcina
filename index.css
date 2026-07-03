@@ -15,6 +15,7 @@
   --color-rozvoj: #fbbf24;  /* Zlatá */
   --color-intimita: #f472b6; /* Ružová */
   --color-sny: #38bdf8;     /* Modrá */
+  --color-nocna: #e11d48;    /* Šarlátová červená */
   --color-ai: #ec4899;      /* Magická ružová/purpurová */
   
   --text-primary: #f3f4f6;
@@ -386,6 +387,11 @@ input[type="text"]:focus, input[type="password"]:focus {
 .tab-btn[data-category="sny"].active {
   background: var(--color-sny);
   box-shadow: 0 4px 15px rgba(56, 189, 248, 0.4);
+}
+
+.tab-btn[data-category="nocna"].active {
+  background: var(--color-nocna);
+  box-shadow: 0 4px 15px rgba(225, 29, 72, 0.4);
 }
 
 .tab-btn[data-category="ai"].active {

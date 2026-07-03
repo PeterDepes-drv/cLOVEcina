@@ -20,7 +20,8 @@ const state = {
     komfort: [],
     rozvoj: [],
     intimita: [],
-    sny: []
+    sny: [],
+    nocna: []
   }
 };
 
@@ -266,7 +267,7 @@ function setupEventListeners() {
   document.getElementById('btn-share-whatsapp').addEventListener('click', () => {
     if (state.currentCardIndex === -1) return;
     const question = QUESTIONS[state.currentCategory][state.currentCardIndex];
-    const categoryNames = { komfort: 'Komfort', rozvoj: 'Rozvoj', intimita: 'Intimita', sny: 'Naše sny' };
+    const categoryNames = { komfort: 'Komfort', rozvoj: 'Rozvoj', intimita: 'Intimita', sny: 'Naše sny', nocna: 'Po 22:00 🌙' };
     const catName = categoryNames[state.currentCategory] || 'Človečina';
     
     const text = `*čLOVEčina pre nás dvoch* ❤️ (${catName})\n\n*Otázka:* "${question}"\n\nAké sú naše odpovede? 😉`;
@@ -471,6 +472,7 @@ function renderCard() {
     rozvoj: 'var(--color-rozvoj)',
     intimita: 'var(--color-intimita)',
     sny: 'var(--color-sny)',
+    nocna: 'var(--color-nocna)',
     ai: 'linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%)'
   };
   const color = categoryColors[state.currentCategory] || 'var(--color-komfort)';
@@ -489,6 +491,7 @@ function renderCard() {
     rozvoj: 'Rozvoj',
     intimita: 'Intimita',
     sny: 'Naše sny',
+    nocna: 'Po 22:00 🌙',
     ai: 'AI Karta ✨'
   };
   categoryLabel.innerText = categoryNames[state.currentCategory] || 'Karta';
