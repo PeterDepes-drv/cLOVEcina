@@ -7,8 +7,6 @@ const state = {
   playerRole: 'host', // 'host' | 'guest' in Live P2P; 'player1' | 'player2' in Async
   currentCategory: 'komfort',
   currentCardIndex: -1,
-  currentAiQuestion: '', // pre AI generovanie
-  geminiApiKey: '', // API kľúč pre Gemini
   isFlipped: false,
   connection: null, // PeerJS connection object
   peer: null, // PeerJS instance
@@ -41,7 +39,6 @@ function loadSettings() {
   }
 
   state.playerName = localStorage.getItem('clovecina_player_name') || '';
-  state.geminiApiKey = localStorage.getItem('clovecina_gemini_api_key') || '';
 }
 
 // Uloženie nastavení do localStorage
@@ -53,11 +50,6 @@ function saveFirebaseConfig(config) {
 function savePlayerName(name) {
   state.playerName = name;
   localStorage.setItem('clovecina_player_name', name);
-}
-
-function saveGeminiApiKey(key) {
-  state.geminiApiKey = key;
-  localStorage.setItem('clovecina_gemini_api_key', key);
 }
 
 // Inicializácia rozhrania po načítaní stránky
@@ -86,7 +78,6 @@ function showScreen(screen) {
 function initUI() {
   // Vyplnenie uložených mien
   document.getElementById('settings-player-name').value = state.playerName;
-  document.getElementById('gemini-api-key').value = state.geminiApiKey;
   if (state.firebaseConfig) {
     document.getElementById('fb-api-key').value = state.firebaseConfig.apiKey || '';
     document.getElementById('fb-project-id').value = state.firebaseConfig.projectId || '';
@@ -135,8 +126,6 @@ function setupEventListeners() {
     const nameInput = document.getElementById('settings-player-name').value.trim();
     savePlayerName(nameInput);
 
-    const geminiKey = document.getElementById('gemini-api-key').value.trim();
-    saveGeminiApiKey(geminiKey);
 
     const apiKey = document.getElementById('fb-api-key').value.trim();
     const projectId = document.getElementById('fb-project-id').value.trim();
@@ -331,87 +320,8 @@ function toggleCardFlip() {
   }
 }
 
-async function generateAIQuestion(apiKey) {
-  const prompt = "Vygeneruj jednu originálnu, hlbokú a spoznávaciu otázku pre partnerský vzťah (pre partnerov/manželov) v slovenčine. Otázka by mala viesť k zmysluplnej, intímnej a úprimnej konverzácii. Vyhni sa klišé otázkam a snaž sa ísť pod povrch. Odpovedz výhradne samotnou otázkou (jedna veta), nepoužívaj žiadne úvodzovky, vysvetlenia ani formátovanie.";
-  
-  const url = `https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=${apiKey}`;
-  
-  const response = await fetch(url, {
-    method: 'POST',
-    headers: {
-      'Content-Type': 'application/json'
-    },
-    body: JSON.stringify({
-      contents: [{
-        parts: [{
-          text: prompt
-        }]
-      }]
-    })
-  });
-
-  if (!response.ok) {
-    throw new Error(`Generovanie zlyhalo (HTTP ${response.status})`);
-  }
-
-  const data = await response.json();
-  const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
-  if (!text) {
-    throw new Error("Prázdna odpoveď od AI.");
-  }
-
-  return text.trim().replace(/^["'„“]|["'“]$/g, '').trim();
-}
-
 // Potiahnutie novej karty
 async function drawNewCard() {
-  if (state.currentCategory === 'ai') {
-    if (!state.geminiApiKey) {
-      state.currentAiQuestion = "Vložte prosím Gemini API kľúč v Nastaveniach (ozubené koliesko vpravo hore) na generovanie AI otázok.";
-      state.currentCardIndex = 999;
-      state.isFlipped = false;
-      renderCard();
-      return;
-    }
-
-    // Zobraziť stav načítavania
-    state.currentAiQuestion = "Umelá inteligencia vymýšľa otázku... 🧠✨";
-    state.currentCardIndex = 999;
-    state.isFlipped = false;
-    renderCard();
-
-    try {
-      const generatedQuestion = await generateAIQuestion(state.geminiApiKey);
-      state.currentAiQuestion = generatedQuestion;
-      renderCard();
-
-      // Synchrónne odoslanie cez PeerJS
-      if (state.mode === 'live' && state.connection) {
-        state.connection.send({ 
-          type: 'DRAW_AI_CARD', 
-          question: generatedQuestion
-        });
-      }
-
-      // Asynchrónne zapísanie do Firebase
-      if (state.mode === 'async' && state.db && state.roomCode) {
-        updateAsyncRoom({
-          currentCategory: 'ai',
-          currentCardIndex: 999,
-          currentAiQuestion: generatedQuestion,
-          isFlipped: false,
-          answers: { player1: '', player2: '' }, // Reset odpovedí pre novú kartu
-          lastUpdated: firebase.firestore.FieldValue.serverTimestamp()
-        });
-      }
-    } catch (e) {
-      console.error(e);
-      state.currentAiQuestion = `Nepodarilo sa vygenerovať AI otázku. Skontrolujte API kľúč v nastaveniach a pripojenie na internet. (Chyba: ${e.message || e})`;
-      renderCard();
-    }
-    return;
-  }
-
   const categoryQuestions = QUESTIONS[state.currentCategory];
   if (!categoryQuestions || categoryQuestions.length === 0) return;
 
@@ -472,18 +382,12 @@ function renderCard() {
     rozvoj: 'var(--color-rozvoj)',
     intimita: 'var(--color-intimita)',
     sny: 'var(--color-sny)',
-    nocna: 'var(--color-nocna)',
-    ai: 'linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%)'
+    nocna: 'var(--color-nocna)'
   };
   const color = categoryColors[state.currentCategory] || 'var(--color-komfort)';
   
-  if (state.currentCategory === 'ai') {
-    cardFront.style.background = color;
-    cardFront.style.setProperty('--category-color', '#fff'); // Biele písmo pre kategóriu
-  } else {
-    cardFront.style.background = 'linear-gradient(135deg, #221c35 0%, #0d0c12 100%)';
-    cardFront.style.setProperty('--category-color', color);
-  }
+  cardFront.style.background = 'linear-gradient(135deg, #221c35 0%, #0d0c12 100%)';
+  cardFront.style.setProperty('--category-color', color);
 
   // Kategória názov
   const categoryNames = {
@@ -491,8 +395,7 @@ function renderCard() {
     rozvoj: 'Rozvoj',
     intimita: 'Intimita',
     sny: 'Naše sny',
-    nocna: 'Po 22:00 🌙',
-    ai: 'AI Karta ✨'
+    nocna: 'Po 22:00 🌙'
   };
   categoryLabel.innerText = categoryNames[state.currentCategory] || 'Karta';
 
@@ -506,35 +409,17 @@ function renderCard() {
     document.getElementById('btn-love-card').style.display = 'none';
     waShareBtn.style.display = 'none';
   } else {
-    let question = "";
-    if (state.currentCategory === 'ai') {
-      question = state.currentAiQuestion || "Žiadna vygenerovaná otázka.";
-    } else {
-      question = QUESTIONS[state.currentCategory][state.currentCardIndex];
-    }
-    
+    const question = QUESTIONS[state.currentCategory][state.currentCardIndex];
     cardText.innerText = question || "Chyba pri načítaní otázky.";
-    
-    // Skryť posielanie reakcií a zdieľanie, ak sa ešte len generuje/načítava/chybuje
-    if (question.includes("Umelá inteligencia vymýšľa") || question.includes("Vložte prosím Gemini") || question.includes("Nepodarilo sa vygenerovať")) {
-      document.getElementById('btn-love-card').style.display = 'none';
-      waShareBtn.style.display = 'none';
-    } else {
-      document.getElementById('btn-love-card').style.display = 'flex';
-      waShareBtn.style.display = 'flex';
-    }
+    document.getElementById('btn-love-card').style.display = 'flex';
+    waShareBtn.style.display = 'flex';
   }
 
   // Zobraziť/skryť panel odpovedí pre asynchrónny režim
   const answersSection = document.getElementById('async-answers-section');
   if (state.mode === 'async' && state.currentCardIndex !== -1) {
-    const question = state.currentCategory === 'ai' ? state.currentAiQuestion : "";
-    if (question.includes("Umelá inteligencia vymýšľa") || question.includes("Vložte prosím Gemini") || question.includes("Nepodarilo sa vygenerovať")) {
-      answersSection.style.display = 'none';
-    } else {
-      answersSection.style.display = 'flex';
-      renderAnswers();
-    }
+    answersSection.style.display = 'flex';
+    renderAnswers();
   } else {
     answersSection.style.display = 'none';
   }
@@ -594,8 +479,7 @@ function startLiveHosting() {
         name: state.playerName,
         category: state.currentCategory,
         index: state.currentCardIndex,
-        isFlipped: state.isFlipped,
-        aiQuestion: state.currentAiQuestion
+        isFlipped: state.isFlipped
       });
     });
   });
@@ -671,9 +555,6 @@ function handlePeerData(data) {
         state.currentCategory = data.category;
         state.currentCardIndex = data.index;
         state.isFlipped = data.isFlipped;
-        if (data.category === 'ai') {
-          state.currentAiQuestion = data.aiQuestion || '';
-        }
         
         // Zmeniť vizuál záložiek
         document.querySelectorAll('.tab-btn').forEach(btn => {
@@ -703,14 +584,6 @@ function handlePeerData(data) {
       state.isFlipped = false;
       renderCard();
       showToast(`${state.partnerName} vytiahol/tiahla novú kartu`);
-      break;
-    case 'DRAW_AI_CARD':
-      state.currentCategory = 'ai';
-      state.currentCardIndex = 999;
-      state.currentAiQuestion = data.question;
-      state.isFlipped = false;
-      renderCard();
-      showToast(`${state.partnerName} vytiahol/tiahla novú AI kartu`);
       break;
     case 'FLIP_CARD':
       state.isFlipped = data.isFlipped;
@@ -891,17 +764,12 @@ function listenToAsyncRoom(code) {
     document.getElementById('partner-status-text').innerText = state.partnerName;
 
     // Aktualizácia stavu karty
-    const isNewCard = state.currentCardIndex !== data.currentCardIndex || 
-                      state.currentCategory !== data.currentCategory || 
-                      (data.currentCategory === 'ai' && state.currentAiQuestion !== data.currentAiQuestion);
+    const isNewCard = state.currentCardIndex !== data.currentCardIndex || state.currentCategory !== data.currentCategory;
     
     state.currentCategory = data.currentCategory;
     state.currentCardIndex = data.currentCardIndex;
     state.isFlipped = data.isFlipped;
     state.answers = data.answers || { player1: '', player2: '' };
-    if (data.currentCategory === 'ai') {
-      state.currentAiQuestion = data.currentAiQuestion || '';
-    }
 
     // Synchronizácia lokálneho počítadla reakcií
     if (state.lastHeartsCount !== undefined && data.heartsCount > state.lastHeartsCount) {

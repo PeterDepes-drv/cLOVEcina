@@ -16,7 +16,6 @@
   --color-intimita: #f472b6; /* Ružová */
   --color-sny: #38bdf8;     /* Modrá */
   --color-nocna: #e11d48;    /* Šarlátová červená */
-  --color-ai: #ec4899;      /* Magická ružová/purpurová */
   
   --text-primary: #f3f4f6;
   --text-muted: #9ca3af;
@@ -392,11 +391,6 @@ input[type="text"]:focus, input[type="password"]:focus {
 .tab-btn[data-category="nocna"].active {
   background: var(--color-nocna);
   box-shadow: 0 4px 15px rgba(225, 29, 72, 0.4);
-}
-
-.tab-btn[data-category="ai"].active {
-  background: linear-gradient(135deg, #ec4899 0%, #8b5cf6 100%);
-  box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
 }
 
 /* 3D KARTA */
