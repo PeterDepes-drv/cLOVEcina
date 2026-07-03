@@ -1,0 +1,308 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Človečina pre dvoch na diaľku - partnerská komunikačná hra na prepojenie a rozvoj vzťahu cez internet.">
+  <title>čLOVEčina pre dvoch na diaľku</title>
+  
+  <!-- CSS Štýly -->
+  <link rel="stylesheet" href="index.css">
+  
+  <!-- FontAwesome Ikony -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body>
+
+  <!-- Hlavička aplikácie -->
+  <header>
+    <div class="logo-container">
+      <i class="fas fa-heart logo-heart"></i>
+      <h1 class="logo-text">čLOVEčina na diaľku</h1>
+    </div>
+    <div class="header-actions">
+      <button class="btn-icon" id="btn-settings" title="Nastavenia a Pripojenie" aria-label="Nastavenia">
+        <i class="fas fa-cog"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- HLAVNÝ OBSAH -->
+  <main>
+    
+    <!-- 1. OBRAZOVKA: LOBBY (VÝBER REŽIMU A PRIPOJENIE) -->
+    <section class="lobby-card" id="lobby-screen">
+      <h2 class="lobby-title">Pripojte sa k sebe</h2>
+      <p class="lobby-description">
+        Prehĺbte svoje rozhovory, oživte intimitu a zdieľajte svoje sny aj vtedy, keď vás delí veľká vzdialenosť. Vyberte si spôsob hry:
+      </p>
+
+      <!-- Výber režimu -->
+      <div class="mode-selectors">
+        <button class="mode-btn active" data-mode="local">
+          <i class="fas fa-mobile-alt"></i>
+          <span>Lokálne rande</span>
+          <small>Hra na jednom zariadení (offline)</small>
+        </button>
+        <button class="mode-btn" data-mode="live">
+          <i class="fas fa-bolt"></i>
+          <span>Rande naživo</span>
+          <small>Synchrónne ťahanie kariet (P2P)</small>
+        </button>
+        <button class="mode-btn" data-mode="async">
+          <i class="fas fa-calendar-alt"></i>
+          <span>Denné spojenie</span>
+          <small>Asynchrónne písanie odpovedí (Firebase)</small>
+        </button>
+      </div>
+
+      <!-- Panel: Lokálny režim -->
+      <div class="connection-panel" id="panel-local">
+        <p class="lobby-description" style="margin-bottom: 0.5rem;">
+          Skvelé pre vyskúšanie otázok a hry na jednom mieste.
+        </p>
+        <button class="btn-primary" id="btn-start-local">
+          <i class="fas fa-play"></i> Spustiť lokálnu hru
+        </button>
+      </div>
+
+      <!-- Panel: Rande naživo (PeerJS) -->
+      <div class="connection-panel" id="panel-live" style="display: none;">
+        <div class="setting-group">
+          <label>1. Hostovať novú hru</label>
+          <button class="btn-primary" id="btn-host-live">
+            <i class="fas fa-paper-plane"></i> Vytvoriť izbu
+          </button>
+        </div>
+        
+        <div style="text-align: center; color: var(--text-muted); font-size: 0.85rem; margin: 0.5rem 0;">— ALEBO —</div>
+
+        <div class="setting-group">
+          <label>2. Pripojiť sa k manželke</label>
+          <div class="room-input-container">
+            <input type="text" id="live-code-input" placeholder="Zadajte kód izby (napr. laska-1234)">
+            <button class="btn-secondary" id="btn-join-live">Pripojiť</button>
+          </div>
+        </div>
+
+        <div class="room-status" id="live-status-info"></div>
+      </div>
+
+      <!-- Panel: Asynchrónne Denné spojenie (Firebase) -->
+      <div class="connection-panel" id="panel-async" style="display: none;">
+        <p class="lobby-description" style="font-size:0.85rem; text-align: left; margin-bottom: 1rem;">
+          <i class="fas fa-info-circle" style="color:var(--accent-gold);"></i> 
+          Tento režim ukladá vaše odpovede do databázy a odhalí ich, až keď odpoviete obaja. Vyžaduje nastavenie <strong>Firebase</strong> (ikona ozubeného kolieska vpravo hore).
+        </p>
+
+        <div class="setting-group">
+          <label>1. Začať novú hru dňa</label>
+          <button class="btn-primary" id="btn-create-async">
+            <i class="fas fa-plus"></i> Vytvoriť spoločnú hru
+          </button>
+        </div>
+        
+        <div style="text-align: center; color: var(--text-muted); font-size: 0.85rem; margin: 0.5rem 0;">— ALEBO —</div>
+
+        <div class="setting-group">
+          <label>2. Vstúpiť do existujúcej hry</label>
+          <div class="room-input-container">
+            <input type="text" id="async-code-input" placeholder="Zadajte kód hry (napr. srdce-4321)">
+            <button class="btn-secondary" id="btn-join-async">Vstúpiť</button>
+          </div>
+        </div>
+
+        <div class="room-status" id="async-status-info"></div>
+      </div>
+
+    </section>
+
+    <!-- 2. OBRAZOVKA: HRA (HERNÁ DOSKA S KARTAMI) -->
+    <section class="game-board" id="game-screen" style="display: none;">
+      
+      <!-- Horný stav a odchod -->
+      <div class="game-info-bar">
+        <button class="btn-back-lobby" id="btn-back-lobby">
+          <i class="fas fa-chevron-left"></i> Lobby
+        </button>
+        
+        <span id="room-id-indicator" style="font-weight: 500; font-size: 0.85rem; color: var(--accent-gold);">Kód izby: --</span>
+        
+        <div class="partner-status">
+          <div class="status-dot offline" id="partner-status-dot"></div>
+          <span id="partner-status-text" style="color: var(--text-muted); font-size: 0.85rem;">Offline</span>
+        </div>
+      </div>
+
+      <!-- Volič kategórií -->
+      <div class="categories-tabs">
+        <button class="tab-btn active" data-category="komfort">Komfort</button>
+        <button class="tab-btn" data-category="rozvoj">Rozvoj</button>
+        <button class="tab-btn" data-category="intimita">Intimita</button>
+        <button class="tab-btn" data-category="sny">Naše sny</button>
+        <button class="tab-btn" data-category="ai">AI Karta ✨</button>
+      </div>
+
+      <!-- 3D scéna s kartou -->
+      <div class="card-scene" id="card-scene">
+        <div class="card-container" id="card-container">
+          
+          <!-- Zadná strana (Rub - Back) -->
+          <div class="card-face card-back">
+            <div class="card-back-pattern">
+              <i class="fas fa-heart"></i>
+            </div>
+            <div class="card-back-text">čLOVEčina</div>
+            <div class="card-back-prompt">Kliknite pre otočenie</div>
+          </div>
+          
+          <!-- Predná strana (Líc - Front) -->
+          <div class="card-face card-front" id="card-front">
+            <div class="card-header">
+              <span class="card-category-label" id="card-category-label">Komfort</span>
+              <div class="card-category-indicator"></div>
+            </div>
+            <div class="card-body">
+              <p class="card-text" id="card-text">
+                Kliknite na "Ťahať kartu" pre začiatok.
+              </p>
+            </div>
+            <div class="card-footer">
+              čLOVEčina pre dvoch na diaľku
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Akcie pod kartou -->
+      <div class="card-actions">
+        <button class="btn-action btn-draw" id="btn-draw-card">
+          <i class="fas fa-sync-alt"></i> Ťahať novú kartu
+        </button>
+        <button class="btn-action btn-love" id="btn-love-card" style="display: none;">
+          <i class="fas fa-heart"></i> Poslať srdiečko
+        </button>
+        <button class="btn-action btn-whatsapp" id="btn-share-whatsapp" style="display: none;">
+          <i class="fab fa-whatsapp"></i> Zdieľať otázku
+        </button>
+      </div>
+
+      <!-- Asynchrónna sekcia s odpoveďami -->
+      <div class="answers-panel" id="async-answers-section" style="display: none;">
+        <h3 class="answers-title">Vaše odpovede na túto kartu</h3>
+        
+        <!-- Formulár na odoslanie -->
+        <div class="answer-form" id="async-form-section">
+          <textarea id="answer-textarea" placeholder="Napíšte sem svoju odpoveď partnerovi na túto kartu..."></textarea>
+          <button class="btn-primary" id="btn-submit-answer">
+            <i class="fas fa-paper-plane"></i> Odoslať odpoveď
+          </button>
+        </div>
+
+        <!-- Zoznam odpovedí -->
+        <div class="answers-list" id="async-answers-container">
+          <!-- Dynamicky dopĺňané cez JS -->
+        </div>
+
+        <!-- WhatsApp akcie pre asynchrónny režim -->
+        <div id="async-whatsapp-actions" style="display: none; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
+          <button class="btn-secondary" id="btn-async-notify-wa" style="width: 100%; display: none; align-items: center; justify-content: center; gap: 0.5rem;">
+            <i class="fab fa-whatsapp"></i> Upozorniť na WhatsApp
+          </button>
+          <button class="btn-secondary" id="btn-async-share-answers-wa" style="width: 100%; display: none; align-items: center; justify-content: center; gap: 0.5rem;">
+            <i class="fab fa-whatsapp"></i> Poslať odpovede na WhatsApp
+          </button>
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- MODÁLNE OKNO: NASTAVENIA & FIREBASE CONFIG -->
+  <div class="modal-overlay" id="settings-modal">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h2 class="modal-title"><i class="fas fa-cog"></i> Nastavenia hry</h2>
+        <button class="modal-close" aria-label="Zatvoriť nastavenia">&times;</button>
+      </div>
+      <div class="modal-body">
+        
+        <!-- Moje meno -->
+        <div class="setting-group">
+          <label for="settings-player-name">Vaše meno / prezývka</label>
+          <input type="text" id="settings-player-name" placeholder="Napr. Peter">
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.06); margin: 0.5rem 0;">
+
+        <!-- Gemini AI Config -->
+        <h3 style="font-size: 1rem; color: #fff; font-weight: 600; margin-bottom: 0.5rem;">
+          Umelá inteligencia (pre AI Kartu)
+        </h3>
+        <div class="setting-group" style="margin-bottom: 0.5rem;">
+          <label for="gemini-api-key">Gemini API Key</label>
+          <input type="password" id="gemini-api-key" placeholder="AIzaSy...">
+          <div class="help-text" style="margin-top: 0.15rem;">
+            Získajte bezplatný API kľúč v <a href="https://aistudio.google.com/" target="_blank">Google AI Studio</a>.
+          </div>
+        </div>
+
+        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.06); margin: 0.5rem 0;">
+
+        <!-- Firebase Config -->
+        <h3 style="font-size: 1rem; color: #fff; font-weight: 600; margin-bottom: 0.5rem;">
+          Nastavenie Firebase (pre Denné spojenie)
+        </h3>
+        
+        <div class="setting-group">
+          <label for="fb-api-key">API Key</label>
+          <input type="password" id="fb-api-key" placeholder="AIzaSy...">
+        </div>
+
+        <div class="setting-group">
+          <label for="fb-project-id">Project ID</label>
+          <input type="text" id="fb-project-id" placeholder="my-clovecina-project">
+        </div>
+
+        <!-- Rýchly návod -->
+        <div class="help-text">
+          <h4 style="font-weight: 600; color: var(--accent-gold); margin-bottom: 0.25rem;">
+            Ako získať kľúče zadarmo za 3 minúty?
+          </h4>
+          <ol style="margin-left: 1.25rem; display: flex; flex-direction: column; gap: 0.2rem;">
+            <li>Choďte na <a href="https://console.firebase.google.com/" target="_blank">Firebase Console</a>.</li>
+            <li>Kliknite na <strong>Add project</strong> a vytvorte bezplatný projekt.</li>
+            <li>V nastaveniach projektu (ozubené koliesko vľavo hore) kliknite pod <em>Your apps</em> na ikonu <strong>&lt;/&gt; (Web app)</strong>.</li>
+            <li>Zaregistrujte aplikáciu a skopírujte z vygenerovaného kódu <strong>apiKey</strong> a <strong>projectId</strong>.</li>
+            <li>V ľavom menu otvorte <strong>Firestore Database</strong> a kliknite na <strong>Create database</strong>. V záložke <em>Rules</em> prepíšte pravidlo na: <br><code style="font-size: 0.75rem; background:rgba(0,0,0,0.3); padding:2px; display:block; border-radius:4px; margin-top:2px;">allow read, write: if true;</code></li>
+          </ol>
+        </div>
+
+      </div>
+      <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
+        <button class="btn-primary" id="btn-save-settings">Uložiť zmeny</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- TOAST NOTIFIKÁCIA -->
+  <div class="toast" id="toast">
+    <i class="fas fa-info-circle"></i>
+    <span id="toast-text">Notifikácia</span>
+  </div>
+
+  <!-- KNIŽNICE Z CDN -->
+  <!-- PeerJS pre Live P2P synchrónne spojenie -->
+  <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
+  
+  <!-- Firebase SDK pre asynchrónne ukladanie -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+
+  <!-- Lokálne skripty -->
+  <script src="questions.js"></script>
+  <script src="app.js"></script>
+</body>
+</html>

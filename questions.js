@@ -1,0 +1,97 @@
+const QUESTIONS = {
+  komfort: [
+    "Aká bola tvoja obľúbená hračka alebo predmet v detstve a prečo?",
+    "Keby si mohol/mohla mať akékoľvek zvieratko ako domáceho miláčika (aj mýtické), čo by to bolo?",
+    "Na aký najvtipnejší spoločný zážitok si spomínaš?",
+    "Keby si mal/a popísať svoj dnešný deň ako filmový žáner, aký by to bol?",
+    "Aká je tvoja najobľúbenejšia vôňa a akú spomienku ti evokuje?",
+    "Keby sme mali zajtra vyraziť na spontánny výlet, kam by si chcel/a ísť?",
+    "Ktorá pesnička ťa zaručene roztancuje alebo ti zlepší náladu?",
+    "Keby si mohol/mohla ovládať jednu superschopnosť, čo by to bolo?",
+    "Aké jedlo ti najviac pripomína detstvo a domov?",
+    "Ktorá kniha, film alebo seriál ťa v poslednom čase najviac zaujal a prečo?",
+    "Čo ťa dnes v práci alebo počas dňa úprimne rozosmialo?",
+    "Aký najbizarnejší talent máš, o ktorom veľa ľudí nevie?",
+    "Keby si mal/a zjesť jedno jedlo po zvyšok svojho života, čo by to bolo?",
+    "Ktoré ročné obdobie máš najradšej a aká aktivita k nemu pre teba neodmysliteľne patrí?",
+    "Keby sme mali večer len pre seba bez technológií, čo by sme robili?",
+    "Aká bola tvoja prvá kazeta, CD alebo pesnička, ktorú si si kúpil/a alebo obľúbil/a?",
+    "Ktorú krajinu na svete by si chcel/a navštíviť len kvôli jej jedlu?",
+    "Čo je tvoj najväčší 'guilty pleasure' (skrytá neresť/potešenie)?",
+    "Aká bola tvoja najobľúbenejšia rozprávka, keď si bol/a malý/á?",
+    "Keby si mohol/mohla stráviť 24 hodín v koži niekoho iného, kto by to bol?"
+  ],
+  rozvoj: [
+    "Čo pre teba znamená naša láska a ako cítiš, že ťa osobnostne rozvíja?",
+    "Čo je momentálne tvoja najväčšia osobná výzva, s ktorou vnútorne zápasíš?",
+    "Ktorá tvoja vlastnosť ti v živote najviac pomáha a ktorá ti naopak najviac prekáža?",
+    "Aké najdôležitejšie životné poučenie si si odniesol/odniesla z nejakého minulého neúspechu?",
+    "Čo robíš, keď cítiš, že si pod veľkým stresom? Ako ti vtedy môžem najlepšie pomôcť?",
+    "Ktorá udalosť v tvojom živote najviac formovala to, kým si dnes?",
+    "Aké správanie alebo reakciu u seba by si chcel/a v budúcnosti zlepšiť?",
+    "Čo pre teba znamená pojem 'úspešný život' a ako sa táto predstava časom zmenila?",
+    "Kedy sa cítiš najviac nepochopený/á a čo by ti pomohlo cítiť sa lepšie?",
+    "Aké hodnoty sú pre teba v živote najdôležitejšie a ako sa odrážajú v našom vzťahu?",
+    "Existuje niečo, čo sa učíš prijať sám/a na sebe v tomto období?",
+    "Aké je tvoje najväčšie ponaučenie z nášho spoločného života za posledný rok?",
+    "Ktorá kniha alebo myšlienka ti v poslednom čase zmenila pohľad na svet?",
+    "Akú vlastnosť alebo zručnosť by si si chcel/a v najbližších mesiacoch osvojiť?",
+    "V čom cítiš, že sme sa ako pár za poslednú dobu najviac posunuli?",
+    "Aké správanie druhých ľudí ťa vie najrýchlejšie vyviesť z miery a čo to hovorí o tebe?",
+    "Na čo si vo svojom živote doteraz najviac hrdý/á?",
+    "Čo pre teba znamená byť naozaj slobodný/á?",
+    "Existuje nejaký strach, ktorého by si sa chcel/a zbaviť?",
+    "Ako vnímaš starnutie a čoho sa na ňom (ne)obávaš?"
+  ],
+  intimita: [
+    "Kedy sa v mojej prítomnosti cítiš najviac milovaný/á a prijatý/á?",
+    "Aké moje gesto, dotyk alebo slovo v tebe najrýchlejšie vyvolá pocit bezpečia a pokoja?",
+    "Čo je pre teba najintímnejší moment, ktorý sme spolu doteraz zažili?",
+    "Existuje niečo, čo by si chcel/a vyskúšať v našej fyzickej intimite, ale doteraz si to nepovedal/a?",
+    "Čo je tvoj najobľúbenejší jazyk lásky a ako najradšej vyjadruješ lásku ty mne?",
+    "Ktorá moja časť tela ťa najviac priťahuje a prečo?",
+    "Ako sa zmenilo tvoje vnímanie fyzickej blízkosti od začiatku nášho vzťahu?",
+    "Čo pre teba znamená slovo 'zraniteľnosť' a kedy je pre teba ťažké ju predo mnou ukázať?",
+    "Kedy na mňa najviac myslíš, keď sme od seba ďaleko?",
+    "Aké sú tvoje najčastejšie romantické alebo erotické fantázie v poslednom čase?",
+    "Čo môžem urobiť pre to, aby si sa v našom milostnom živote cítil/a ešte bezpečnejšie a uvoľnenejšie?",
+    "Ktorý spoločný moment fyzického kontaktu (mimo sexu) ti priniesol najviac radosti?",
+    "Ako sa cítiš, keď sa na teba dlho dívam bez slov?",
+    "Existuje nejaké zranenie z minulosti, o ktorom vieš, že ovplyvňuje to, ako dnes prežívaš našu blízkosť?",
+    "Aké slovo alebo kompliment, ktorý som ti kedy povedal/a, ti najviac uviazol v pamäti?",
+    "Čo ťa na mne dokáže stále najviac očariť alebo pritiahnuť?",
+    "Ako vnímaš rovnováhu medzi našou fyzickou a emocionálnou intimitou?",
+    "V akej chvíli dňa cítiš najsilnejšie prepojenie medzi nami?",
+    "Čo ťa dokáže najspoľahlivejšie naladiť na romantickú vlnu?",
+    "Čo je pre teba najkrajšia forma vyjadrenia dôvery?"
+  ],
+  sny: [
+    "Keby sme mali neobmedzené množstvo peňazí a času, kde a ako by sme prežili nasledujúci rok?",
+    "Ako vyzerá tvoja predstava nášho spoločného života o 10 rokov?",
+    "Máš nejaký tajný sen alebo túžbu, o ktorej sme sa ešte nikdy podrobne nerozprávali?",
+    "Aké spoločné dobrodružstvo alebo cestu by si chcel/a v najbližších rokoch podniknúť?",
+    "Ako si predstavuješ náš spoločný ideálny domov? Kde by sa nachádzal a ako by to tam vyzeralo?",
+    "Čo by si si prial/a, aby sme ako pár dokázali spoločne vybudovať alebo vytvoriť?",
+    "Aký odkaz alebo stopy by si chcel/a, aby sme tu po sebe zanechali?",
+    "Keby sme si mohli kúpiť spoločne nejakú chatku na samote, ako by sme tam trávili čas?",
+    "Aký bláznivý alebo netradičný nápad by si chcel/a so mnou zrealizovať?",
+    "Čo je tvoj najväčší sen pre mňa ako jednotlivca a ako ťa v ňom môžem podporiť?",
+    "Ako vyzerá tvoja predstava nášho ideálneho spoločného víkendu o 20 rokov?",
+    "Aké tradície alebo rituály by si chcel/a, aby sme vo našom vzťahu zaviedli alebo zachovali?",
+    "Keby sme mali spoločne napísať knihu, o čom by bola?",
+    "V akej krajine alebo meste by si si chcel/a vyskúšať bývať na pol roka?",
+    "Čo je tvoj najväčší osobný profesijný alebo kreatívny sen, ktorý chceš ešte dosiahnuť?",
+    "Aké spoločné hobby alebo aktivitu by si chcel/a, aby sme začali robiť?",
+    "Čo by bolo na zozname tvojich 'top 5 vecí, ktoré chcem zažiť pred smrťou'?",
+    "Ako vyzerá tvoj ideálny dôchodok s nami dvoma?",
+    "Ak by sme mohli zmeniť jednu vec na našom životnom štýle hneď teraz, čo by to bolo?",
+    "Čo ťa najviac napĺňa optimizmom, keď myslíš na našu spoločnú budúcnosť?"
+  ]
+};
+
+// Export pre použitie v prehliadači (ES Modules alebo globálna premenná)
+if (typeof module !== "undefined" && module.exports) {
+  module.exports = QUESTIONS;
+} else {
+  window.QUESTIONS = QUESTIONS;
+}
