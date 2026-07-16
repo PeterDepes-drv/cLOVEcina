@@ -1,0 +1,2472 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Láskanie - Hra pre skutočne intímne večery na diaľku s manželkou.">
+  <title>Láskanie - Intímna hra na diaľku</title>
+  
+  <!-- Google Fonts: Playfair Display pre romantickú eleganciu a Quicksand pre jemnosť -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Quicksand:wght@400;500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome pre ikony -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    /* DESIGN SYSTEM & GLOBAL STYLES */
+    :root {
+      --bg-dark: #080310;         /* Veľmi hlboká zamatová tmavofialová */
+      --bg-card: rgba(22, 11, 36, 0.65); /* Priehľadná fialová pre sklenený efekt */
+      --bg-card-inner: rgba(43, 26, 66, 0.5); 
+      --text-primary: #fff5f5;    /* Hrejivá biela */
+      --text-secondary: #d6cbd8;  /* Tlmená levanduľová */
+      --text-muted: #85748a;      /* Tmavá levanduľová */
+      
+      --accent-gold: #dfab6c;     /* Starožitné šampanské zlato */
+      --accent-gold-hover: #f3c993;
+      --accent-gold-glow: rgba(223, 171, 108, 0.4);
+      --accent-gold-light: rgba(223, 171, 108, 0.12);
+      
+      --accent-rose: #e75480;     /* Intímna ružová / tmavá ruža */
+      --accent-rose-glow: rgba(231, 84, 128, 0.5);
+      
+      --color-manzel: #4ba3e3;    /* Nebeská modrá s teplým tónom */
+      --color-manzelka: #f26d9e;   /* Zmyselná ružovo-fialová */
+
+      --transition-calm: all 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+      --transition-quick: all 0.2s ease-out;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Quicksand', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      background-image: 
+        radial-gradient(at 10% 20%, rgba(75, 26, 122, 0.2) 0px, transparent 50%),
+        radial-gradient(at 90% 80%, rgba(179, 44, 70, 0.15) 0px, transparent 50%);
+      color: var(--text-secondary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 1rem;
+      overflow-x: hidden;
+      position: relative;
+    }
+
+    /* Ambientné svetelné gule */
+    .ambient-glow {
+      position: absolute;
+      width: 300px;
+      height: 300px;
+      border-radius: 50%;
+      background: var(--accent-rose-glow);
+      filter: blur(120px);
+      z-index: -1;
+      opacity: 0.4;
+      pointer-events: none;
+      animation: float-glow 15s infinite alternate ease-in-out;
+    }
+    
+    .glow-1 { top: 10%; left: 15%; background: rgba(75, 26, 122, 0.25); }
+    .glow-2 { bottom: 15%; right: 10%; background: rgba(231, 84, 128, 0.2); }
+
+    @keyframes float-glow {
+      0% { transform: translate(0, 0) scale(1); }
+      100% { transform: translate(40px, 30px) scale(1.15); }
+    }
+
+    h1, h2, h3, h4, .font-romantic {
+      font-family: 'Playfair Display', serif;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    /* HLAVIČKA APLIKÁCIE */
+    header {
+      width: 100%;
+      max-width: 650px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0.5rem;
+      margin-bottom: 1.5rem;
+      border-bottom: 1px solid rgba(231, 84, 128, 0.15);
+      z-index: 10;
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .logo-candle {
+      color: var(--accent-gold);
+      font-size: 1.6rem;
+      position: relative;
+      animation: flame-flicker 2s infinite alternate ease-in-out;
+    }
+
+    @keyframes flame-flicker {
+      0%, 100% { transform: scale(1) rotate(-1deg); filter: drop-shadow(0 0 4px var(--accent-gold-glow)); }
+      50% { transform: scale(1.08) rotate(2deg); filter: drop-shadow(0 0 10px rgba(223, 171, 108, 0.7)); }
+    }
+
+    .logo-text {
+      font-size: 1.7rem;
+      letter-spacing: 0.5px;
+      background: linear-gradient(135deg, var(--text-primary), var(--accent-gold));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      font-weight: 700;
+    }
+
+    .btn-icon {
+      background: transparent;
+      border: 1px solid rgba(231, 84, 128, 0.2);
+      color: var(--text-secondary);
+      width: 42px;
+      height: 42px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition-quick);
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    .btn-icon:hover {
+      background: var(--accent-gold-light);
+      border-color: var(--accent-gold);
+      color: var(--accent-gold);
+      box-shadow: 0 0 10px var(--accent-gold-glow);
+    }
+
+    /* HLAVNÝ KONTAJNER */
+    main {
+      width: 100%;
+      max-width: 650px;
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+      z-index: 10;
+    }
+
+    /* UPOZORNENIE PRE FIREBASE */
+    .firebase-alert-banner {
+      background: linear-gradient(135deg, rgba(179, 44, 70, 0.15), rgba(75, 26, 122, 0.15));
+      border: 1px solid rgba(231, 84, 128, 0.2);
+      border-radius: 16px;
+      padding: 0.85rem 1.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.3);
+      backdrop-filter: blur(8px);
+    }
+
+    .firebase-alert-banner i {
+      color: var(--accent-gold);
+      font-size: 1.1rem;
+    }
+
+    /* SPOLOČNÉ KARTY / KROKY */
+    .screen-card {
+      background: var(--bg-card);
+      border: 1px solid rgba(231, 84, 128, 0.15);
+      border-radius: 24px;
+      padding: 2rem 1.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      box-shadow: 0 15px 35px rgba(0, 0, 0, 0.4);
+      backdrop-filter: blur(20px);
+      -webkit-backdrop-filter: blur(20px);
+      transition: var(--transition-calm);
+    }
+
+    /* LOBBY / PRIHLÁSENIE */
+    .lobby-subtitle {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+      margin-bottom: 2rem;
+      max-width: 450px;
+      line-height: 1.5;
+    }
+
+    .section-title {
+      font-size: 1.2rem;
+      margin-bottom: 1rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      color: var(--accent-gold);
+    }
+
+    .role-selection-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      width: 100%;
+      margin-bottom: 2rem;
+    }
+
+    .role-btn {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1.5px solid rgba(231, 84, 128, 0.15);
+      border-radius: 18px;
+      padding: 1.5rem 1rem;
+      cursor: pointer;
+      transition: var(--transition-calm);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.8rem;
+    }
+
+    .role-btn i {
+      font-size: 2.2rem;
+      transition: var(--transition-calm);
+    }
+
+    .role-btn span {
+      font-weight: 600;
+      font-size: 1rem;
+      color: var(--text-secondary);
+    }
+
+    .role-btn[data-role="manzel"]:hover, .role-btn[data-role="manzel"].active {
+      border-color: var(--color-manzel);
+      background: rgba(75, 163, 227, 0.08);
+      box-shadow: 0 0 20px rgba(75, 163, 227, 0.25);
+    }
+    .role-btn[data-role="manzel"] i { color: rgba(75, 163, 227, 0.6); }
+    .role-btn[data-role="manzel"]:hover i, .role-btn[data-role="manzel"].active i {
+      color: var(--color-manzel);
+      transform: scale(1.1);
+    }
+
+    .role-btn[data-role="manzelka"]:hover, .role-btn[data-role="manzelka"].active {
+      border-color: var(--color-manzelka);
+      background: rgba(242, 109, 158, 0.08);
+      box-shadow: 0 0 20px rgba(242, 109, 158, 0.25);
+    }
+    .role-btn[data-role="manzelka"] i { color: rgba(242, 109, 158, 0.6); }
+    .role-btn[data-role="manzelka"]:hover i, .role-btn[data-role="manzelka"].active i {
+      color: var(--color-manzelka);
+      transform: scale(1.1);
+    }
+
+    .input-group {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      text-align: left;
+      margin-bottom: 1.5rem;
+    }
+
+    .input-label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--text-secondary);
+      padding-left: 0.2rem;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .room-input {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(231, 84, 128, 0.2);
+      border-radius: 12px;
+      padding: 0.85rem 1rem;
+      color: var(--text-primary);
+      font-size: 1.1rem;
+      font-weight: 700;
+      letter-spacing: 2px;
+      text-transform: uppercase;
+      text-align: center;
+      transition: var(--transition-quick);
+      width: 100%;
+    }
+
+    .room-input:focus {
+      outline: none;
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 10px var(--accent-gold-glow);
+    }
+
+    .action-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      width: 100%;
+    }
+
+    /* TLAČIDLÁ */
+    .btn-primary {
+      background: linear-gradient(135deg, var(--accent-gold), #c99355);
+      color: #3e2609;
+      border: none;
+      border-radius: 12px;
+      padding: 0.95rem 1.8rem;
+      font-size: 1rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: var(--transition-quick);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      width: 100%;
+      box-shadow: 0 4px 15px rgba(223, 171, 108, 0.25);
+    }
+
+    .btn-primary:hover {
+      background: linear-gradient(135deg, var(--accent-gold-hover), var(--accent-gold));
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(223, 171, 108, 0.4);
+    }
+
+    .btn-secondary {
+      background: rgba(255, 255, 255, 0.03);
+      color: var(--text-secondary);
+      border: 1px solid rgba(231, 84, 128, 0.2);
+      border-radius: 12px;
+      padding: 0.95rem 1.8rem;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: var(--transition-quick);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.6rem;
+      width: 100%;
+    }
+
+    .btn-secondary:hover {
+      background: rgba(231, 84, 128, 0.05);
+      border-color: var(--accent-rose);
+      color: var(--text-primary);
+    }
+
+    /* KROK: PRÍPRAVA ATMOSFÉRY */
+    .preparation-checklist {
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      text-align: left;
+      margin: 1.5rem 0;
+    }
+
+    .check-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 1rem;
+      background: rgba(255, 255, 255, 0.015);
+      border: 1px solid rgba(231, 84, 128, 0.08);
+      border-radius: 14px;
+      padding: 1rem;
+      cursor: pointer;
+      transition: var(--transition-quick);
+    }
+
+    .check-item:hover {
+      background: rgba(231, 84, 128, 0.03);
+      border-color: rgba(231, 84, 128, 0.2);
+    }
+
+    .check-item input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      width: 22px;
+      height: 22px;
+      border: 1.5px solid var(--accent-gold);
+      border-radius: 6px;
+      outline: none;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      margin-top: 0.1rem;
+      transition: var(--transition-quick);
+    }
+
+    .check-item input[type="checkbox"]:checked {
+      background: var(--accent-gold);
+      border-color: var(--accent-gold);
+    }
+
+    .check-item input[type="checkbox"]:checked::after {
+      content: "\f00c";
+      font-family: "Font Awesome 6 Free";
+      font-weight: 900;
+      color: #3e2609;
+      font-size: 0.75rem;
+    }
+
+    .check-text {
+      font-size: 0.95rem;
+      line-height: 1.4;
+      color: var(--text-secondary);
+    }
+
+    .prep-status-box {
+      background: rgba(0, 0, 0, 0.2);
+      border: 1px solid rgba(231, 84, 128, 0.1);
+      border-radius: 14px;
+      padding: 1rem;
+      width: 100%;
+      margin-top: 1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+    }
+
+    .partner-prep-status {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 0.9rem;
+    }
+
+    .status-badge {
+      padding: 0.25rem 0.75rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .status-badge.not-ready {
+      background: rgba(255, 255, 255, 0.05);
+      color: var(--text-muted);
+    }
+
+    .status-badge.ready {
+      background: rgba(16, 185, 129, 0.15);
+      color: #10b981;
+      box-shadow: 0 0 10px rgba(16, 185, 129, 0.1);
+    }
+
+    /* INFORMAČNÁ LIŠTA V HRE */
+    .game-info-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      margin-bottom: 0.5rem;
+    }
+
+    .btn-back-lobby {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      cursor: pointer;
+      font-size: 0.9rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      transition: var(--transition-quick);
+    }
+
+    .btn-back-lobby:hover {
+      color: var(--accent-gold);
+    }
+
+    .room-code-indicator {
+      background: rgba(223, 171, 108, 0.08);
+      border: 1px dashed var(--accent-gold);
+      color: var(--accent-gold);
+      padding: 0.35rem 0.85rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 700;
+      letter-spacing: 0.5px;
+      cursor: pointer;
+      transition: var(--transition-quick);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .room-code-indicator:hover {
+      background: var(--accent-gold-light);
+      box-shadow: 0 0 10px var(--accent-gold-glow);
+    }
+
+    /* PRÍTOMNOSŤ PARTNEROV */
+    .presence-indicators-row {
+      display: flex;
+      gap: 0.8rem;
+      margin-bottom: 0.5rem;
+      width: 100%;
+      justify-content: center;
+    }
+
+    .presence-status-chip {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      padding: 0.4rem 0.8rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition-calm);
+    }
+
+    .presence-status-chip .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--text-muted);
+      box-shadow: none;
+    }
+
+    .presence-status-chip.online {
+      background: rgba(255, 255, 255, 0.04);
+      border-color: rgba(231, 84, 128, 0.15);
+    }
+
+    .presence-status-chip.manzel.online .status-dot {
+      background: var(--color-manzel);
+      box-shadow: 0 0 8px var(--color-manzel);
+    }
+
+    .presence-status-chip.manzelka.online .status-dot {
+      background: var(--color-manzelka);
+      box-shadow: 0 0 8px var(--color-manzelka);
+    }
+
+    .presence-status-chip.manzel { border-color: rgba(75, 163, 227, 0.15); }
+    .presence-status-chip.manzelka { border-color: rgba(242, 109, 158, 0.15); }
+
+    /* NÁLADOMETER: PLAMIENOK TÚŽBY */
+    .mood-tuner-card {
+      background: linear-gradient(135deg, rgba(22, 11, 36, 0.8), rgba(43, 26, 66, 0.4));
+      border: 1px solid rgba(231, 84, 128, 0.15);
+      border-radius: 20px;
+      padding: 1.2rem;
+      width: 100%;
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      backdrop-filter: blur(10px);
+    }
+
+    .mood-tuner-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--accent-gold);
+    }
+
+    .mood-slider-container {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+      position: relative;
+    }
+
+    .mood-slider {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 100%;
+      height: 6px;
+      border-radius: 3px;
+      background: rgba(255, 255, 255, 0.1);
+      outline: none;
+      cursor: pointer;
+    }
+
+    .mood-slider::-webkit-slider-thumb {
+      -webkit-appearance: none;
+      appearance: none;
+      width: 22px;
+      height: 22px;
+      border-radius: 50%;
+      background: linear-gradient(135deg, #ff4e50, #f9d423);
+      cursor: pointer;
+      box-shadow: 0 0 10px rgba(255, 78, 80, 0.8);
+      transition: transform 0.1s ease;
+    }
+
+    .mood-slider::-webkit-slider-thumb:hover {
+      transform: scale(1.15);
+    }
+
+    .mood-labels {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      margin-top: 0.2rem;
+    }
+
+    .mood-flame-comparison {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 0.8rem;
+      margin-top: 0.3rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 0.6rem;
+    }
+
+    .flame-display {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 0.4rem;
+      border-radius: 12px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .flame-display.manzel { border-left: 3px solid var(--color-manzel); }
+    .flame-display.manzelka { border-left: 3px solid var(--color-manzelka); }
+
+    .flame-icon-glow {
+      color: #ff7e5f;
+      animation: flame-pulse 1.5s infinite alternate ease-in-out;
+      display: inline-block;
+    }
+
+    @keyframes flame-pulse {
+      0% { transform: scale(1); filter: drop-shadow(0 0 2px #ff4e50); }
+      100% { transform: scale(1.2) rotate(3deg); filter: drop-shadow(0 0 8px #ff7e5f); }
+    }
+
+    /* REŽIMY A KATEGÓRIE */
+    .mode-tab-bar {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 14px;
+      padding: 0.25rem;
+      width: 100%;
+      border: 1px solid rgba(231, 84, 128, 0.08);
+    }
+
+    .mode-tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-muted);
+      padding: 0.65rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      border-radius: 11px;
+      cursor: pointer;
+      transition: var(--transition-quick);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.4rem;
+    }
+
+    .mode-tab-btn.active {
+      background: rgba(231, 84, 128, 0.1);
+      color: var(--accent-rose);
+      box-shadow: inset 0 0 10px rgba(231, 84, 128, 0.05);
+      border: 1px solid rgba(231, 84, 128, 0.15);
+    }
+
+    .category-filter-container {
+      display: flex;
+      gap: 0.4rem;
+      width: 100%;
+      overflow-x: auto;
+      padding: 0.2rem 0.1rem;
+      scrollbar-width: none; /* Firefox */
+    }
+
+    .category-filter-container::-webkit-scrollbar {
+      display: none; /* Safari / Chrome */
+    }
+
+    .category-tab-btn {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(231, 84, 128, 0.1);
+      color: var(--text-secondary);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: var(--transition-quick);
+    }
+
+    .category-tab-btn:hover {
+      background: rgba(231, 84, 128, 0.05);
+      border-color: rgba(231, 84, 128, 0.2);
+    }
+
+    .category-tab-btn.active {
+      background: var(--accent-gold-light);
+      border-color: var(--accent-gold);
+      color: var(--accent-gold);
+      box-shadow: 0 0 10px var(--accent-gold-glow);
+    }
+
+    /* HERNÁ KARTA */
+    .card-scene {
+      perspective: 1000px;
+      width: 100%;
+      margin: 0.5rem 0;
+    }
+
+    .card-container {
+      background: linear-gradient(145deg, rgba(22, 11, 36, 0.9), rgba(15, 6, 27, 0.95));
+      border: 1.5px solid rgba(231, 84, 128, 0.2);
+      border-radius: 28px;
+      width: 100%;
+      min-height: 280px;
+      padding: 2.2rem 2rem;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.5), 0 0 30px rgba(231, 84, 128, 0.05);
+      position: relative;
+      transition: transform 0.6s cubic-bezier(0.4, 0, 0.2, 1), box-shadow 0.6s ease;
+      transform-style: preserve-3d;
+    }
+
+    .card-container.glowing-card {
+      box-shadow: 0 20px 45px rgba(0, 0, 0, 0.6), 0 0 35px var(--accent-gold-glow);
+      border-color: var(--accent-gold);
+    }
+
+    .card-header-elements {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 100%;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 0.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .card-category-badge {
+      background: rgba(231, 84, 128, 0.12);
+      border: 1px solid rgba(231, 84, 128, 0.25);
+      color: var(--accent-rose);
+      padding: 0.3rem 0.9rem;
+      border-radius: 20px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .card-category-badge.cat-naladenie {
+      background: rgba(231, 84, 128, 0.12);
+      border-color: rgba(231, 84, 128, 0.25);
+      color: var(--accent-rose);
+    }
+
+    .card-category-badge.cat-túžby {
+      background: rgba(139, 92, 246, 0.12);
+      border-color: rgba(139, 92, 246, 0.25);
+      color: #a78bfa;
+    }
+
+    .card-category-badge.cat-dotyky {
+      background: rgba(245, 158, 11, 0.12);
+      border-color: rgba(245, 158, 11, 0.25);
+      color: var(--accent-gold);
+    }
+
+    .card-category-badge.cat-horúce {
+      background: rgba(239, 68, 68, 0.12);
+      border-color: rgba(239, 68, 68, 0.25);
+      color: #f87171;
+    }
+
+    .card-id-label {
+      font-size: 0.8rem;
+      font-weight: 700;
+      color: var(--text-muted);
+      letter-spacing: 0.5px;
+    }
+
+    .card-body {
+      flex-grow: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 0;
+    }
+
+    .card-text {
+      font-family: 'Playfair Display', serif;
+      font-size: 1.35rem;
+      line-height: 1.55;
+      color: var(--text-primary);
+      text-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+      font-style: italic;
+    }
+
+    .card-skipped-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.8rem;
+      animation: fade-in 0.4s ease;
+    }
+
+    .card-skipped-icon {
+      font-size: 2.2rem;
+      color: var(--text-muted);
+    }
+
+    .card-skipped-text {
+      font-size: 1rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .card-footer-text {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+      letter-spacing: 1px;
+      text-transform: uppercase;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      padding-top: 0.8rem;
+      margin-top: 1rem;
+      width: 100%;
+    }
+
+    .game-actions {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 0.8rem;
+      width: 100%;
+    }
+
+    .btn-danger {
+      background: rgba(179, 44, 70, 0.08);
+      border-color: rgba(179, 44, 70, 0.3);
+      color: #f87171;
+    }
+
+    .btn-danger:hover {
+      background: rgba(179, 44, 70, 0.18);
+      border-color: #ef4444;
+      color: #fca5a5;
+    }
+
+    /* PANEL ODPOVEDÍ (PRE ASYNCHRÓNNY REŽIM) */
+    .answers-panel {
+      background: rgba(0, 0, 0, 0.25);
+      border: 1px solid rgba(231, 84, 128, 0.1);
+      border-radius: 20px;
+      padding: 1.5rem;
+      width: 100%;
+      text-align: left;
+      box-shadow: inset 0 4px 20px rgba(0, 0, 0, 0.3);
+    }
+
+    .answers-title {
+      font-size: 1.05rem;
+      margin-bottom: 1rem;
+      color: var(--accent-gold);
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+    }
+
+    .answers-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .answer-block {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      transition: var(--transition-calm);
+    }
+
+    .answer-block.manzel { border-left: 3px solid var(--color-manzel); }
+    .answer-block.manzelka { border-left: 3px solid var(--color-manzelka); }
+
+    .answer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .answer-author {
+      font-size: 0.85rem;
+      font-weight: 700;
+    }
+
+    .answer-author.manzel { color: var(--color-manzel); }
+    .answer-author.manzelka { color: var(--color-manzelka); }
+
+    .answer-time {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    .answer-content {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      color: var(--text-primary);
+      white-space: pre-wrap;
+    }
+
+    .answer-empty {
+      font-size: 0.9rem;
+      color: var(--text-muted);
+      font-style: italic;
+    }
+
+    .answer-locked {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 0;
+      text-align: center;
+      color: var(--text-muted);
+    }
+
+    .answer-locked i {
+      font-size: 1.4rem;
+      color: var(--accent-rose);
+      animation: heartbeat 2s infinite ease-in-out;
+    }
+
+    @keyframes heartbeat {
+      0%, 100% { transform: scale(1); }
+      50% { transform: scale(1.15); }
+    }
+
+    .answer-locked span {
+      font-size: 0.85rem;
+      line-height: 1.4;
+      max-width: 350px;
+    }
+
+    .answer-compose-area {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      width: 100%;
+    }
+
+    .answer-textarea {
+      background: rgba(0, 0, 0, 0.3);
+      border: 1px solid rgba(231, 84, 128, 0.15);
+      border-radius: 12px;
+      padding: 0.8rem;
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      resize: vertical;
+      min-height: 80px;
+      outline: none;
+      transition: var(--transition-quick);
+    }
+
+    .answer-textarea:focus {
+      border-color: var(--accent-rose);
+      box-shadow: 0 0 10px rgba(231, 84, 128, 0.15);
+    }
+
+    /* TREZOR TAJOMSTIEV */
+    .secret-vault-card {
+      background: linear-gradient(135deg, rgba(30, 10, 40, 0.75), rgba(12, 5, 20, 0.9));
+      border: 1px solid rgba(223, 171, 108, 0.2);
+      border-radius: 24px;
+      padding: 1.8rem;
+      width: 100%;
+      text-align: left;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4), 0 0 20px rgba(223, 171, 108, 0.05);
+      margin-top: 1rem;
+      backdrop-filter: blur(15px);
+    }
+
+    .vault-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid rgba(223, 171, 108, 0.15);
+      padding-bottom: 0.8rem;
+      margin-bottom: 1rem;
+    }
+
+    .vault-title {
+      font-size: 1.15rem;
+      color: var(--accent-gold);
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+    }
+
+    .vault-title i {
+      animation: vault-glow 3s infinite alternate ease-in-out;
+    }
+
+    @keyframes vault-glow {
+      0% { text-shadow: 0 0 2px var(--accent-gold-glow); }
+      100% { text-shadow: 0 0 8px var(--accent-gold); }
+    }
+
+    .vault-status-badge {
+      background: rgba(223, 171, 108, 0.08);
+      border: 1px solid rgba(223, 171, 108, 0.2);
+      color: var(--accent-gold);
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 0.25rem 0.65rem;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 0.3rem;
+    }
+
+    .vault-status-badge.unlocked {
+      background: rgba(16, 185, 129, 0.1);
+      border-color: rgba(16, 185, 129, 0.3);
+      color: #10b981;
+    }
+
+    .vault-desc {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+      line-height: 1.4;
+      margin-bottom: 1.2rem;
+    }
+
+    .vault-inputs-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .vault-compose {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+    }
+
+    .vault-textarea {
+      background: rgba(0, 0, 0, 0.4);
+      border: 1px solid rgba(223, 171, 108, 0.15);
+      border-radius: 14px;
+      padding: 0.9rem;
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      min-height: 90px;
+      outline: none;
+      resize: vertical;
+      transition: var(--transition-quick);
+    }
+
+    .vault-textarea:focus {
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 10px var(--accent-gold-glow);
+    }
+
+    .vault-partner-status-row {
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      background: rgba(0, 0, 0, 0.2);
+      padding: 0.9rem 1.2rem;
+      border-radius: 14px;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    .vault-partner-item {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.85rem;
+    }
+
+    .vault-partner-item span {
+      font-weight: 600;
+    }
+
+    .vault-partner-item.manzel span { color: var(--color-manzel); }
+    .vault-partner-item.manzelka span { color: var(--color-manzelka); }
+
+    .vault-revealed-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-top: 0.5rem;
+    }
+
+    .vault-revealed-box {
+      background: rgba(255, 255, 255, 0.015);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      border-radius: 16px;
+      padding: 1.2rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.6rem;
+      box-shadow: 0 4px 15px rgba(0, 0, 0, 0.2);
+    }
+
+    .vault-revealed-box.manzel { 
+      border-color: rgba(75, 163, 227, 0.25);
+      box-shadow: 0 0 15px rgba(75, 163, 227, 0.05);
+    }
+    .vault-revealed-box.manzelka { 
+      border-color: rgba(242, 109, 158, 0.25);
+      box-shadow: 0 0 15px rgba(242, 109, 158, 0.05);
+    }
+
+    .vault-revealed-author {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+    
+    .vault-revealed-author.manzel { color: var(--color-manzel); }
+    .vault-revealed-author.manzelka { color: var(--color-manzelka); }
+
+    .vault-revealed-text {
+      font-size: 0.95rem;
+      line-height: 1.5;
+      font-style: italic;
+      color: var(--text-primary);
+      white-space: pre-wrap;
+    }
+
+    .btn-vault-reset {
+      margin-top: 1rem;
+      align-self: center;
+    }
+
+    /* TOAST NOTIFIKÁCIA */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      background: rgba(22, 11, 36, 0.95);
+      border: 1px solid var(--accent-gold);
+      color: var(--text-primary);
+      padding: 0.8rem 1.5rem;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 0.6rem;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.5), 0 0 15px var(--accent-gold-glow);
+      opacity: 0;
+      transform: translateY(10px);
+      transition: opacity 0.3s ease, transform 0.3s ease;
+      z-index: 1000;
+      pointer-events: none;
+    }
+
+    .toast.show {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .toast i {
+      color: var(--accent-gold);
+    }
+
+    /* ZÁKLADNÉ RESPOND SIZES */
+    @media (max-width: 500px) {
+      .vault-revealed-grid {
+        grid-template-columns: 1fr;
+      }
+      .game-actions {
+        grid-template-columns: 1fr;
+      }
+      .card-container {
+        padding: 1.5rem 1.2rem;
+        min-height: 260px;
+      }
+      .card-text {
+        font-size: 1.15rem;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="ambient-glow glow-1"></div>
+  <div class="ambient-glow glow-2"></div>
+
+  <header>
+    <div class="logo-container">
+      <i class="fa-solid fa-fire-burner logo-candle"></i>
+      <span class="logo-text">Láskanie</span>
+    </div>
+    <!-- Zdieľaný odchod / reset -->
+    <button class="btn-icon" id="header-btn-info" title="O hre" style="display: none;">
+      <i class="fas fa-info"></i>
+    </button>
+  </header>
+
+  <main>
+    <!-- Firebase Warning Banner -->
+    <div class="firebase-alert-banner" id="fb-config-warning" style="display: none;">
+      <i class="fas fa-circle-exclamation"></i>
+      <div>
+        <strong>Firebase nie je nastavený.</strong> Hra pobeží v lokálnom režime Demo. Ak chcete hrať na diaľku, nastavte Firebase v rodinnej hre na hlavnej stránke.
+      </div>
+    </div>
+
+    <!-- 1. OBRAZOVKA: LOBBY -->
+    <section class="screen-card" id="screen-lobby">
+      <h2 class="font-romantic" style="font-size: 1.8rem; margin-bottom: 0.5rem;">Intímne chvíle na diaľku</h2>
+      <p class="lobby-subtitle">Prehĺbte svoje prepojenie, otvorte tajné komnaty svojich túžob a dotknite sa slovami, aj keď ste ďaleko jeden od druhého.</p>
+      
+      <div class="section-title">
+        <i class="fas fa-user-hearts"></i> Zvoľ si svoju rolu pre dnešný večer
+      </div>
+      <div class="role-selection-grid">
+        <button class="role-btn" data-role="manzel">
+          <i class="fas fa-venus-mars"></i>
+          <span>Manžel</span>
+        </button>
+        <button class="role-btn" data-role="manzelka">
+          <i class="fas fa-venus-mars" style="transform: rotate(90deg);"></i>
+          <span>Manželka</span>
+        </button>
+      </div>
+
+      <div class="input-group">
+        <label class="input-label" for="room-code-input">
+          <i class="fas fa-key"></i> Zadajte kód izby (rovnaký pre oboch)
+        </label>
+        <input type="text" class="room-input" id="room-code-input" placeholder="Napr. Srdce" maxlength="8">
+      </div>
+
+      <div class="action-row">
+        <button class="btn-primary" id="btn-enter-room">
+          <i class="fas fa-feather-pointed"></i> Vstúpiť do izby lásky
+        </button>
+      </div>
+
+      <!-- Prepojenie hier -->
+      <div style="margin-top: 2rem; font-size: 0.85rem; border-top: 1px solid rgba(231, 84, 128, 0.15); padding-top: 1rem; width: 100%; display: flex; justify-content: center; gap: 1rem;">
+        <a href="index.html" style="color: var(--text-muted); text-decoration: none; transition: var(--transition-quick);" onmouseover="this.style.color='var(--accent-gold)'" onmouseout="this.style.color='var(--text-muted)'"><i class="fas fa-people-roof"></i> Rodinná Človečina</a>
+        <span style="color: rgba(231, 84, 128, 0.2);">|</span>
+        <a href="laska.html" style="color: var(--text-muted); text-decoration: none; transition: var(--transition-quick);" onmouseover="this.style.color='var(--accent-rose)'" onmouseout="this.style.color='var(--text-muted)'"><i class="fas fa-heart"></i> Partnerská čLOVEčina</a>
+      </div>
+    </section>
+
+    <!-- 2. OBRAZOVKA: PRÍPRAVA ATMOSFÉRY -->
+    <section class="screen-card" id="screen-atmosphere" style="display: none;">
+      <h2 class="font-romantic" style="font-size: 1.8rem; margin-bottom: 0.5rem; color: var(--accent-gold);">Naladenie atmosféry</h2>
+      <p class="lobby-subtitle" style="margin-bottom: 1.2rem;">Než vstúpite do hry, venujte chvíľu nastaveniu svojho osobného priestoru. Intimita si vyžaduje pokoj.</p>
+
+      <div class="preparation-checklist">
+        <label class="check-item">
+          <input type="checkbox" id="check-privacy">
+          <span class="check-text">Mám vytvorené úplné súkromie a viem, že nás nikto nebude rušiť 🚪</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" id="check-lighting">
+          <span class="check-text">Naladil/a som svetlo (zapálená sviečka, šero alebo tlmené osvetlenie) 🕯️</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" id="check-drink">
+          <span class="check-text">Mám pripravený obľúbený nápoj (pohár vína, čaj, čerstvú vodu) 🍷</span>
+        </label>
+        <label class="check-item">
+          <input type="checkbox" id="check-mood">
+          <span class="check-text">Som rozhodnutý/á venovať tento čas naplno svojej polovičke a počúvať bez hodnotenia ❤️</span>
+        </label>
+      </div>
+
+      <button class="btn-primary" id="btn-ready-confirm" disabled>
+        <i class="fas fa-heart"></i> Som naladený/á a pripravený/á
+      </button>
+
+      <div class="prep-status-box">
+        <div class="partner-prep-status" id="status-me-row">
+          <span>Tvoja pripravenosť:</span>
+          <span class="status-badge not-ready" id="status-badge-me"><i class="fas fa-clock"></i> Čaká sa</span>
+        </div>
+        <div class="partner-prep-status" id="status-partner-row">
+          <span>Pripravenosť partnera:</span>
+          <span class="status-badge not-ready" id="status-badge-partner"><i class="fas fa-clock"></i> Čaká sa</span>
+        </div>
+      </div>
+      
+      <button class="btn-back-lobby" id="btn-leave-atmos" style="margin-top: 1.5rem;">
+        <i class="fas fa-chevron-left"></i> Späť do lobby
+      </button>
+    </section>
+
+    <!-- 3. OBRAZOVKA: SAMOTNÁ HRA -->
+    <section id="screen-game" style="display: none; flex-direction: column; gap: 1.2rem; width: 100%;">
+      
+      <div class="game-info-bar">
+        <button class="btn-back-lobby" id="btn-leave-room">
+          <i class="fas fa-chevron-left"></i> Opustiť izbu
+        </button>
+        
+        <span class="room-code-indicator" id="display-room-code" title="Klikni pre skopírovanie kódu">
+          KÓD: -- <i class="fas fa-copy" style="font-size: 0.75rem;"></i>
+        </span>
+      </div>
+
+      <!-- Prítomnosť oboch v reálnom čase -->
+      <div class="presence-indicators-row" id="presence-indicators">
+        <div class="presence-status-chip manzel" data-presence-role="manzel">
+          <div class="status-dot"></div> <span>Manžel</span>
+        </div>
+        <div class="presence-status-chip manzelka" data-presence-role="manzelka">
+          <div class="status-dot"></div> <span>Manželka</span>
+        </div>
+      </div>
+
+      <!-- NÁLADOMETER (PLAMIENOK TÚŽBY) -->
+      <div class="mood-tuner-card">
+        <div class="mood-tuner-header">
+          <span><i class="fa-solid fa-fire"></i> Plamienok túžby (Tvoj náladometer)</span>
+          <span id="display-my-mood-val">1 - Pokojná romantika 🌹</span>
+        </div>
+        <div class="mood-slider-container">
+          <input type="range" class="mood-slider" id="mood-range-slider" min="1" max="10" value="1">
+          <div class="mood-labels">
+            <span>Romantika</span>
+            <span>Dotyky</span>
+            <span>Hravosť</span>
+            <span>Vášeň</span>
+          </div>
+        </div>
+        
+        <div class="mood-flame-comparison">
+          <div class="flame-display manzel">
+            <i class="fas fa-fire flame-icon-glow" id="flame-manzel-icon"></i>
+            <span>Manžel: <strong id="mood-val-manzel">1</strong>/10</span>
+          </div>
+          <div class="flame-display manzelka">
+            <i class="fas fa-fire flame-icon-glow" id="flame-manzelka-icon"></i>
+            <span>Manželka: <strong id="mood-val-manzelka">1</strong>/10</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Prepínač režimu hry -->
+      <div class="mode-tab-bar">
+        <button class="mode-tab-btn active" data-game-mode="live">
+          <i class="fas fa-bolt"></i> NAŽIVO (Zrkadlenie)
+        </button>
+        <button class="mode-tab-btn" data-game-mode="async">
+          <i class="fas fa-clock"></i> NAŠE TEMPO (Písanie)
+        </button>
+      </div>
+
+      <!-- Filter kategórií zmyselných kariet -->
+      <div class="category-filter-container" id="category-tabs">
+        <button class="category-tab-btn active" data-category="all">Všetky témy</button>
+        <button class="category-tab-btn" data-category="naladenie">Naladenie 🌹 (1-20)</button>
+        <button class="category-tab-btn" data-category="túžby">Túžby 💋 (21-40)</button>
+        <button class="category-tab-btn" data-category="dotyky">Dotyky slovom 🕯️ (41-60)</button>
+        <button class="category-tab-btn" data-category="horúce">Horúce chvíle 🔥 (61-80)</button>
+      </div>
+
+      <!-- Herná zmyselná karta -->
+      <div class="card-scene">
+        <div class="card-container" id="game-card">
+          <div class="card-header-elements">
+            <span class="card-category-badge cat-naladenie" id="card-category-name">Kategória</span>
+            <span class="card-id-label" id="card-question-number">Karta #--</span>
+          </div>
+
+          <div class="card-body">
+            <div id="card-text-wrapper" style="width: 100%;">
+              <p class="card-text" id="card-question-text">Ťahajte prvú kartu a nechajte sa unášať prítomnosťou toho druhého...</p>
+            </div>
+            <div id="card-skipped-wrapper" class="card-skipped-container" style="display: none;">
+              <i class="fas fa-circle-check card-skipped-icon" style="color: var(--accent-gold);"></i>
+              <p class="card-skipped-text">Rozumieme, túto kartu preskakujeme. Hra má byť o potešení, nie tlaku. 💖</p>
+            </div>
+          </div>
+
+          <div class="card-footer-text" id="card-footer-text">
+            Láskanie - Spojenie na diaľku
+          </div>
+        </div>
+      </div>
+
+      <!-- Herné akcie pod kartou -->
+      <div class="game-actions">
+        <button class="btn-primary" id="btn-draw-card">
+          <i class="fas fa-shuffle"></i> Ťahať novú kartu
+        </button>
+        <button class="btn-secondary btn-danger" id="btn-pass-card" title="Preskočiť túto tému">
+          <i class="fas fa-dove"></i> Pas
+        </button>
+      </div>
+
+      <!-- Panel s odpoveďami pre režim "NAŠE TEMPO" -->
+      <div class="answers-panel" id="answers-panel-section" style="display: none;">
+        <h3 class="answers-title"><i class="fas fa-comments-text"></i> Naše intímne odpovede</h3>
+        
+        <div class="answers-grid" id="answers-container">
+          <!-- Dynamicky sa vloží odpoveď Manžela a Manželky -->
+        </div>
+      </div>
+
+      <!-- TREZOR TAJOMSTIEV (VŽDY K DISPOZÍCII) -->
+      <div class="secret-vault-card">
+        <div class="vault-header">
+          <span class="vault-title"><i class="fas fa-vault"></i> Trezor tajomstiev</span>
+          <span class="vault-status-badge" id="vault-status-badge"><i class="fas fa-lock"></i> ZAMKNUTÝ</span>
+        </div>
+        
+        <div id="vault-locked-state">
+          <p class="vault-desc">Zadajte sem svoje tajné prianie, fantáziu alebo priznanie pre tento večer. Obsah sa odhalí obom naraz až vtedy, keď napíše a uzamkne svoje tajomstvo aj vaša polovička.</p>
+          
+          <div class="vault-inputs-container">
+            <div class="vault-compose" id="vault-my-entry-area">
+              <textarea class="vault-textarea" id="vault-my-text" placeholder="Sem napíš svoje tajné želanie pre dnešný večer... (polovička ho zatiaľ neuvidí)"></textarea>
+              <button class="btn-primary" id="btn-vault-submit" style="align-self: flex-end; padding: 0.5rem 1.2rem; font-size: 0.85rem; width: auto;">
+                <i class="fas fa-lock"></i> Bezpečne uzamknúť tajomstvo
+              </button>
+            </div>
+            
+            <div class="vault-partner-status-row">
+              <div class="vault-partner-item manzel" id="vault-status-manzel">
+                <span>Manžel:</span>
+                <span class="status-badge not-ready" id="vault-badge-manzel"><i class="fas fa-times-circle"></i> Nenapísal</span>
+              </div>
+              <div class="vault-partner-item manzelka" id="vault-status-manzelka">
+                <span>Manželka:</span>
+                <span class="status-badge not-ready" id="vault-badge-manzelka"><i class="fas fa-times-circle"></i> Nenapísala</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div id="vault-unlocked-state" style="display: none;">
+          <p class="vault-desc" style="color: #10b981; font-weight: 600;"><i class="fas fa-unlock"></i> Odomknuté! Obaja ste uzamkli svoje tajomstvo. Tu sú vaše dnešné večerné túžby:</p>
+          
+          <div class="vault-revealed-grid">
+            <div class="vault-revealed-box manzel">
+              <span class="vault-revealed-author manzel">Manželove prianie</span>
+              <p class="vault-revealed-text" id="vault-text-manzel">Tu bude zobrazené prianie.</p>
+            </div>
+            <div class="vault-revealed-box manzelka">
+              <span class="vault-revealed-author manzelka">Manželkine prianie</span>
+              <p class="vault-revealed-text" id="vault-text-manzelka">Tu bude zobrazené prianie.</p>
+            </div>
+          </div>
+
+          <div style="display: flex; justify-content: center;">
+            <button class="btn-secondary btn-danger btn-vault-reset" id="btn-vault-reset" style="padding: 0.5rem 1.2rem; font-size: 0.85rem; width: auto;">
+              <i class="fas fa-trash-arrow-up"></i> Vymazať a začať znova
+            </button>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- TOAST NOTIFIKÁCIA -->
+  <div class="toast" id="toast-message">
+    <i class="fas fa-circle-info"></i>
+    <span id="toast-text-content">Notifikácia</span>
+  </div>
+
+  <!-- FIREBASE SDK -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+  <script>
+    // =========================================================================
+    // 1. DATABÁZA 80 ZMYSELNÝCH KARIET A VÝZIEV PRE PÁRY NA DIAĽKU
+    // =========================================================================
+    const QUESTIONS = [
+      // 1-20: Naladenie
+      { id: 1, category: "Naladenie", text: "Čo ti na mne najviac chýba, keď sme takto ďaleko od seba?" },
+      { id: 2, category: "Naladenie", text: "Spomeň si na naše najromantickejšie spoločné ráno. Čo ho robilo výnimočným?" },
+      { id: 3, category: "Naladenie", text: "Akú moju vlastnosť alebo drobnosť na mojom tele máš najradšej, keď spolu zaspávame?" },
+      { id: 4, category: "Naladenie", text: "Kedy si si dnes na mňa spomenul/a a čo presne ti prebehlo hlavou?" },
+      { id: 5, category: "Naladenie", text: "Akú vôňu si sľubuješ spojiť so mnou, keď sa nabudúce stretneme?" },
+      { id: 6, category: "Naladenie", text: "Čo pre teba znamená pojem 'bezpečné útočisko' v našom manželstve?" },
+      { id: 7, category: "Naladenie", text: "Ktorá pesnička ti ma najviac pripomína a prečo?" },
+      { id: 8, category: "Naladenie", text: "Ak by si mal/a popísať naše manželstvo tromi zmyselnými slovami, ktoré by to boli?" },
+      { id: 9, category: "Naladenie", text: "Aký kompliment si mi chcel/a povedať za posledné dni, ale nenašiel/nenašla si na to správny čas?" },
+      { id: 10, category: "Naladenie", text: "Čo ťa na mne vie vždy najrýchlejšie upokojiť, keď si pod stresom?" },
+      { id: 11, category: "Naladenie", text: "Ktorá spoločná spomienka z našich začiatkov vo tebe doteraz vyvoláva motýle v bruchu?" },
+      { id: 12, category: "Naladenie", text: "Čo na mne najviac obdivuješ v tom, ako zvládaš naše spoločné životné situácie?" },
+      { id: 13, category: "Naladenie", text: "Aký zmyselný odkaz by si mi poslal/a na papieriku, keby si mi ho mohol/mohla tajne strčiť do vrecka?" },
+      { id: 14, category: "Naladenie", text: "Ktorý môj dotyk je pre teba najviac uvoľňujúci a liečivý?" },
+      { id: 15, category: "Naladenie", text: "Keby si mohol/mohla zastaviť čas v jednom jedinom našom spoločnom intímnom momente, ktorý by to bol?" },
+      { id: 16, category: "Naladenie", text: "Čo ťa dnes najviac potešilo a ako s tým súvisí sila našej lásky?" },
+      { id: 17, category: "Naladenie", text: "Čo by si mi zašepkal/a do ucha práve teraz, keby si ležal/a tesne vedľa mňa?" },
+      { id: 18, category: "Naladenie", text: "Ako sa tvoje vnímanie našej blízkosti zmenilo za tie roky, čo sme spolu?" },
+      { id: 19, category: "Naladenie", text: "Ktorý spoločný smiech bol pre teba za poslednú dobu najviac oslobodzujúci?" },
+      { id: 20, category: "Naladenie", text: "Ak by sme mali dnes večer vytvoriť nový spoločný zvyk na diaľku, čo by to mohlo byť?" },
+
+      // 21-40: Túžby
+      { id: 21, category: "Túžby", text: "Existuje nejaká zmyselná predstava o mne, o ktorej si mi doteraz nepovedal/a?" },
+      { id: 22, category: "Túžby", text: "Ktoré miesto na tvojom tele je momentálne najcitlivejšie na jemný dotyk pier?" },
+      { id: 23, category: "Túžby", text: "Keby sme mali víkend len pre seba v luxusnom hoteli, ako by vyzeral náš prvý spoločný večer?" },
+      { id: 24, category: "Túžby", text: "Máš nejakú tajnú predstvu o oblečení alebo bielizni, ktorú by si na mne chcel/a vidieť?" },
+      { id: 25, category: "Túžby", text: "Ak by si mal/a možnosť vybrať jedno nové nečakané miesto, kde sa pomilujeme, kde by to bolo?" },
+      { id: 26, category: "Túžby", text: "Čo ťa na mne najviac vzrušuje v bežný deň bez toho, aby som sa o to nejako snažil/a?" },
+      { id: 27, category: "Túžby", text: "Aké je tvoje najobľúbenejšie ročné obdobie na milovanie a prečo?" },
+      { id: 28, category: "Túžby", text: "Existuje nejaká zmyselná hra, rola alebo nápad, ktorý ťa láka spoločne vyskúšať?" },
+      { id: 29, category: "Túžby", text: "Čo je pre teba najdôležitejšou ingredienciou pre hlboké a úplné zmyselné prepojenie?" },
+      { id: 30, category: "Túžby", text: "Ktorá intímna scéna z filmu alebo knihy vo tebe vyvolala túžbu prežiť niečo podobné so mnou?" },
+      { id: 31, category: "Túžby", text: "Máš radšej pomalé, nežné milovanie, alebo divokú a nespútanú vášeň? Od čoho to u teba závisí?" },
+      { id: 32, category: "Túžby", text: "Ak by si ma mohol/mohla vidieť v tejto chvíli robiť čokoľvek, čo by to bolo?" },
+      { id: 33, category: "Túžby", text: "Aké tajné myšlienky ti chodia po rozume, keď sa na mňa pozeráš počas nášho videohovoru?" },
+      { id: 34, category: "Túžby", text: "Ktorá časť dňa (ráno, popoludnie, noc) vo tebe prebúdza najväčšiu túžbu dotknúť sa ma?" },
+      { id: 35, category: "Túžby", text: "Keby si mi mal/a poslať jednu zvodnú fotku, aká časť tvojho tela by na nej dominovala?" },
+      { id: 36, category: "Túžby", text: "Akú úlohu v tvojom vzrušení hrá priamy očný kontakt? Ako ho môžeme viac využiť na diaľku?" },
+      { id: 37, category: "Túžby", text: "Čo pre teba znamená pocit 'byť úplne odovzdaný/á' a v čom ti v tom najviac dôverujem?" },
+      { id: 38, category: "Túžby", text: "Ako by si chcel/a, aby som ťa privítal/a pri dverách, keď sa po dlhom čase vrátiš domov?" },
+      { id: 39, category: "Túžby", text: "Akú zmyselnú masáž by si mi chcel/a dopriať a ktoré partie by si chcel/a ušetrieť na záver?" },
+      { id: 40, category: "Túžby", text: "Existuje nejaké zmyselné tajomstvo z tvojej minulosti, ktoré by si mi dnes večer chcel/a odhaliť?" },
+
+      // 41-60: Dotyky slovom
+      { id: 41, category: "Dotyky", text: "Zavri oči a popíš mi naozaj pomaly a detailne, ako by si ma teraz hladil/a po chrbte a krku." },
+      { id: 42, category: "Dotyky", text: "Predstav si, že nanášaš teplý masážny olej na moje ramená. Popíš mi ten krúživý pohyb a moju reakciu." },
+      { id: 43, category: "Dotyky", text: "Ktorými slovami by si ma chcel/a sprevádzať, keby sme sa milovali v úplnej tme?" },
+      { id: 44, category: "Dotyky", text: "Zavri oči na 10 sekúnd, potom mi popíš, ako presne by si ma pobozkal/a na pery a na krk práve teraz." },
+      { id: 45, category: "Dotyky", text: "Ak by tvoj hlas mohol byť fyzickým dotykom, na ktorej časti tela by som ho v tejto sekunde cítil/a?" },
+      { id: 46, category: "Dotyky", text: "Popíš mi pocit, keď sa tvoje prsty pevne prepletú s mojimi. Čo v tej chvíli prežíva tvoje srdce?" },
+      { id: 47, category: "Dotyky", text: "Ako by si opísal/a prirodzenú vôňu mojej pokožky niekomu, kto ju nikdy necítil?" },
+      { id: 48, category: "Dotyky", text: "Predstav si, že mi šepkáš do ucha niečo intímne. Popíš tón svojho hlasu a to, ako blízko sú tvoje pery." },
+      { id: 49, category: "Dotyky", text: "Popíš mi zmyselný spoločný kúpeľ, ktorý by si pre nás pripravil/a. Aké vône, hudba a svetlo by tam boli?" },
+      { id: 50, category: "Dotyky", text: "Ako by si slovami opísal/a ten moment napätia tesne predtým, ako sa naše pery prvýkrát stretnú po odlúčení?" },
+      { id: 51, category: "Dotyky", text: "Zavri oči a predstav si, že prechádzaš končekmi prstov po mojich vlasoch. Popíš mi rytmus tohto dotyku." },
+      { id: 52, category: "Dotyky", text: "Popíš mi, ako by si ma pomaly vyzliekal/a, kus po kuse, a aké vyznania by si mi popritom šepkal/a." },
+      { id: 53, category: "Dotyky", text: "Zvoľ jedno miesto na mojom tele, ktoré by si chcel/a iba jemne hladiť pierkom alebo končekmi prstov. Popíš ho." },
+      { id: 54, category: "Dotyky", text: "Popíš romantickú večeru, ktorú by sme jedli len rukami a navzájom sa kŕmili so zavretými očami." },
+      { id: 55, category: "Dotyky", text: "Zavri oči a popíš, ako ma objímaš zozadu, keď sa spolu dívame do tmy. Ako blízko sú naše telá?" },
+      { id: 56, category: "Dotyky", text: "Popíš pohyb svojich rúk, keby si mi robil/a masáž unavených chodidiel po celom dni." },
+      { id: 57, category: "Dotyky", text: "Ak by si mal/a prirovnať moje bozky k prírodnému živlu (napr. teplý letný dážď), čo by to bolo a prečo?" },
+      { id: 58, category: "Dotyky", text: "Povedz mi, ako by si ma držal/a za ruku pri prechádzke v noci a ako by sa tvoj stisk zmenil, keby sme boli úplne sami." },
+      { id: 59, category: "Dotyky", text: "Predstav si, že ležíme tesne oproti sebe a len sa dívame do očí. Popíš mi, čo čítaš v mojom pohľade." },
+      { id: 60, category: "Dotyky", text: "Popíš, ako by si ma nežne prebudil/a bozkom na čelo a postupne prešiel/prešla nižšie." },
+
+      // 61-80: Horúce chvíle
+      { id: 61, category: "Horúce", text: "Urob si pohodlie, zatvor oči a dotkni sa svojich pier presne tak, ako by si chcel/a, aby som sa ich dotkol/dotkla ja. Druhý sa díva..." },
+      { id: 62, category: "Horúce", text: "Ukáž mi na chvíľu na kameru ten najzvodnejší pohľad, aký pre mňa máš. Vydrž sa mi dívať do očí bez slova 10 sekúnd." },
+      { id: 63, category: "Horúce", text: "Povedz mi s privretými očami tri slová, ktoré ťa najviac vzrušujú, keď ti ich šepkám." },
+      { id: 64, category: "Horúce", text: "Uvoľni si jeden gombík alebo odhaľ kúsok ramena/krku na kamere a ukáž mi miesto, ktoré čaká na môj bozk." },
+      { id: 65, category: "Horúce", text: "Napíš na malý papierik jedno zmyselné slovo, ukáž mi ho na kameru a potom ho znič tajomným spôsobom." },
+      { id: 66, category: "Horúce", text: "Zhasni svetlá vo svojej izbe a nechaj len svetlo sviečky alebo telefónu. Ukáž mi, ako svetlo tieňov dopadá na tvoju tvár." },
+      { id: 67, category: "Horúce", text: "Zober si pohár vody alebo vína, pomaly sa napi a pritom sa mi dívaj priamo do očí bez prerušenia." },
+      { id: 68, category: "Horúce", text: "Povedz mi jedno zmyselné prianie, ktoré ti musím bezpodmienečne splniť v prvú hodinu, keď budeme opäť spolu." },
+      { id: 69, category: "Horúce", text: "Ukáž mi svoju ruku a pomaly prejdi prstami po svojom krku a kľúčnej kosti, akoby som to robil/a ja." },
+      { id: 70, category: "Horúce", text: "Priblíž sa s tvárou veľmi blízko ku kamere, tak, aby sme videli len oči, a zašepkaj moje meno tak, ako ho hovoríš v najintímnejších chvíľach." },
+      { id: 71, category: "Horúce", text: "Odhaľ mi na 5 sekúnd kúsok oblečenia, ktoré máš na sebe pod vrchnou vrstvou." },
+      { id: 72, category: "Horúce", text: "Povedz mi na rovinu, ktorá časť tvojho tela by chcela zažiť môj teplý dych práve teraz." },
+      { id: 73, category: "Horúce", text: "Vezmi si do ruky kocku ľadu alebo teplý predmet a prejdi si ním po zápästí, pričom mi úprimne opíš ten pocit." },
+      { id: 74, category: "Horúce", text: "Predvedieš mi na kameru pomalý pohyb ramien alebo vlasov, ktorým ma vo svojej spálni najviac očaruješ?" },
+      { id: 75, category: "Horúce", text: "Pošli mi vzdušný bozk, ale urob to tak pomaly a precítene, akoby sa tvoje pery naozaj spojili s mojimi." },
+      { id: 76, category: "Horúce", text: "Zašepkaj mi do mikrofónu niečo, čo ti bežne naháňa červeň do tváre, keď na to v priebehu dňa pomyslíš." },
+      { id: 77, category: "Horúce", text: "Ukáž mi na svojom tele, kde presne by si chcel/a, aby som ťa (nežne!) pohrýzol/pohrýzla, keď sa stretneme." },
+      { id: 78, category: "Horúce", text: "Zatvor oči, zhlboka sa nadýchni a pomaly vydýchni priamo do mikrofónu, akoby si v tej chvíli zaspával/a na mojej hrudi." },
+      { id: 79, category: "Horúce", text: "Urob zvodné gesto rukou a naznač mi, čo by si so mnou robil/a, keby v tejto sekunde klesla vzdialenosť medzi nami na nulu." },
+      { id: 80, category: "Horúce", text: "Ukáž mi kúsok svojej pokožky (napr. krk, predlaktie) a povedz mi s úsmevom: 'Toto patrí tebe'." }
+    ];
+
+    // =========================================================================
+    // 2. KONFIGURÁCIA A STAV REÁLNEHO ČASU (FIREBASE)
+    // =========================================================================
+    const firebaseConfig = {
+      apiKey: "AIzaSyB5VwMNMTPeQprg_97tqR1EkNymzG8MYFY",
+      authDomain: "clovecina-c22a8.firebaseapp.com",
+      databaseURL: "https://clovecina-c22a8-default-rtdb.firebaseio.com",
+      projectId: "clovecina-c22a8",
+      storageBucket: "clovecina-c22a8.firebasestorage.app",
+      messagingSenderId: "486927023849",
+      appId: "1:486927023849:web:c414501d5ee10b95f17a78"
+    };
+
+    let db = null;
+    let databaseInitialized = false;
+
+    // Lokálny stav hry
+    const state = {
+      myRole: '',            // 'manzel' alebo 'manzelka'
+      roomCode: '',          // Kód miestnosti (napr. "SRDCE")
+      isDemoMode: true,      // fallback na offline demo, ak nie je Firebase
+      mode: 'live',          // 'live' (synchrónne) alebo 'async' (asynchrónne odpovede)
+      currentCardId: 0,
+      skipped: false,
+      categoryFilter: 'all',
+      presence: { manzel: false, manzelka: false },
+      prepReady: { manzel: false, manzelka: false },
+      flameLevels: { manzel: 1, manzelka: 1 },
+      answers: {},           // Textové odpovede pre asynchrónny režim
+      secrets: { manzel: '', manzelka: '' } // Trezor tajomstiev
+    };
+
+    // Firebase referencie
+    let myPresenceRef = null;
+    let presenceRef = null;
+    let infoRef = null;
+    let atmosphereRef = null;
+    let myAtmosphereRef = null;
+    let flameRef = null;
+    let myFlameRef = null;
+    let secretsRef = null;
+    let mySecretsRef = null;
+    let answersRef = null;
+
+    // =========================================================================
+    // 3. EVENT LISTENERS & INICIALIZÁCIA
+    // =========================================================================
+    document.addEventListener('DOMContentLoaded', () => {
+      loadFirebaseConfig();
+      setupUI();
+      setupEventListeners();
+      checkFirebaseStatus();
+    });
+
+    // Načítanie Firebase konfigurácie z predošlej rodinnej hry (ak existuje v localStorage)
+    function loadFirebaseConfig() {
+      const savedConfig = localStorage.getItem('rodinna_clovecina_fb_config');
+      if (savedConfig) {
+        try {
+          const parsed = JSON.parse(savedConfig);
+          Object.assign(firebaseConfig, parsed);
+        } catch (e) {
+          console.error("Chyba pri načítaní uloženej konfigurácie Firebase z localStorage.", e);
+        }
+      }
+    }
+
+    // Inicializácia Firebase databázy
+    function initFirebase() {
+      if (databaseInitialized) return true;
+      if (!firebaseConfig.apiKey || !firebaseConfig.databaseURL) return false;
+      try {
+        if (firebase.apps.length === 0) firebase.initializeApp(firebaseConfig);
+        db = firebase.database();
+        databaseInitialized = true;
+        return true;
+      } catch (e) {
+        console.error("Chyba pri inicializácii Firebase:", e);
+        return false;
+      }
+    }
+
+    function checkFirebaseStatus() {
+      const banner = document.getElementById('fb-config-warning');
+      const hasConfig = firebaseConfig.apiKey && firebaseConfig.databaseURL;
+      banner.style.display = hasConfig ? 'none' : 'flex';
+    }
+
+    function setupUI() {
+      document.getElementById('screen-lobby').style.display = 'flex';
+      document.getElementById('screen-atmosphere').style.display = 'none';
+      document.getElementById('screen-game').style.display = 'none';
+    }
+
+    function setupEventListeners() {
+      // Výber roly (Manžel / Manželka)
+      document.querySelectorAll('.role-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          state.myRole = btn.dataset.role;
+        });
+      });
+
+      // Vstup do izby (Spustí prípravu atmosféry)
+      document.getElementById('btn-enter-room').addEventListener('click', () => {
+        const rawCode = document.getElementById('room-code-input').value.trim();
+        if (!state.myRole) {
+          showToast("Prosím, zvoľte si najprv svoju rolu (Manžel alebo Manželka)!");
+          return;
+        }
+        if (!rawCode) {
+          showToast("Zadajte kód izby pre pripojenie.");
+          return;
+        }
+        const cleanCode = rawCode.toUpperCase();
+        startAtmosphereWorkflow(cleanCode);
+      });
+
+      // Kontrola checklistu na potvrdenie pripravenosti
+      const checkBoxes = ['check-privacy', 'check-lighting', 'check-drink', 'check-mood'];
+      checkBoxes.forEach(id => {
+        document.getElementById(id).addEventListener('change', checkChecklistCompletion);
+      });
+
+      // Tlačidlo pre potvrdenie pripravenosti
+      document.getElementById('btn-ready-confirm').addEventListener('click', confirmMyReadyStatus);
+
+      // Návrat z prípravy do lobby
+      document.getElementById('btn-leave-atmos').addEventListener('click', leaveAtmosphereWorkflow);
+
+      // Odchod z hry naspäť do lobby
+      document.getElementById('btn-leave-room').addEventListener('click', leaveRoomWorkflow);
+
+      // Kopírovanie kódu izby kliknutím
+      document.getElementById('display-room-code').addEventListener('click', () => {
+        navigator.clipboard.writeText(state.roomCode).then(() => {
+          showToast(`Kód izby ${state.roomCode} bol skopírovaný!`);
+        });
+      });
+
+      // Zmena Plamienka túžby (Náladometer)
+      const moodSlider = document.getElementById('mood-range-slider');
+      moodSlider.addEventListener('input', (e) => {
+        const val = parseInt(e.target.value);
+        updateMyMoodFlame(val);
+      });
+
+      // Prepínanie režimov (Live / Async)
+      document.querySelectorAll('.mode-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const newMode = btn.dataset.gameMode;
+          setRoomMode(newMode);
+        });
+      });
+
+      // Výber kategórií zmyselných kariet
+      document.querySelectorAll('.category-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.category-tab-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          const newCat = btn.dataset.category;
+          setCategoryFilter(newCat);
+        });
+      });
+
+      // Akcia: Ťahať novú zmyselnú kartu
+      document.getElementById('btn-draw-card').addEventListener('click', drawRandomCard);
+
+      // Akcia: PAS (Preskočiť tému)
+      document.getElementById('btn-pass-card').addEventListener('click', passCurrentCard);
+
+      // Akcia: Uzamknúť tajomstvo do trezoru
+      document.getElementById('btn-vault-submit').addEventListener('click', submitMySecret);
+
+      // Akcia: Reset Trezoru
+      document.getElementById('btn-vault-reset').addEventListener('click', resetSecretVault);
+    }
+
+    // =========================================================================
+    // 4. KROK 1: ATMOSFÉRA WORKFLOW (CHECKLIST)
+    // =========================================================================
+    function startAtmosphereWorkflow(roomCode) {
+      state.roomCode = roomCode;
+      const hasFirebase = initFirebase();
+
+      document.getElementById('screen-lobby').style.display = 'none';
+      document.getElementById('screen-atmosphere').style.display = 'flex';
+
+      // Reset checklistov
+      document.getElementById('check-privacy').checked = false;
+      document.getElementById('check-lighting').checked = false;
+      document.getElementById('check-drink').checked = false;
+      document.getElementById('check-mood').checked = false;
+      document.getElementById('btn-ready-confirm').disabled = true;
+
+      // Reset lokálnej pripravenosti
+      state.prepReady = { manzel: false, manzelka: false };
+      renderAtmosphereStatusBadges();
+
+      if (hasFirebase) {
+        state.isDemoMode = false;
+        showToast(`Pripájanie do izby: ${roomCode}...`);
+
+        // Sledovanie pripravenosti atmosféry
+        atmosphereRef = db.ref(`rooms/${roomCode}/laskanieAtmosphere`);
+        atmosphereRef.on('value', (snapshot) => {
+          const val = snapshot.val() || {};
+          state.prepReady = { manzel: !!val.manzel, manzelka: !!val.manzelka };
+          renderAtmosphereStatusBadges();
+
+          // Ak sú OBAJA pripravení, automaticky vstúpiť do hry!
+          if (state.prepReady.manzel && state.prepReady.manzelka) {
+            atmosphereRef.off(); // vypnúť listener pri prechode
+            joinRoomWorkflow(roomCode, false);
+          }
+        });
+      } else {
+        state.isDemoMode = true;
+        showToast("Demo režim: Firebase nie je pripojený. Hráte offline.");
+        renderAtmosphereStatusBadges();
+      }
+    }
+
+    function checkChecklistCompletion() {
+      const isPrivacy = document.getElementById('check-privacy').checked;
+      const isLighting = document.getElementById('check-lighting').checked;
+      const isDrink = document.getElementById('check-drink').checked;
+      const isMood = document.getElementById('check-mood').checked;
+
+      const btn = document.getElementById('btn-ready-confirm');
+      btn.disabled = !(isPrivacy && isLighting && isDrink && isMood);
+    }
+
+    function confirmMyReadyStatus() {
+      if (state.isDemoMode) {
+        state.prepReady[state.myRole] = true;
+        renderAtmosphereStatusBadges();
+        showToast("Si pripravený/á! V Demo režime ťa prepíname rovno do hry.");
+        // V demo režime netreba čakať na druhého
+        setTimeout(() => {
+          joinRoomWorkflow(state.roomCode, true);
+        }, 1000);
+      } else {
+        myAtmosphereRef = db.ref(`rooms/${state.roomCode}/laskanieAtmosphere/${state.myRole}`);
+        myAtmosphereRef.set(true);
+        myAtmosphereRef.onDisconnect().remove();
+        showToast("Nastavenie uložené. Čaká sa na pripravenosť partnera... 🕯️");
+      }
+    }
+
+    function renderAtmosphereStatusBadges() {
+      const badgeMe = document.getElementById('status-badge-me');
+      const badgePartner = document.getElementById('status-badge-partner');
+      const partnerRole = state.myRole === 'manzel' ? 'manzelka' : 'manzel';
+
+      // Moja pripravenosť
+      if (state.prepReady[state.myRole]) {
+        badgeMe.className = "status-badge ready";
+        badgeMe.innerHTML = '<i class="fas fa-check-circle"></i> Pripravený/á';
+      } else {
+        badgeMe.className = "status-badge not-ready";
+        badgeMe.innerHTML = '<i class="fas fa-clock"></i> Čaká sa';
+      }
+
+      // Partnerova pripravenosť
+      if (state.prepReady[partnerRole]) {
+        badgePartner.className = "status-badge ready";
+        badgePartner.innerHTML = `<i class="fas fa-check-circle"></i> ${partnerRole === 'manzel' ? 'Pripravený' : 'Pripravená'}`;
+      } else {
+        badgePartner.className = "status-badge not-ready";
+        badgePartner.innerHTML = '<i class="fas fa-clock"></i> Čaká sa';
+      }
+    }
+
+    function leaveAtmosphereWorkflow() {
+      if (myAtmosphereRef) { myAtmosphereRef.remove(); myAtmosphereRef = null; }
+      if (atmosphereRef) { atmosphereRef.off(); atmosphereRef = null; }
+      setupUI();
+    }
+
+    // =========================================================================
+    // 5. KROK 2: VSTUP DO HERNÉHO PRESTREDIA
+    // =========================================================================
+    function joinRoomWorkflow(roomCode, isCreatingNew) {
+      state.roomCode = roomCode;
+      const hasFirebase = initFirebase();
+
+      document.getElementById('screen-atmosphere').style.display = 'none';
+      document.getElementById('screen-lobby').style.display = 'none';
+      document.getElementById('screen-game').style.display = 'flex';
+
+      document.getElementById('display-room-code').innerHTML = `KÓD: ${roomCode} <i class="fas fa-copy" style="font-size: 0.75rem;"></i>`;
+
+      if (hasFirebase) {
+        state.isDemoMode = false;
+
+        // 1. Zabezpečenie prítomnosti (Presence)
+        myPresenceRef = db.ref(`rooms/${roomCode}/laskaniePresence/${state.myRole}`);
+        myPresenceRef.set(true);
+        myPresenceRef.onDisconnect().remove();
+
+        presenceRef = db.ref(`rooms/${roomCode}/laskaniePresence`);
+        presenceRef.on('value', (snapshot) => {
+          const val = snapshot.val() || {};
+          state.presence = { manzel: !!val.manzel, manzelka: !!val.manzelka };
+          renderPresenceIndicators();
+        });
+
+        // 2. Synchronizácia herných parametrov (Info)
+        infoRef = db.ref(`rooms/${roomCode}/laskanieInfo`);
+        if (isCreatingNew || state.myRole === 'manzel') { 
+          // Prvý inicializuje štruktúru, ak neexistuje
+          infoRef.transaction((currentData) => {
+            if (currentData === null) {
+              return {
+                mode: 'live',
+                currentCardId: 0,
+                skipped: false,
+                categoryFilter: 'all',
+                lastUpdated: firebase.database.ServerValue.TIMESTAMP
+              };
+            }
+            return; // nič nemeň, ak už existuje
+          });
+        }
+
+        infoRef.on('value', (snapshot) => {
+          const val = snapshot.val();
+          if (val) {
+            const cardChanged = state.currentCardId !== val.currentCardId;
+            const skipChanged = state.skipped !== val.skipped;
+            state.mode = val.mode || 'live';
+            state.currentCardId = val.currentCardId || 0;
+            state.skipped = val.skipped || false;
+            state.categoryFilter = val.categoryFilter || 'all';
+
+            // Zmena kategórie v tabe
+            document.querySelectorAll('.category-tab-btn').forEach(b => {
+              b.classList.toggle('active', b.dataset.category === state.categoryFilter);
+            });
+
+            // Zmena režimu v tabe
+            document.querySelectorAll('.mode-tab-btn').forEach(b => {
+              b.classList.toggle('active', b.dataset.gameMode === state.mode);
+            });
+
+            if (cardChanged) setupAnswersListener();
+            renderGameInterface(cardChanged || skipChanged);
+          }
+        });
+
+        // 3. Sledovanie Plamienka túžby (Náladometer)
+        myFlameRef = db.ref(`rooms/${roomCode}/laskanieFlame/${state.myRole}`);
+        myFlameRef.onDisconnect().remove();
+
+        flameRef = db.ref(`rooms/${roomCode}/laskanieFlame`);
+        flameRef.on('value', (snapshot) => {
+          const val = snapshot.val() || {};
+          state.flameLevels = {
+            manzel: val.manzel || 1,
+            manzelka: val.manzelka || 1
+          };
+          renderMoodFlameComparison();
+        });
+
+        // 4. Sledovanie Trezoru tajomstiev
+        mySecretsRef = db.ref(`rooms/${roomCode}/laskanieSecrets/${state.myRole}`);
+        
+        secretsRef = db.ref(`rooms/${roomCode}/laskanieSecrets`);
+        secretsRef.on('value', (snapshot) => {
+          const val = snapshot.val() || {};
+          state.secrets = {
+            manzel: val.manzel || '',
+            manzelka: val.manzelka || ''
+          };
+          renderSecretVault();
+        });
+
+      } else {
+        // Lokálny demo režim
+        startLocalDemoMode();
+      }
+    }
+
+    function startLocalDemoMode() {
+      state.isDemoMode = true;
+      state.presence = { manzel: false, manzelka: false };
+      state.presence[state.myRole] = true;
+      showToast(`Lokálne demo v izbe: ${state.roomCode}`);
+      renderPresenceIndicators();
+      renderMoodFlameComparison();
+      renderGameInterface(true);
+      renderSecretVault();
+    }
+
+    function leaveRoomWorkflow() {
+      // Zmazať prítomnosť a vypnúť listenery
+      if (myPresenceRef) { myPresenceRef.remove(); myPresenceRef = null; }
+      if (presenceRef) { presenceRef.off(); presenceRef = null; }
+      if (infoRef) { infoRef.off(); infoRef = null; }
+      if (myAtmosphereRef) { myAtmosphereRef.remove(); myAtmosphereRef = null; }
+      if (atmosphereRef) { atmosphereRef.off(); atmosphereRef = null; }
+      if (myFlameRef) { myFlameRef.remove(); myFlameRef = null; }
+      if (flameRef) { flameRef.off(); flameRef = null; }
+      if (mySecretsRef) { mySecretsRef = null; }
+      if (secretsRef) { secretsRef.off(); secretsRef = null; }
+      if (answersRef) { answersRef.off(); answersRef = null; }
+
+      state.roomCode = '';
+      state.currentCardId = 0;
+      state.skipped = false;
+      state.answers = {};
+      state.secrets = { manzel: '', manzelka: '' };
+
+      // Vrátiť posuvník náladometra na 1
+      document.getElementById('mood-range-slider').value = 1;
+      updateMyMoodFlame(1);
+
+      setupUI();
+      showToast("Opustili ste izbu lásky.");
+    }
+
+    // =========================================================================
+    // 6. RENDER INTERFACE (SYNCHRONIZÁCIA A ZOBRAZOVANIE)
+    // =========================================================================
+    function renderPresenceIndicators() {
+      const container = document.getElementById('presence-indicators');
+      const roles = ['manzel', 'manzelka'];
+      roles.forEach(role => {
+        const item = container.querySelector(`[data-presence-role="${role}"]`);
+        if (item) {
+          item.classList.toggle('online', state.presence[role]);
+        }
+      });
+    }
+
+    function renderGameInterface(shouldAnimateCard) {
+      const card = document.getElementById('game-card');
+      const categoryBadge = document.getElementById('card-category-name');
+      const qNumber = document.getElementById('card-question-number');
+      const qText = document.getElementById('card-question-text');
+      const textWrapper = document.getElementById('card-text-wrapper');
+      const skippedWrapper = document.getElementById('card-skipped-wrapper');
+      const answersPanel = document.getElementById('answers-panel-section');
+
+      // Animácia pretočenia/zväčšenia pri novej karte
+      if (shouldAnimateCard) {
+        card.style.transform = 'scale(0.96) rotateX(10deg)';
+        card.style.opacity = '0.7';
+      }
+
+      setTimeout(() => {
+        if (state.currentCardId === 0) {
+          // Úvodný stav pred vytiahnutím karty
+          categoryBadge.className = "card-category-badge cat-naladenie";
+          categoryBadge.textContent = "Naladenie";
+          qNumber.textContent = "Úvod";
+          qText.textContent = "Kliknite na 'Ťahať novú kartu' nižšie a nechajte sa viesť zmyselnými otázkami a úlohami.";
+          textWrapper.style.display = 'block';
+          skippedWrapper.style.display = 'none';
+          card.classList.remove('glowing-card');
+        } else {
+          const currentCard = QUESTIONS.find(q => q.id === state.currentCardId);
+          if (currentCard) {
+            if (state.skipped) {
+              textWrapper.style.display = 'none';
+              skippedWrapper.style.display = 'flex';
+              categoryBadge.textContent = "Preskočené";
+              categoryBadge.className = "card-category-badge";
+              qNumber.textContent = `Karta #${currentCard.id}`;
+              card.classList.remove('glowing-card');
+            } else {
+              textWrapper.style.display = 'block';
+              skippedWrapper.style.display = 'none';
+              qText.textContent = currentCard.text;
+              qNumber.textContent = `Karta #${currentCard.id}`;
+              
+              // Podpora tried pre badges a glowing efekt pri horúcej kategórii
+              const catClass = currentCard.category.toLowerCase();
+              categoryBadge.textContent = currentCard.category;
+              categoryBadge.className = `card-category-badge cat-${catClass}`;
+
+              if (catClass === 'horúce') {
+                card.classList.add('glowing-card');
+              } else {
+                card.classList.remove('glowing-card');
+              }
+            }
+          }
+        }
+
+        // Zobrazenie textových odpovedí v asynchrónnom režime
+        if (state.mode === 'async' && state.currentCardId > 0 && !state.skipped) {
+          answersPanel.style.display = 'block';
+          renderAnswersPanel();
+        } else {
+          answersPanel.style.display = 'none';
+        }
+
+        if (shouldAnimateCard) {
+          card.style.transform = 'scale(1) rotateX(0)';
+          card.style.opacity = '1';
+        }
+      }, shouldAnimateCard ? 150 : 0);
+    }
+
+    // =========================================================================
+    // 7. NÁLADOMETER (PLAMIENOK TÚŽBY) LOGIKA
+    // =========================================================================
+    function updateMyMoodFlame(val) {
+      const display = document.getElementById('display-my-mood-val');
+      let text = '';
+      if (val <= 3) text = `${val} - Pokojná romantika 🌹`;
+      else if (val <= 6) text = `${val} - Zmyselné naladenie 💋`;
+      else if (val <= 8) text = `${val} - Hravá iskra ✨`;
+      else text = `${val} - Divoká vášeň 🔥`;
+      
+      display.textContent = text;
+      state.flameLevels[state.myRole] = val;
+
+      if (!state.isDemoMode && myFlameRef) {
+        myFlameRef.set(val);
+      } else {
+        renderMoodFlameComparison();
+      }
+    }
+
+    function renderMoodFlameComparison() {
+      const mVal = state.flameLevels.manzel;
+      const fVal = state.flameLevels.manzelka;
+
+      document.getElementById('mood-val-manzel').textContent = mVal;
+      document.getElementById('mood-val-manzelka').textContent = fVal;
+
+      // Zväčšovanie plamienkov podľa hodnoty
+      const mIcon = document.getElementById('flame-manzel-icon');
+      const fIcon = document.getElementById('flame-manzelka-icon');
+
+      mIcon.style.transform = `scale(${1 + mVal * 0.12})`;
+      fIcon.style.transform = `scale(${1 + fVal * 0.12})`;
+
+      // Úprava farby svietenia (od zlatej po červenú)
+      const getFlameColor = (val) => {
+        if (val <= 3) return '#e0a96d'; // Gold
+        if (val <= 6) return '#ff7e5f'; // Soft orange
+        if (val <= 8) return '#ff4e50'; // Red orange
+        return '#ef4444'; // Hot red
+      };
+
+      mIcon.style.color = getFlameColor(mVal);
+      fIcon.style.color = getFlameColor(fVal);
+    }
+
+    // =========================================================================
+    // 8. ŤAHANIE KARIET A PAS (SYNCHRONIZÁCIA CEZ FIREBASE)
+    // =========================================================================
+    function drawRandomCard() {
+      // Filtrujeme otázky podľa zvolenej kategórie
+      let pool = QUESTIONS;
+      if (state.categoryFilter !== 'all') {
+        const catMap = {
+          'naladenie': 'Naladenie',
+          'túžby': 'Túžby',
+          'dotyky': 'Dotyky',
+          'horúce': 'Horúce'
+        };
+        pool = QUESTIONS.filter(q => q.category === catMap[state.categoryFilter]);
+      }
+
+      if (pool.length === 0) return;
+
+      let randomIndex = Math.floor(Math.random() * pool.length);
+      let newCard = pool[randomIndex];
+
+      // Ak sme vybrali rovnakú kartu, skúsime znova
+      if (pool.length > 1 && newCard.id === state.currentCardId) {
+        newCard = pool[(randomIndex + 1) % pool.length];
+      }
+
+      if (state.isDemoMode) {
+        state.currentCardId = newCard.id;
+        state.skipped = false;
+        state.answers = {};
+        renderGameInterface(true);
+      } else {
+        // Vymazať predchádzajúce textové odpovede pre túto kartu na Firebase
+        db.ref(`rooms/${state.roomCode}/laskanieAnswers/${newCard.id}`).remove();
+        
+        infoRef.update({
+          currentCardId: newCard.id,
+          skipped: false,
+          lastUpdated: firebase.database.ServerValue.TIMESTAMP
+        });
+      }
+      showToast("Ťahám novú kartu...");
+    }
+
+    function passCurrentCard() {
+      if (state.currentCardId === 0) return;
+      if (state.isDemoMode) {
+        state.skipped = true;
+        renderGameInterface(true);
+      } else {
+        infoRef.update({
+          skipped: true,
+          lastUpdated: firebase.database.ServerValue.TIMESTAMP
+        });
+      }
+      showToast("Téma bola preskočená.");
+    }
+
+    function setCategoryFilter(category) {
+      if (state.isDemoMode) {
+        state.categoryFilter = category;
+        showToast(`Filtrujem kategóriu: ${category}`);
+      } else {
+        infoRef.update({
+          categoryFilter: category,
+          lastUpdated: firebase.database.ServerValue.TIMESTAMP
+        });
+      }
+    }
+
+    function setRoomMode(mode) {
+      if (state.isDemoMode) {
+        state.mode = mode;
+        renderGameInterface(true);
+        showToast(`Prepnuté do režimu: ${mode === 'live' ? 'Naživo' : 'Naše tempo'}`);
+      } else {
+        infoRef.update({
+          mode: mode,
+          lastUpdated: firebase.database.ServerValue.TIMESTAMP
+        });
+      }
+    }
+
+    // =========================================================================
+    // 9. ASYNCHRÓNNE ODPOVEDE (NAŠE TEMPO) LOGIKA
+    // =========================================================================
+    function setupAnswersListener() {
+      if (answersRef) answersRef.off();
+      state.answers = {};
+      
+      if (state.isDemoMode || !state.currentCardId) { 
+        renderAnswersPanel(); 
+        return; 
+      }
+      
+      answersRef = db.ref(`rooms/${state.roomCode}/laskanieAnswers/${state.currentCardId}`);
+      answersRef.on('value', (snapshot) => {
+        state.answers = snapshot.val() || {};
+        renderAnswersPanel();
+      });
+    }
+
+    function submitMyAnswer(text) {
+      const clean = text.trim();
+      if (!clean) return;
+      
+      if (state.isDemoMode) {
+        state.answers[state.myRole] = clean;
+        renderAnswersPanel();
+      } else {
+        db.ref(`rooms/${state.roomCode}/laskanieAnswers/${state.currentCardId}/${state.myRole}`).set(clean);
+      }
+      showToast("Odpoveď bola zaznamenaná.");
+    }
+
+    function renderAnswersPanel() {
+      const container = document.getElementById('answers-container');
+      container.innerHTML = '';
+
+      const roles = ['manzel', 'manzelka'];
+      
+      roles.forEach(role => {
+        const isMe = role === state.myRole;
+        const authorName = role === 'manzel' ? 'Manžel' : 'Manželka';
+        const answerText = state.answers[role];
+        const hasAnswered = !!answerText;
+        
+        // Zistenie, či ja sám mám už zodpovedané
+        const hasMyAnswer = !!state.answers[state.myRole];
+
+        const block = document.createElement('div');
+        block.className = `answer-block ${role}`;
+
+        const header = document.createElement('div');
+        header.className = 'answer-header';
+
+        const authorSpan = document.createElement('span');
+        authorSpan.className = `answer-author ${role}`;
+        authorSpan.textContent = authorName;
+        header.appendChild(authorSpan);
+        block.appendChild(header);
+
+        const body = document.createElement('div');
+
+        if (isMe) {
+          if (hasAnswered) {
+            body.innerHTML = `<p class="answer-content">${escapeHTML(answerText)}</p>`;
+          } else {
+            const compose = document.createElement('div');
+            compose.className = 'answer-compose-area';
+            
+            const textarea = document.createElement('textarea');
+            textarea.className = 'answer-textarea';
+            textarea.placeholder = "Sem napíš svoju intímnu odpoveď polovičke...";
+            
+            const submitBtn = document.createElement('button');
+            submitBtn.className = 'btn-primary';
+            submitBtn.style.padding = '0.5rem 1rem';
+            submitBtn.style.fontSize = '0.85rem';
+            submitBtn.style.alignSelf = 'flex-end';
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Odoslať';
+            
+            submitBtn.addEventListener('click', () => {
+              submitMyAnswer(textarea.value);
+            });
+
+            compose.appendChild(textarea);
+            compose.appendChild(submitBtn);
+            body.appendChild(compose);
+          }
+        } else {
+          // Pre partnera
+          if (!hasAnswered) {
+            body.innerHTML = `<p class="answer-empty">Čaká sa na intímnu odpoveď partnera... 💬</p>`;
+          } else {
+            // Partner odpovedal, ale vidím to len, ak som AJ JA už odpovedal
+            if (hasMyAnswer) {
+              body.innerHTML = `<p class="answer-content">${escapeHTML(answerText)}</p>`;
+            } else {
+              body.innerHTML = `
+                <div class="answer-locked">
+                  <i class="fas fa-lock"></i>
+                  <span>Odpoveď partnera je uzamknutá. Odomkne sa v momente, keď odošleš svoju odpoveď.</span>
+                </div>
+              `;
+            }
+          }
+        }
+
+        block.appendChild(body);
+        container.appendChild(block);
+      });
+    }
+
+    // =========================================================================
+    // 10. TREZOR TAJOMSTIEV (LOGIKA SÚČASNÉHO ODHALENIA)
+    // =========================================================================
+    function submitMySecret() {
+      const text = document.getElementById('vault-my-text').value.trim();
+      if (!text) {
+        showToast("Nemôžeš uzamknúť prázdny trezor!");
+        return;
+      }
+
+      if (state.isDemoMode) {
+        state.secrets[state.myRole] = text;
+        renderSecretVault();
+      } else {
+        mySecretsRef.set(text);
+      }
+      showToast("Tvoje tajné želanie bolo uzamknuté v trezore 🔒");
+    }
+
+    function resetSecretVault() {
+      if (confirm("Naozaj chcete vymazať trezor a začať znova?")) {
+        if (state.isDemoMode) {
+          state.secrets = { manzel: '', manzelka: '' };
+          document.getElementById('vault-my-text').value = '';
+          renderSecretVault();
+        } else {
+          db.ref(`rooms/${state.roomCode}/laskanieSecrets`).remove();
+          document.getElementById('vault-my-text').value = '';
+        }
+        showToast("Trezor bol vymazaný.");
+      }
+    }
+
+    function renderSecretVault() {
+      const lockedState = document.getElementById('vault-locked-state');
+      const unlockedState = document.getElementById('vault-unlocked-state');
+      const statusBadge = document.getElementById('vault-status-badge');
+
+      const mSecret = state.secrets.manzel;
+      const fSecret = state.secrets.manzelka;
+
+      const hasM = !!mSecret;
+      const hasF = !!fSecret;
+
+      // Status badges v locked state
+      const bManzel = document.getElementById('vault-badge-manzel');
+      const bManzelka = document.getElementById('vault-badge-manzelka');
+
+      if (hasM) {
+        bManzel.className = "status-badge ready";
+        bManzel.innerHTML = '<i class="fas fa-lock"></i> Uzamknuté';
+      } else {
+        bManzel.className = "status-badge not-ready";
+        bManzel.innerHTML = '<i class="fas fa-times-circle"></i> Nenapísal';
+      }
+
+      if (hasF) {
+        bManzelka.className = "status-badge ready";
+        bManzelka.innerHTML = '<i class="fas fa-lock"></i> Uzamknuté';
+      } else {
+        bManzelka.className = "status-badge not-ready";
+        bManzelka.innerHTML = '<i class="fas fa-times-circle"></i> Nenapísala';
+      }
+
+      // Rozhodnutie, či je trezor odomknutý (obaja zadali tajomstvo)
+      if (hasM && hasF) {
+        lockedState.style.display = 'none';
+        unlockedState.style.display = 'block';
+        
+        statusBadge.className = "vault-status-badge unlocked";
+        statusBadge.innerHTML = '<i class="fas fa-unlock"></i> ODOMKNUTÝ';
+
+        document.getElementById('vault-text-manzel').textContent = mSecret;
+        document.getElementById('vault-text-manzelka').textContent = fSecret;
+      } else {
+        lockedState.style.display = 'block';
+        unlockedState.style.display = 'none';
+
+        statusBadge.className = "vault-status-badge";
+        statusBadge.innerHTML = '<i class="fas fa-lock"></i> ZAMKNUTÝ';
+
+        // Ak už používateľ odoslal, skryjeme editovateľnú oblasť
+        const myEntryArea = document.getElementById('vault-my-entry-area');
+        if (state.secrets[state.myRole]) {
+          myEntryArea.style.display = 'none';
+        } else {
+          myEntryArea.style.display = 'flex';
+        }
+      }
+    }
+
+    // =========================================================================
+    // 11. POMOCNÉ FUNKCIE (TOAST, ESCAPE HTML)
+    // =========================================================================
+    function showToast(message) {
+      const toast = document.getElementById('toast-message');
+      const text = document.getElementById('toast-text-content');
+      
+      text.textContent = message;
+      toast.classList.add('show');
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    function escapeHTML(str) {
+      return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+  </script>
+</body>
+</html>
