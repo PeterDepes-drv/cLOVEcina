@@ -3,216 +3,1102 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <meta name="description" content="Človečina pre dvoch na diaľku - partnerská komunikačná hra na prepojenie a rozvoj vzťahu cez internet.">
-  <title>čLOVEčina pre dvoch na diaľku</title>
+  <meta name="description" content="Rodinná Človečina - rodinná komunikačná hra na prepojenie a rozhovory.">
+  <title>Rodinná Človečina</title>
   
-  <!-- CSS Štýly -->
-  <link rel="stylesheet" href="index.css">
+  <!-- Google Fonts: Quicksand pre mäkké rodinné písmo a Inter pre čitateľnosť -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
   
-  <!-- FontAwesome Ikony -->
+  <!-- FontAwesome pre ikony -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    /* DESIGN SYSTEM & GLOBAL STYLES */
+    :root {
+      --bg-dark: #0f172a;       /* Hlboká tmavomodrá */
+      --bg-card: #1e293b;       /* Tmavosivá pre karty */
+      --bg-card-inner: #334155; /* Vnútorné prvky a sekcie */
+      --text-primary: #f8fafc;  /* Mäkká biela */
+      --text-secondary: #cbd5e1;/* Svetlosivá pre čitateľnosť */
+      --text-muted: #64748b;    /* Tlmená sivá */
+      
+      --accent-gold: #d97706;   /* Matná zlatá */
+      --accent-gold-hover: #f59e0b;
+      --accent-gold-light: rgba(217, 119, 6, 0.15);
+      
+      --color-tatino: #3b82f6;  /* Modrá */
+      --color-mamina: #ec4899;  /* Ružová */
+      --color-ivo: #10b981;     /* Zelená */
+      --color-majo: #8b5cf6;    /* Fialová */
+
+      --transition-calm: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-secondary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 1rem;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4, .font-soft {
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    /* HLAVIČKA APLIKÁCIE */
+    header {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0.5rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo-heart {
+      color: var(--accent-gold);
+      font-size: 1.5rem;
+      animation: pulse 3s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.15); opacity: 1; text-shadow: 0 0 10px var(--accent-gold); }
+    }
+
+    .logo-text {
+      font-size: 1.4rem;
+      letter-spacing: -0.5px;
+    }
+
+    .btn-icon {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-secondary);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition-calm);
+    }
+
+    .btn-icon:hover {
+      border-color: var(--accent-gold);
+      color: var(--accent-gold);
+      background-color: var(--accent-gold-light);
+    }
+
+    /* HLAVNÝ KONTAJNER */
+    main {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      flex-grow: 1;
+    }
+
+    /* LOBBY OBRAZOVKA */
+    .lobby-card {
+      background-color: var(--bg-card);
+      border-radius: 1.5rem;
+      padding: 2rem 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .lobby-title {
+      font-size: 1.6rem;
+      text-align: center;
+      color: var(--text-primary);
+    }
+
+    .lobby-description {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    /* Výber roly */
+    .role-section-title {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      text-align: center;
+      color: var(--accent-gold);
+    }
+
+    .role-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+    }
+
+    .role-btn {
+      background-color: var(--bg-card-inner);
+      border: 2px solid transparent;
+      border-radius: 1rem;
+      padding: 1.25rem 1rem;
+      color: var(--text-primary);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition-calm);
+    }
+
+    .role-btn i {
+      font-size: 1.8rem;
+    }
+
+    .role-btn span {
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .role-btn small {
+      font-size: 0.75rem;
+      color: var(--text-muted);
+    }
+
+    /* Špecifické farby pre roly pri výbere */
+    .role-btn[data-role="tatino"]:hover, .role-btn[data-role="tatino"].active {
+      border-color: var(--color-tatino);
+      background-color: rgba(59, 130, 246, 0.05);
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.15);
+    }
+    .role-btn[data-role="tatino"] i { color: var(--color-tatino); }
+
+    .role-btn[data-role="mamina"]:hover, .role-btn[data-role="mamina"].active {
+      border-color: var(--color-mamina);
+      background-color: rgba(236, 72, 153, 0.05);
+      box-shadow: 0 0 15px rgba(236, 72, 153, 0.15);
+    }
+    .role-btn[data-role="mamina"] i { color: var(--color-mamina); }
+
+    .role-btn[data-role="ivo"]:hover, .role-btn[data-role="ivo"].active {
+      border-color: var(--color-ivo);
+      background-color: rgba(16, 185, 129, 0.05);
+      box-shadow: 0 0 15px rgba(16, 185, 129, 0.15);
+    }
+    .role-btn[data-role="ivo"] i { color: var(--color-ivo); }
+
+    .role-btn[data-role="majo"]:hover, .role-btn[data-role="majo"].active {
+      border-color: var(--color-majo);
+      background-color: rgba(139, 92, 246, 0.05);
+      box-shadow: 0 0 15px rgba(139, 92, 246, 0.15);
+    }
+    .role-btn[data-role="majo"] i { color: var(--color-majo); }
+
+    /* Pripojenie izby */
+    .room-action-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 0.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .room-input-group {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .room-input {
+      flex-grow: 1;
+      background-color: var(--bg-card-inner);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 0.75rem;
+      padding: 0.75rem 1rem;
+      color: var(--text-primary);
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-align: center;
+      transition: var(--transition-calm);
+    }
+
+    .room-input:focus {
+      outline: none;
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 10px rgba(217, 119, 6, 0.2);
+    }
+
+    /* TLAČIDLÁ */
+    .btn-primary {
+      background-color: var(--accent-gold);
+      color: var(--bg-dark);
+      border: none;
+      border-radius: 0.75rem;
+      padding: 0.85rem 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: var(--transition-calm);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--accent-gold-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      color: var(--text-secondary);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 0.75rem;
+      padding: 0.85rem 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: var(--transition-calm);
+    }
+
+    .btn-secondary:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+      border-color: var(--text-secondary);
+    }
+
+    .btn-danger {
+      background-color: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+    }
+
+    .btn-danger:hover {
+      background-color: #ef4444;
+      color: var(--text-primary);
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+
+    /* UPOZORNENIE PRE FIREBASE */
+    .firebase-alert-banner {
+      background-color: rgba(217, 119, 6, 0.08);
+      border: 1px dashed var(--accent-gold);
+      border-radius: 1rem;
+      padding: 1rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+
+    .firebase-alert-banner i {
+      color: var(--accent-gold);
+      font-size: 1.2rem;
+      margin-top: 0.1rem;
+    }
+
+    /* HERNÁ OBRAZOVKA */
+    .game-board {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    /* Horná info lišta */
+    .game-info-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: var(--bg-card);
+      padding: 0.75rem 1rem;
+      border-radius: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .btn-back-lobby {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: var(--transition-calm);
+    }
+
+    .btn-back-lobby:hover {
+      color: var(--accent-gold);
+    }
+
+    .room-code-indicator {
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 700;
+      color: var(--accent-gold);
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
+
+    .room-code-indicator:hover {
+      text-decoration: underline;
+    }
+
+    /* Aktívni hráči a status */
+    .family-presence-row {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0.5rem;
+      margin-top: 0.25rem;
+    }
+
+    .family-member-status {
+      background-color: var(--bg-card);
+      border-radius: 0.75rem;
+      padding: 0.5rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: var(--transition-calm);
+    }
+
+    .family-member-status.online {
+      background-color: rgba(255, 255, 255, 0.02);
+    }
+
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--text-muted);
+    }
+
+    .status-dot.active {
+      background-color: #10b981;
+      box-shadow: 0 0 8px #10b981;
+    }
+
+    /* Režimy a kategórie */
+    .mode-tab-bar {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5rem;
+      background-color: var(--bg-card);
+      padding: 0.35rem;
+      border-radius: 0.75rem;
+    }
+
+    .mode-tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      padding: 0.65rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 0.5rem;
+      transition: var(--transition-calm);
+    }
+
+    .mode-tab-btn.active {
+      background-color: var(--bg-card-inner);
+      color: var(--accent-gold);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+
+    /* Filter kategórií */
+    .category-filter-container {
+      display: flex;
+      gap: 0.4rem;
+      overflow-x: auto;
+      padding: 0.25rem 0.1rem;
+      scrollbar-width: thin;
+      scrollbar-color: var(--accent-gold-light) transparent;
+    }
+
+    .category-filter-container::-webkit-scrollbar {
+      height: 4px;
+    }
+    .category-filter-container::-webkit-scrollbar-thumb {
+      background-color: var(--accent-gold-light);
+      border-radius: 2px;
+    }
+
+    .category-tab-btn {
+      background-color: var(--bg-card);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      color: var(--text-secondary);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: var(--transition-calm);
+    }
+
+    .category-tab-btn.active {
+      background-color: var(--accent-gold-light);
+      border-color: var(--accent-gold);
+      color: var(--accent-gold);
+    }
+
+    /* KARTA HRA */
+    .card-scene {
+      perspective: 1000px;
+      margin: 0.5rem 0;
+    }
+
+    .card-container {
+      background-color: var(--bg-card);
+      border-radius: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+      min-height: 250px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 2rem;
+      position: relative;
+      transition: var(--transition-calm);
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .card-container.fade-out {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    .card-container.fade-in {
+      animation: cardFadeIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @keyframes cardFadeIn {
+      from { opacity: 0; transform: translateY(20px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .card-category-badge {
+      background-color: var(--bg-card-inner);
+      color: var(--accent-gold);
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 0.35rem 0.85rem;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+      border: 1px solid rgba(217, 119, 6, 0.2);
+    }
+
+    .card-id-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .card-body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-grow: 1;
+      margin: 1.5rem 0;
+      text-align: center;
+    }
+
+    .card-text {
+      font-family: 'Quicksand', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+
+    /* Špeciálny prechod pre "Preskočené" */
+    .card-skipped-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      text-align: center;
+      padding: 1rem 0;
+    }
+
+    .card-skipped-icon {
+      font-size: 2.5rem;
+      color: var(--accent-gold);
+      animation: calm-spin 10s infinite linear;
+    }
+
+    @keyframes calm-spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .card-skipped-text {
+      font-family: 'Quicksand', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 500;
+      border-top: 1px solid rgba(255, 255, 255, 0.03);
+      padding-top: 0.85rem;
+    }
+
+    /* Akcie pre ťahanie kariet a Pas */
+    .game-actions {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 0.75rem;
+    }
+
+    /* ODPASOVAŤ A ODPOVEDAŤ (Naše tempo) */
+    .answers-panel {
+      background-color: var(--bg-card);
+      border-radius: 1.5rem;
+      padding: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .answers-title {
+      font-size: 1.1rem;
+      color: var(--accent-gold);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 0.5rem;
+    }
+
+    .answers-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .answer-block {
+      background-color: var(--bg-card-inner);
+      border-radius: 0.85rem;
+      padding: 1rem;
+      border: 1px solid transparent;
+      transition: var(--transition-calm);
+    }
+
+    .answer-block-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .answer-role-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.9rem;
+    }
+
+    /* Roly vo farbách v paneli odpovedí */
+    .badge-tatino { color: var(--color-tatino); }
+    .badge-mamina { color: var(--color-mamina); }
+    .badge-ivo { color: var(--color-ivo); }
+    .badge-majo { color: var(--color-majo); }
+
+    .answer-status-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .answer-status-label.done {
+      color: #10b981;
+    }
+
+    .answer-status-label.waiting {
+      color: var(--text-muted);
+    }
+
+    /* Písanie odpovede */
+    .answer-compose-area {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .answer-textarea {
+      width: 100%;
+      background-color: var(--bg-dark);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 0.75rem;
+      padding: 0.75rem;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      resize: vertical;
+      min-height: 80px;
+      transition: var(--transition-calm);
+    }
+
+    .answer-textarea:focus {
+      outline: none;
+      border-color: var(--accent-gold);
+    }
+
+    /* Zamknutá odpoveď */
+    .answer-locked {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 1.5rem 0.5rem;
+      border: 1px dashed rgba(255, 255, 255, 0.1);
+      border-radius: 0.5rem;
+      background-color: rgba(15, 23, 42, 0.3);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-align: center;
+    }
+
+    .answer-locked i {
+      font-size: 1.5rem;
+      color: var(--accent-gold);
+    }
+
+    .answer-content {
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    .answer-empty {
+      color: var(--text-muted);
+      font-style: italic;
+      font-size: 0.85rem;
+    }
+
+    /* MODÁLNE OKNO PRE NASTAVENIA */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background-color: rgba(15, 23, 42, 0.85);
+      backdrop-filter: blur(8px);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      opacity: 0;
+      pointer-events: none;
+      transition: var(--transition-calm);
+    }
+
+    .modal-overlay.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .modal-content {
+      background-color: var(--bg-card);
+      border-radius: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      width: 90%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      transform: translateY(20px);
+      transition: var(--transition-calm);
+    }
+
+    .modal-overlay.active .modal-content {
+      transform: translateY(0);
+    }
+
+    .modal-header {
+      padding: 1.5rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .modal-title {
+      font-size: 1.25rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .modal-close {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 1.5rem;
+      cursor: pointer;
+      line-height: 1;
+    }
+
+    .modal-close:hover {
+      color: #ef4444;
+    }
+
+    .modal-body {
+      padding: 1.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1.25rem;
+    }
+
+    .setting-group {
+      display: flex;
+      flex-direction: column;
+      gap: 0.4rem;
+    }
+
+    .setting-group label {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: var(--accent-gold);
+    }
+
+    .setting-input {
+      background-color: var(--bg-card-inner);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 0.75rem;
+      padding: 0.75rem;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+    }
+
+    .setting-input:focus {
+      outline: none;
+      border-color: var(--accent-gold);
+    }
+
+    /* Návod pre Firebase */
+    .help-text-box {
+      background-color: rgba(15, 23, 42, 0.4);
+      border-radius: 0.75rem;
+      padding: 1rem;
+      font-size: 0.8rem;
+      line-height: 1.4;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+    }
+
+    .help-text-box h4 {
+      color: var(--accent-gold);
+      font-size: 0.85rem;
+      margin-bottom: 0.4rem;
+    }
+
+    .help-text-box ol {
+      margin-left: 1.1rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0.25rem;
+    }
+
+    .modal-footer {
+      padding: 1.25rem 1.5rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+      display: flex;
+      justify-content: flex-end;
+      gap: 0.5rem;
+    }
+
+    /* TOAST NOTIFIKÁCIA */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background-color: var(--accent-gold);
+      color: var(--bg-dark);
+      padding: 0.75rem 1.5rem;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 2000;
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .toast.active {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    /* RESPONSIVE DESIGN */
+    @media (max-width: 480px) {
+      body {
+        padding: 0.5rem;
+      }
+      .lobby-card {
+        padding: 1.5rem 1rem;
+      }
+      .role-grid {
+        gap: 0.5rem;
+      }
+      .role-btn {
+        padding: 1rem 0.5rem;
+      }
+      .card-container {
+        padding: 1.5rem 1.25rem;
+        min-height: 280px;
+      }
+      .card-text {
+        font-size: 1.15rem;
+      }
+    }
+  </style>
 </head>
 <body>
 
-  <!-- Hlavička aplikácie -->
+  <!-- HLAVIČKA -->
   <header>
     <div class="logo-container">
       <i class="fas fa-heart logo-heart"></i>
-      <h1 class="logo-text">čLOVEčina na diaľku</h1>
+      <h1 class="logo-text">Rodinná Človečina</h1>
     </div>
-    <div class="header-actions">
-      <button class="btn-icon" id="btn-settings" title="Nastavenia a Pripojenie" aria-label="Nastavenia">
-        <i class="fas fa-cog"></i>
-      </button>
-    </div>
+    <button class="btn-icon" id="btn-settings" title="Nastavenia Firebase" aria-label="Nastavenia">
+      <i class="fas fa-cog"></i>
+    </button>
   </header>
 
   <!-- HLAVNÝ OBSAH -->
   <main>
     
-    <!-- 1. OBRAZOVKA: LOBBY (VÝBER REŽIMU A PRIPOJENIE) -->
-    <section class="lobby-card" id="lobby-screen">
-      <h2 class="lobby-title">Pripojte sa k sebe</h2>
+    <!-- 1. ÚVODNÁ OBRAZOVKA (LOBBY) -->
+    <section class="lobby-card" id="screen-lobby">
+      <h2 class="lobby-title">Vitajte v rodinnom kruhu</h2>
       <p class="lobby-description">
-        Prehĺbte svoje rozhovory, oživte intimitu a zdieľajte svoje sny aj vtedy, keď vás delí veľká vzdialenosť. Vyberte si spôsob hry:
+        Sadnite si spolu k stolu a porozprávajte sa otvorene, so zvedavosťou a bez tlaku. Táto hra spája rodinu tatina, maminy, Iva a Maja cez zdieľanie pocitov, zážitkov a hudobných či knižných svetov.
       </p>
 
-      <!-- Výber režimu -->
-      <div class="mode-selectors">
-        <button class="mode-btn active" data-mode="local">
-          <i class="fas fa-mobile-alt"></i>
-          <span>Lokálne rande</span>
-          <small>Hra na jednom zariadení (offline)</small>
-        </button>
-        <button class="mode-btn" data-mode="live">
-          <i class="fas fa-bolt"></i>
-          <span>Rande naživo</span>
-          <small>Synchrónne ťahanie kariet (P2P)</small>
-        </button>
-        <button class="mode-btn" data-mode="async">
-          <i class="fas fa-calendar-alt"></i>
-          <span>Denné spojenie</span>
-          <small>Asynchrónne písanie odpovedí (Firebase)</small>
-        </button>
-      </div>
-
-      <!-- Panel: Lokálny režim -->
-      <div class="connection-panel" id="panel-local">
-        <p class="lobby-description" style="margin-bottom: 0.5rem;">
-          Skvelé pre vyskúšanie otázok a hry na jednom mieste.
-        </p>
-        <button class="btn-primary" id="btn-start-local">
-          <i class="fas fa-play"></i> Spustiť lokálnu hru
-        </button>
-      </div>
-
-      <!-- Panel: Rande naživo (PeerJS) -->
-      <div class="connection-panel" id="panel-live" style="display: none;">
-        <div class="setting-group">
-          <label>1. Hostovať novú hru</label>
-          <button class="btn-primary" id="btn-host-live">
-            <i class="fas fa-paper-plane"></i> Vytvoriť izbu
+      <!-- Výber roly -->
+      <div>
+        <h3 class="role-section-title">1. Kto si ty? (Vyber rolu)</h3>
+        <div class="role-grid">
+          <button class="role-btn" data-role="tatino">
+            <i class="fas fa-user-tie"></i>
+            <span>tatino</span>
+            <small>Admin / Tvorca</small>
+          </button>
+          <button class="role-btn" data-role="mamina">
+            <i class="fas fa-user-circle"></i>
+            <span>mamina</span>
+            <small>Člen rodiny</small>
+          </button>
+          <button class="role-btn" data-role="ivo">
+            <i class="fas fa-child-reaching"></i>
+            <span>Ivo</span>
+            <small>Člen rodiny</small>
+          </button>
+          <button class="role-btn" data-role="majo">
+            <i class="fas fa-child"></i>
+            <span>Majo</span>
+            <small>Člen rodiny</small>
           </button>
         </div>
-        
-        <div style="text-align: center; color: var(--text-muted); font-size: 0.85rem; margin: 0.5rem 0;">— ALEBO —</div>
-
-        <div class="setting-group">
-          <label>2. Pripojiť sa k manželke</label>
-          <div class="room-input-container">
-            <input type="text" id="live-code-input" placeholder="Zadajte kód izby (napr. laska-1234)">
-            <button class="btn-secondary" id="btn-join-live">Pripojiť</button>
-          </div>
-        </div>
-
-        <div class="room-status" id="live-status-info"></div>
       </div>
 
-      <!-- Panel: Asynchrónne Denné spojenie (Firebase) -->
-      <div class="connection-panel" id="panel-async" style="display: none;">
-        <p class="lobby-description" style="font-size:0.85rem; text-align: left; margin-bottom: 1rem;">
-          <i class="fas fa-info-circle" style="color:var(--accent-gold);"></i> 
-          Tento režim ukladá vaše odpovede do databázy a odhalí ich, až keď odpoviete obaja. Vyžaduje nastavenie <strong>Firebase</strong> (ikona ozubeného kolieska vpravo hore).
-        </p>
-
-        <div class="setting-group">
-          <label>1. Začať novú hru dňa</label>
-          <button class="btn-primary" id="btn-create-async">
-            <i class="fas fa-plus"></i> Vytvoriť spoločnú hru
+      <!-- Pripojenie a izba -->
+      <div class="room-action-container">
+        <h3 class="role-section-title">2. Pripoj sa do izby</h3>
+        
+        <div class="room-input-group">
+          <input type="text" class="room-input" id="input-room-code" placeholder="Kód izby" maxlength="4">
+          <button class="btn-primary" id="btn-join-room">
+            <i class="fas fa-sign-in-alt"></i> Vstúpiť
           </button>
         </div>
-        
-        <div style="text-align: center; color: var(--text-muted); font-size: 0.85rem; margin: 0.5rem 0;">— ALEBO —</div>
 
-        <div class="setting-group">
-          <label>2. Vstúpiť do existujúcej hry</label>
-          <div class="room-input-container">
-            <input type="text" id="async-code-input" placeholder="Zadajte kód hry (napr. srdce-4321)">
-            <button class="btn-secondary" id="btn-join-async">Vstúpiť</button>
-          </div>
-        </div>
+        <div style="text-align: center; color: var(--text-muted); font-size: 0.8rem; margin: 0.2rem 0;">— ALEBO —</div>
 
-        <div class="room-status" id="async-status-info"></div>
+        <button class="btn-secondary" id="btn-create-room">
+          <i class="fas fa-plus"></i> Vytvoriť novú hraciu miestnosť
+        </button>
       </div>
 
+      <!-- Firebase Alert -->
+      <div class="firebase-alert-banner" id="fb-config-warning" style="display: none;">
+        <i class="fas fa-exclamation-triangle"></i>
+        <div>
+          <strong>Firebase nie je pripojený.</strong> Hra pobeží v lokálnom demo režime (bez prepojenia v reálnom čase). Ak chcete hrať spoločne na viacerých telefónoch, kliknite na <strong>ozubené koliesko ⚙️ hore</strong> a vložte konfiguračné údaje.
+        </div>
+      </div>
     </section>
 
-    <!-- 2. OBRAZOVKA: HRA (HERNÁ DOSKA S KARTAMI) -->
-    <section class="game-board" id="game-screen" style="display: none;">
+    <!-- 2. HERNÁ OBRAZOVKA -->
+    <section class="game-board" id="screen-game" style="display: none;">
       
-      <!-- Horný stav a odchod -->
+      <!-- Horná info lišta -->
       <div class="game-info-bar">
-        <button class="btn-back-lobby" id="btn-back-lobby">
-          <i class="fas fa-chevron-left"></i> Lobby
+        <button class="btn-back-lobby" id="btn-leave-room">
+          <i class="fas fa-chevron-left"></i> Odísť z izby
         </button>
         
-        <span id="room-id-indicator" style="font-weight: 500; font-size: 0.85rem; color: var(--accent-gold);">Kód izby: --</span>
-        
-        <div class="partner-status">
-          <div class="status-dot offline" id="partner-status-dot"></div>
-          <span id="partner-status-text" style="color: var(--text-muted); font-size: 0.85rem;">Offline</span>
+        <span class="room-code-indicator" id="display-room-code" title="Klikni pre skopírovanie kódu">
+          KÓD: -- <i class="fas fa-copy" style="font-size: 0.75rem;"></i>
+        </span>
+      </div>
+
+      <!-- Zoznam prítomných rodinných príslušníkov -->
+      <div class="family-presence-row" id="presence-indicators">
+        <div class="family-member-status" data-presence-role="tatino">
+          <span class="status-indicator"><div class="status-dot"></div> <span class="badge-tatino">tatino</span></span>
+        </div>
+        <div class="family-member-status" data-presence-role="mamina">
+          <span class="status-indicator"><div class="status-dot"></div> <span class="badge-mamina">mamina</span></span>
+        </div>
+        <div class="family-member-status" data-presence-role="ivo">
+          <span class="status-indicator"><div class="status-dot"></div> <span class="badge-ivo">Ivo</span></span>
+        </div>
+        <div class="family-member-status" data-presence-role="majo">
+          <span class="status-indicator"><div class="status-dot"></div> <span class="badge-majo">Majo</span></span>
         </div>
       </div>
 
-      <!-- Volič kategórií -->
-      <div class="categories-tabs">
-        <button class="tab-btn active" data-category="komfort">Komfort</button>
-        <button class="tab-btn" data-category="rozvoj">Rozvoj</button>
-        <button class="tab-btn" data-category="intimita">Intimita</button>
-        <button class="tab-btn" data-category="sny">Naše sny</button>
-        <button class="tab-btn" data-category="nocna">Po 22:00 🌙</button>
+      <!-- Prepínač režimu hry (všetci vidia synchrónne, ktokoľvek môže prepnúť a zmení sa u všetkých) -->
+      <div class="mode-tab-bar">
+        <button class="mode-tab-btn active" data-game-mode="live">
+          <i class="fas fa-bolt"></i> NAŽIVO (Synchrónne)
+        </button>
+        <button class="mode-tab-btn" data-game-mode="async">
+          <i class="fas fa-clock"></i> NAŠE TEMPO (Asynchrónne)
+        </button>
       </div>
 
-      <!-- 3D scéna s kartou -->
-      <div class="card-scene" id="card-scene">
-        <div class="card-container" id="card-container">
+      <!-- Filter kategórií -->
+      <div class="category-filter-container">
+        <button class="category-tab-btn active" data-category="all">Všetky kategórie</button>
+        <button class="category-tab-btn" data-category="zmysly">Zmysly (1-40)</button>
+        <button class="category-tab-btn" data-category="hudba">Hudba (41-80)</button>
+        <button class="category-tab-btn" data-category="knihy">Knihy (81-120)</button>
+        <button class="category-tab-btn" data-category="predstavivost">Predstavivosť (121-160)</button>
+        <button class="category-tab-btn" data-category="rodina">Rodina (161-200)</button>
+      </div>
+
+      <!-- Herná karta s 3D / Tieňovaním -->
+      <div class="card-scene">
+        <div class="card-container" id="game-card">
           
-          <!-- Zadná strana (Rub - Back) -->
-          <div class="card-face card-back">
-            <div class="card-back-pattern">
-              <i class="fas fa-heart"></i>
-            </div>
-            <div class="card-back-text">čLOVEčina</div>
-            <div class="card-back-prompt">Kliknite pre otočenie</div>
+          <!-- Hore kategória a číslo -->
+          <div class="card-header" id="card-header-elements">
+            <span class="card-category-badge" id="card-category-name">Kategória</span>
+            <span class="card-id-label" id="card-question-number">Karta #--</span>
           </div>
-          
-          <!-- Predná strana (Líc - Front) -->
-          <div class="card-face card-front" id="card-front">
-            <div class="card-header">
-              <span class="card-category-label" id="card-category-label">Komfort</span>
-              <div class="card-category-indicator"></div>
+
+          <!-- Stred (Samotná otázka / Preskočený stav) -->
+          <div class="card-body">
+            <!-- Otázka -->
+            <div id="card-text-wrapper">
+              <p class="card-text" id="card-question-text">Pre začiatok kliknite na Ťahať novú kartu.</p>
             </div>
-            <div class="card-body">
-              <p class="card-text" id="card-text">
-                Kliknite na "Ťahať kartu" pre začiatok.
-              </p>
+            <!-- Preskočené -->
+            <div id="card-skipped-wrapper" class="card-skipped-container" style="display: none;">
+              <i class="fas fa-dove card-skipped-icon"></i>
+              <p class="card-skipped-text">V poriadku, túto kartu preskakujeme. Žiadny tlak, ideme ďalej! 😊</p>
             </div>
-            <div class="card-footer">
-              čLOVEčina pre dvoch na diaľku
-            </div>
+          </div>
+
+          <!-- Päta karty -->
+          <div class="card-footer" id="card-footer-text">
+            Rodinná Človečina
           </div>
 
         </div>
       </div>
 
-      <!-- Akcie pod kartou -->
-      <div class="card-actions">
-        <button class="btn-action btn-draw" id="btn-draw-card">
-          <i class="fas fa-sync-alt"></i> Ťahať novú kartu
+      <!-- Akčné tlačidlá pod kartou -->
+      <div class="game-actions">
+        <button class="btn-primary" id="btn-draw-card">
+          <i class="fas fa-random"></i> Ťahať novú kartu
         </button>
-        <button class="btn-action btn-love" id="btn-love-card" style="display: none;">
-          <i class="fas fa-heart"></i> Poslať srdiečko
-        </button>
-        <button class="btn-action btn-whatsapp" id="btn-share-whatsapp" style="display: none;">
-          <i class="fab fa-whatsapp"></i> Zdieľať otázku
+        <button class="btn-secondary btn-danger" id="btn-pass-card" title="Preskočiť túto otázku u všetkých">
+          <i class="fas fa-hand-peace"></i> Pas
         </button>
       </div>
 
-      <!-- Asynchrónna sekcia s odpoveďami -->
-      <div class="answers-panel" id="async-answers-section" style="display: none;">
-        <h3 class="answers-title">Vaše odpovede na túto kartu</h3>
+      <!-- Panel s odpoveďami pre "NAŠE TEMPO" -->
+      <div class="answers-panel" id="answers-panel-section" style="display: none;">
+        <h3 class="answers-title">Odpovede rodiny na Kartu dňa</h3>
         
-        <!-- Formulár na odoslanie -->
-        <div class="answer-form" id="async-form-section">
-          <textarea id="answer-textarea" placeholder="Napíšte sem svoju odpoveď partnerovi na túto kartu..."></textarea>
-          <button class="btn-primary" id="btn-submit-answer">
-            <i class="fas fa-paper-plane"></i> Odoslať odpoveď
-          </button>
-        </div>
-
-        <!-- Zoznam odpovedí -->
-        <div class="answers-list" id="async-answers-container">
-          <!-- Dynamicky dopĺňané cez JS -->
-        </div>
-
-        <!-- WhatsApp akcie pre asynchrónny režim -->
-        <div id="async-whatsapp-actions" style="display: none; flex-direction: column; gap: 0.5rem; margin-top: 0.5rem;">
-          <button class="btn-secondary" id="btn-async-notify-wa" style="width: 100%; display: none; align-items: center; justify-content: center; gap: 0.5rem;">
-            <i class="fab fa-whatsapp"></i> Upozorniť na WhatsApp
-          </button>
-          <button class="btn-secondary" id="btn-async-share-answers-wa" style="width: 100%; display: none; align-items: center; justify-content: center; gap: 0.5rem;">
-            <i class="fab fa-whatsapp"></i> Poslať odpovede na WhatsApp
-          </button>
+        <div class="answers-grid" id="answers-container">
+          <!-- Dynamicky generované položky pre Tatina, Maminu, Iva, Maja -->
         </div>
       </div>
 
@@ -220,75 +1106,1034 @@
 
   </main>
 
-  <!-- MODÁLNE OKNO: NASTAVENIA & FIREBASE CONFIG -->
+  <!-- MODÁLNE OKNO: NASTAVENIA & KONFIGURÁCIA FIREBASE -->
   <div class="modal-overlay" id="settings-modal">
     <div class="modal-content">
       <div class="modal-header">
-        <h2 class="modal-title"><i class="fas fa-cog"></i> Nastavenia hry</h2>
-        <button class="modal-close" aria-label="Zatvoriť nastavenia">&times;</button>
+        <h2 class="modal-title"><i class="fas fa-cog"></i> Nastavenia Firebase</h2>
+        <button class="modal-close" id="btn-close-settings">&times;</button>
       </div>
       <div class="modal-body">
-        
-        <!-- Moje meno -->
-        <div class="setting-group">
-          <label for="settings-player-name">Vaše meno / prezývka</label>
-          <input type="text" id="settings-player-name" placeholder="Napr. Peter">
-        </div>
+        <p style="font-size: 0.85rem; line-height: 1.4; color: var(--text-secondary);">
+          Pre prepojenie rodiny v reálnom čase na viacerých zariadeniach je potrebné nakonfigurovať Firebase Realtime Database. Konfigurácia sa ukladá iba vo vašom prehliadači (localStorage).
+        </p>
 
-        <hr style="border: 0; border-top: 1px solid rgba(255,255,255,0.06); margin: 0.5rem 0;">
-
-        <!-- Firebase Config -->
-        <h3 style="font-size: 1rem; color: #fff; font-weight: 600; margin-bottom: 0.5rem;">
-          Nastavenie Firebase (pre Denné spojenie)
-        </h3>
-        
         <div class="setting-group">
           <label for="fb-api-key">API Key</label>
-          <input type="password" id="fb-api-key" placeholder="AIzaSy...">
+          <input type="password" id="fb-api-key" class="setting-input" placeholder="AIzaSy...">
+        </div>
+
+        <div class="setting-group">
+          <label for="fb-auth-domain">Auth Domain</label>
+          <input type="text" id="fb-auth-domain" class="setting-input" placeholder="projekt.firebaseapp.com">
+        </div>
+
+        <div class="setting-group">
+          <label for="fb-database-url">Database URL</label>
+          <input type="text" id="fb-database-url" class="setting-input" placeholder="https://projekt.firebaseio.com">
         </div>
 
         <div class="setting-group">
           <label for="fb-project-id">Project ID</label>
-          <input type="text" id="fb-project-id" placeholder="my-clovecina-project">
+          <input type="text" id="fb-project-id" class="setting-input" placeholder="projekt-id">
         </div>
 
-        <!-- Rýchly návod -->
-        <div class="help-text">
-          <h4 style="font-weight: 600; color: var(--accent-gold); margin-bottom: 0.25rem;">
-            Ako získať kľúče zadarmo za 3 minúty?
-          </h4>
-          <ol style="margin-left: 1.25rem; display: flex; flex-direction: column; gap: 0.2rem;">
-            <li>Choďte na <a href="https://console.firebase.google.com/" target="_blank">Firebase Console</a>.</li>
-            <li>Kliknite na <strong>Add project</strong> a vytvorte bezplatný projekt.</li>
-            <li>V nastaveniach projektu (ozubené koliesko vľavo hore) kliknite pod <em>Your apps</em> na ikonu <strong>&lt;/&gt; (Web app)</strong>.</li>
-            <li>Zaregistrujte aplikáciu a skopírujte z vygenerovaného kódu <strong>apiKey</strong> a <strong>projectId</strong>.</li>
-            <li>V ľavom menu otvorte <strong>Firestore Database</strong> a kliknite na <strong>Create database</strong>. V záložke <em>Rules</em> prepíšte pravidlo na: <br><code style="font-size: 0.75rem; background:rgba(0,0,0,0.3); padding:2px; display:block; border-radius:4px; margin-top:2px;">allow read, write: if true;</code></li>
+        <!-- Návod pre Firebase -->
+        <div class="help-text-box">
+          <h4>Ako získať databázu zadarmo za 3 minúty?</h4>
+          <ol>
+            <li>Navštívte <a href="https://console.firebase.google.com/" target="_blank" style="color:var(--accent-gold); text-decoration: underline;">Firebase Console</a>.</li>
+            <li>Vytvorte si nový bezplatný projekt (kliknite na <em>Pridať projekt</em>).</li>
+            <li>Zaregistrujte <strong>Webovú aplikáciu (ikona &lt;/&gt;)</strong> v nastaveniach projektu.</li>
+            <li>Skopíruj hodnoty z vygenerovaného objektu <code>firebaseConfig</code> sem.</li>
+            <li>V ľavom menu otvorte <strong>Realtime Database</strong> a vytvorte databázu.</li>
+            <li>V záložke <strong>Rules (Pravidlá)</strong> prepíšte kód na:<br>
+              <code style="display:block; background: #0f172a; padding: 0.35rem; border-radius: 4px; font-size: 0.75rem; margin-top: 0.2rem; color: #10b981;">{ "rules": { ".read": true, ".write": true } }</code>
+            </li>
           </ol>
         </div>
-
       </div>
-      <div class="modal-footer" style="display: flex; justify-content: flex-end; gap: 0.5rem; margin-top: 1rem;">
-        <button class="btn-primary" id="btn-save-settings">Uložiť zmeny</button>
+      <div class="modal-footer">
+        <button class="btn-secondary" id="btn-clear-settings">Vymazať údaje</button>
+        <button class="btn-primary" id="btn-save-settings">Uložiť a Načítať</button>
       </div>
     </div>
   </div>
 
   <!-- TOAST NOTIFIKÁCIA -->
-  <div class="toast" id="toast">
+  <div class="toast" id="toast-message">
     <i class="fas fa-info-circle"></i>
-    <span id="toast-text">Notifikácia</span>
+    <span id="toast-text-content">Notifikácia</span>
   </div>
 
-  <!-- KNIŽNICE Z CDN -->
-  <!-- PeerJS pre Live P2P synchrónne spojenie -->
-  <script src="https://unpkg.com/peerjs@1.4.7/dist/peerjs.min.js"></script>
-  
-  <!-- Firebase SDK pre asynchrónne ukladanie -->
+  <!-- FIREBASE COMPAT SDK Z CDN -->
   <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
-  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-firestore-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
 
-  <!-- Lokálne skripty -->
-  <script src="questions.js"></script>
-  <script src="app.js"></script>
+  <script>
+    // ==========================================
+    // 1. KONFIGURÁCIA FIREBASE (PREDVOLENE PRÁZDNA)
+    // ==========================================
+    const firebaseConfig = {
+      apiKey: "",
+      authDomain: "",
+      databaseURL: "",
+      projectId: "",
+      storageBucket: "",
+      messagingSenderId: "",
+      appId: ""
+    };
+
+    // ==========================================
+    // 2. DATABÁZA 200 OTÁZOK (V SLOVENČINE)
+    // ==========================================
+    const QUESTIONS = [
+      // 1-40: Zmysly
+      { id: 1, category: "Zmysly", text: "Aká je tvoja najobľúbenejšia vôňa doma a čo ti pripomína?" },
+      { id: 2, category: "Zmysly", text: "Ktoré jedlo ti svojou chuťou najviac pripomína detstvo?" },
+      { id: 3, category: "Zmysly", text: "Aký zvuk ťa ráno zaručene prebudí s dobrou náladou?" },
+      { id: 4, category: "Zmysly", text: "Ktorú textúru alebo materiál máš na dotyk najradšej?" },
+      { id: 5, category: "Zmysly", text: "Aký najkrajší výhľad v prírode si kedy videl/a?" },
+      { id: 6, category: "Zmysly", text: "Ktorú chuť (sladkú, slanú, kyslú, horkú) máš najradšej a prečo?" },
+      { id: 7, category: "Zmysly", text: "Aký zvuk z prírody ťa najviac upokojuje?" },
+      { id: 8, category: "Zmysly", text: "Ktoré ročné obdobie vonia podľa teba najkrajšie a ako by si tú vôňu opísal/a?" },
+      { id: 9, category: "Zmysly", text: "Kedy si naposledy cítil/a niečo, čo ti okamžite vyvolalo starú spomienku?" },
+      { id: 10, category: "Zmysly", text: "Aká je tvoja obľúbená farba a ako sa cítiš, keď sa na ňu pozeráš?" },
+      { id: 11, category: "Zmysly", text: "Ak by si mal/a opísať chuť nášho domova ako jedno jedlo, čo by to bolo?" },
+      { id: 12, category: "Zmysly", text: "Aký zvuk ti najviac prekáža pri zaspávaní?" },
+      { id: 13, category: "Zmysly", text: "Ktoré miesto v našom byte je podľa teba vizuálne najpríjemnejšie?" },
+      { id: 14, category: "Zmysly", text: "Ako najradšej relaxuješ pomocou zmyslov (napr. teplý kúpeľ, sviečka, ticho)?" },
+      { id: 15, category: "Zmysly", text: "Ktoré jedlo by si mohol/mohla jesť so zavretými očami a hneď by si vedel/a, čo to je?" },
+      { id: 16, category: "Zmysly", text: "Aký je tvoj najobľúbenejší dotyk (napr. objatie, držanie za ruku, hladkanie)?" },
+      { id: 17, category: "Zmysly", text: "Ktorá vôňa ti vyslovene prekáža alebo ťa vyrušuje?" },
+      { id: 18, category: "Zmysly", text: "Ak by si si mal/a vybrať jeden zmysel, ktorý by bol dnes tvojím hlavným sprievodcom, ktorý by to bol?" },
+      { id: 19, category: "Zmysly", text: "Aké svetlo (slnečné, sviečka, tlmená lampa) máš najradšej pri večernom rozhovore?" },
+      { id: 20, category: "Zmysly", text: "Ktorý zvuk ti pripomína prázdniny u starých rodičov?" },
+      { id: 21, category: "Zmysly", text: "Akú chuť by si priradil/a našim spoločným nedeľným ránam?" },
+      { id: 22, category: "Zmysly", text: "Ktorá vôňa ťa najrýchlejšie vráti do školských čias?" },
+      { id: 23, category: "Zmysly", text: "Aký je najpríjemnejší zvuk, ktorý môžeš počuť, keď sa vrátiš domov?" },
+      { id: 24, category: "Zmysly", text: "Ktoré oblečenie nosíš najradšej kvôli tomu, ako príjemne pôsobí na koži?" },
+      { id: 25, category: "Zmysly", text: "Akú farbu by mal mať tvoj ideálny diaľ a prečo?" },
+      { id: 26, category: "Zmysly", text: "Aké jedlo ti chutilo najviac na našej poslednej spoločnej dovolenke?" },
+      { id: 27, category: "Zmysly", text: "Ktorý zmysel podľa teba najviac ovplyvňuje tvoju náladu?" },
+      { id: 28, category: "Zmysly", text: "Akú vôňu máš spojenú s Vianocami v našej rodine?" },
+      { id: 29, category: "Zmysly", text: "Aký zvuk v dome ti dáva pocit, že je všetko v poriadku a si v bezpečí?" },
+      { id: 30, category: "Zmysly", text: "Čo je pre teba najpríjemnejšie na dotyk v prírode (napr. piesok, tráva, mach)?" },
+      { id: 31, category: "Zmysly", text: "Ktoré jedlo, čo mamina alebo tatino varí, vonia najlepšie po celom dome?" },
+      { id: 32, category: "Zmysly", text: "Aký vizuálny detail na našom dome/byte ťa vždy poteší, keď ho uvidíš?" },
+      { id: 33, category: "Zmysly", text: "Ktorá chuť ťa vie najrýchlejšie postaviť na nohy, keď si unavený/á?" },
+      { id: 34, category: "Zmysly", text: "Akú vôňu by si chcel/a cítiť, keď sa ráno zobudíš?" },
+      { id: 35, category: "Zmysly", text: "Aký prírodný úkaz (napr. blesk, dúha, padanie snehu) ťa najviac fascinuje na pohľad?" },
+      { id: 36, category: "Zmysly", text: "Ktorý zvuk z detstva by si chcel/a znova počuť?" },
+      { id: 37, category: "Zmysly", text: "Aké je tvoje najobľúbenejšie ovocie z hľadiska vône a textúry?" },
+      { id: 38, category: "Zmysly", text: "Ktorý dotyk ti najviac pomáha, keď sa cítiš smutne?" },
+      { id: 39, category: "Zmysly", text: "Aký najzaujímavejší tvar si kedy videl/a v prírode (napr. oblak, skala)?" },
+      { id: 40, category: "Zmysly", text: "Ak by si mal/a ochutnať niečo úplne nového, čo by to bolo?" },
+
+      // 41-80: Hudba
+      { id: 41, category: "Hudba", text: "Ktorá pesnička ti vždy pripomenie nejaký dôležitý moment s rodinou?" },
+      { id: 42, category: "Hudba", text: "Hral/a si niekedy na nejakom hudobnom nástroji, alebo by si sa to chcel/a naučiť?" },
+      { id: 43, category: "Hudba", text: "Aký hudobný štýl počúvaš najradšej, keď si chceš oddýchnuť?" },
+      { id: 44, category: "Hudba", text: "Ktorý koncert alebo hudobné vystúpenie bolo pre teba najväčším zážitkom?" },
+      { id: 45, category: "Hudba", text: "Keby si mal/a vybrať jednu pieseň ako hymnu našej rodiny, ktorá by to bola?" },
+      { id: 46, category: "Hudba", text: "Akú hudbu počúvaš najradšej v aute počas spoločných výletov?" },
+      { id: 47, category: "Hudba", text: "Ktorá pesnička ťa dokáže okamžite rozosmiať alebo roztancovať?" },
+      { id: 48, category: "Hudba", text: "Ak by si mohol/mohla hrať na akomkoľvek nástroji ako virtuóz, čo by to bolo?" },
+      { id: 49, category: "Hudba", text: "Aká pieseň ťa sprevádzala počas tvojich pubertálnych čias?" },
+      { id: 50, category: "Hudba", text: "Ktorý spevák alebo speváčka má pre teba najpríjemnejší hlas?" },
+      { id: 51, category: "Hudba", text: "Spievate si niekedy v sprche alebo pri varení? Akú pesničku najčastejšie?" },
+      { id: 52, category: "Hudba", text: "Ktorý hudobný album by si si vzal/a na opustený ostrov?" },
+      { id: 53, category: "Hudba", text: "Máš radšej hlasnú hudbu, pri ktorej tancuješ, alebo tiché melódie na pozadí?" },
+      { id: 54, category: "Hudba", text: "Ktorá pesnička sa ti spája s maminou a ktorá s tatinom?" },
+      { id: 55, category: "Hudba", text: "Aká bola prvá pesnička, ktorú si si v živote zapamätal/a?" },
+      { id: 56, category: "Hudba", text: "Ktorý hudobný žáner ti vyslovene prekáža a nevieš ho počúvať?" },
+      { id: 57, category: "Hudba", text: "Keby si mal/a zložiť pieseň o svojom živote, aké tempo a náladu by mala?" },
+      { id: 58, category: "Hudba", text: "Ktorá filmová hudba alebo soundtrack ťa najviac chytili za srdce?" },
+      { id: 59, category: "Hudba", text: "Aký zvuk alebo tón nástroja (napr. husle, klavír, gitara) ti znie najkrajšie?" },
+      { id: 60, category: "Hudba", text: "Ktorú pesničku sme spolu naposledy spoločne spievali alebo počúvali?" },
+      { id: 61, category: "Hudba", text: "Akú hudbu si púšťaš, keď potrebuješ načerpať energiu a motiváciu?" },
+      { id: 62, category: "Hudba", text: "Ktorá pesnička ťa dokáže dojať až k slzám a prečo?" },
+      { id: 63, category: "Hudba", text: "Ak by si mohol/mohla stráviť deň s nejakou hudobnou hviezdou, kto by to bol?" },
+      { id: 64, category: "Hudba", text: "Aká hudba ti pomáha pri sústredení sa na učenie alebo prácu?" },
+      { id: 65, category: "Hudba", text: "Pamätáš si na nejakú uspávanku z detstva? Kto ti ju spieval?" },
+      { id: 66, category: "Hudba", text: "Ktorá pesnička je tvoje najväčšie 'guilty pleasure' (pieseň, ktorá sa ti páči, hoci je trochu nezvyčajná)?" },
+      { id: 67, category: "Hudba", text: "Akú hudbu by si si pustil/a pri táboráku pod hviezdami?" },
+      { id: 68, category: "Hudba", text: "Ktorý tanec by si sa chcel/a v živote naučiť?" },
+      { id: 69, category: "Hudba", text: "Aká pieseň ti pripomína leto a slnko?" },
+      { id: 70, category: "Hudba", text: "Ktorý hudobný nástroj podľa teba najlepšie vyjadruje tvoju osobnosť?" },
+      { id: 71, category: "Hudba", text: "Kedy naposledy si zažil/a zimomriavky z nejakej piesne a ktorá to bola?" },
+      { id: 72, category: "Hudba", text: "Máš radšej modernú hudbu alebo staré klasiky zo 70., 80. či 90. rokov?" },
+      { id: 73, category: "Hudba", text: "Ktorá pesnička ťa vie najrýchlejšie upokojiť po ťažkom dni?" },
+      { id: 74, category: "Hudba", text: "Akú pieseň by si venoval/a dnes človeku po tvojej pravici?" },
+      { id: 75, category: "Hudba", text: "Čo si myslíš o spievaní na verejnosti (karaoke)? Vyskúšal/a by si to?" },
+      { id: 76, category: "Hudba", text: "Ktorá skladba ti pripomína nedeľný obed u nás doma?" },
+      { id: 77, category: "Hudba", text: "Ktorá kapela alebo hudobná skupina je pre teba legendárna?" },
+      { id: 78, category: "Hudba", text: "Ak by naša rodina zakladala kapelu, kto by hral na akom nástroji?" },
+      { id: 79, category: "Hudba", text: "Akú hudbu počúvaš, keď vonku prší a máš melancholickú náladu?" },
+      { id: 80, category: "Hudba", text: "Ktorá pesnička ťa naučila nejaký dôležitý text alebo myšlienku?" },
+
+      // 81-120: Knihy
+      { id: 81, category: "Knihy", text: "Aká bola tvoja najobľúbenešia rozprávková kniha v detstve?" },
+      { id: 82, category: "Knihy", text: "Ktorá knižná postava sa ti najviac podobá svojou povahou?" },
+      { id: 83, category: "Knihy", text: "Keby si mal/a napísať knihu o našej rodine, ako by sa volala?" },
+      { id: 84, category: "Knihy", text: "Ktorá kniha ťa v živote najviac ovplyvnila alebo zmenila tvoj názor na svet?" },
+      { id: 85, category: "Knihy", text: "Máš radšej klasické tlačené knihy, e-knihy alebo audioknihy?" },
+      { id: 86, category: "Knihy", text: "Ktorého spisovateľa alebo spisovateľku považuješ za geniálneho?" },
+      { id: 87, category: "Knihy", text: "Keby si mohol/mohla prežiť jeden deň v knižnom svete, ktorý by to bol?" },
+      { id: 88, category: "Knihy", text: "Aká kniha ťa naposledy tak chytila, že si ju nevedel/a odložiť?" },
+      { id: 89, category: "Knihy", text: "Ktorú knižnú sériu by si odporučil/a každému členovi našej rodiny?" },
+      { id: 90, category: "Knihy", text: "Ak by si mal/a napísať autobiografiu, aká by bola prvá veta prvej kapitoly?" },
+      { id: 91, category: "Knihy", text: "Ktorá rozprávka, ktorú sme ti čítali (alebo si sám čítal), ti najviac utvela v pamäti?" },
+      { id: 92, category: "Knihy", text: "Aké prostredie z knihy (napr. Rokfort, Stredozem, Narnia) by si chcel/a navštíviť?" },
+      { id: 93, category: "Knihy", text: "Ktorá knižná postava by bola tvojím najlepším priateľom?" },
+      { id: 94, category: "Knihy", text: "Čítaš radšej knihy, ktoré ťa niečo naučia, alebo tie, ktoré ťa prenesú do iného sveta?" },
+      { id: 95, category: "Knihy", text: "Ktorú knihu si prečítal/a viac ako raz a prečo?" },
+      { id: 96, category: "Knihy", text: "Keby si mal/a prežiť týždeň bez technológií, ktoré tri knihy by si si vzal/a so sebou?" },
+      { id: 97, category: "Knihy", text: "Aká najvtipnejšia vec sa ti spája s čítaním alebo s knihami?" },
+      { id: 98, category: "Knihy", text: "Ktorý knižný citát ti uviazol v pamäti a riadiš sa ním?" },
+      { id: 99, category: "Knihy", text: "Ak by si mohol/mohla položiť jednu otázku autorovi svojej obľúbenej knihy, čo by to bolo?" },
+      { id: 100, category: "Knihy", text: "Ktorá detská kniha by podľa teba mala byť povinným čítaním aj pre dospelých?" },
+      { id: 101, category: "Knihy", text: "Aké miesto na čítanie kníh je tvoje najobľúbenejšie (napr. posteľ, kreslo, záhrada)?" },
+      { id: 102, category: "Knihy", text: "Ktorú knihu máš rozčítanú práve teraz a ako sa ti páči?" },
+      { id: 103, category: "Knihy", text: "Keby si mal/a navrhnúť obal pre knihu o svojom doterajšom živote, čo by na ňom bolo?" },
+      { id: 104, category: "Knihy", text: "Aká kniha ťa prinútila zamyslieť sa nad tvojím vzťahom k prírode alebo k ľuďom?" },
+      { id: 105, category: "Knihy", text: "Ktorú knižnú adaptáciu (film alebo seriál) považuješ za lepšiu ako samotnú knihu?" },
+      { id: 106, category: "Knihy", text: "Ako vyzerá tvoja ideálna domáca knižnica?" },
+      { id: 107, category: "Knihy", text: "Ktorá encyklopédia alebo náučná kniha ťa v detstve najviac bavila?" },
+      { id: 108, category: "Knihy", text: "Čo pre teba znamená vôňa starej knihy?" },
+      { id: 109, category: "Knihy", text: "Ak by si mohol/mohla vymazať pamäť, aby si si mohol/mohla prečítať jednu knihu znova prvýkrát, ktorá by to bola?" },
+      { id: 110, category: "Knihy", text: "Ktorá knižná postava má podľa teba najlepšie vlastnosti, aké by mal mať človek?" },
+      { id: 111, category: "Knihy", text: "Ako často čítaš a čo by ti pomohlo čítať viac?" },
+      { id: 112, category: "Knihy", text: "Ktorá kniha ti pomohla v ťažkom období tvojho života?" },
+      { id: 113, category: "Knihy", text: "Akú najzaujímavejšiu informáciu si sa kedy dozvedel/a z knihy?" },
+      { id: 114, category: "Knihy", text: "Keby si mal/a vytvoriť vlastnú rozprávkovú postavu, ako by vyzerala a čo by robila?" },
+      { id: 115, category: "Knihy", text: "Aký typ príbehov (napr. detektívky, fantasy, sci-fi, biografie) ťa najmenej baví?" },
+      { id: 116, category: "Knihy", text: "Ktorú knihu z knižnice našich rodičov/starých rodičov si pamätáš najviac?" },
+      { id: 117, category: "Knihy", text: "Ktorá kniha je podľa teba preceňovaná a nebavila ťa?" },
+      { id: 118, category: "Knihy", text: "Ak by si mal/a napísať detskú knižku, o čom by bola?" },
+      { id: 119, category: "Knihy", text: "Ktorý komiks alebo ilustrovaná kniha sa ti najviac páči?" },
+      { id: 120, category: "Knihy", text: "Čo je najdôležitejšie ponaučenie, ktoré by si chcel/a odovzdať cez knihy ďalším generáciám?" },
+
+      // 121-160: Predstavivosť
+      { id: 121, category: "Predstavivosť", text: "Keby si mohol/mohla mať akúkoľvek superschopnosť, čo by to bolo a ako by si ju využil/a?" },
+      { id: 122, category: "Predstavivosť", text: "Ak by si mohol/mohla cestovať v čase, do ktorého obdobia by si sa pozrel/a?" },
+      { id: 123, category: "Predstavivosť", text: "Predstav si, že objavíš nový neobývaný ostrov. Ako by si ho pomenoval/a a aké pravidlá by tam platili?" },
+      { id: 124, category: "Predstavivosť", text: "Keby zvieratá vedeli hovoriť, s ktorým druhom by si sa porozprával/a ako prvým?" },
+      { id: 125, category: "Predstavivosť", text: "Ak by si mohol/mohla navrhnúť nový dopravný prostriedok budúcnosti, ako by vyzerať?" },
+      { id: 126, category: "Predstavivosť", text: "Keby si mal/a možnosť stráviť týždeň vo vesmíre na vesmírnej stanici, išiel/išla by si?" },
+      { id: 127, category: "Predstavivosť", text: "Predstav si, že môžeš na jeden deň zmeniť gravitáciu. Čo by si robil/a?" },
+      { id: 128, category: "Predstavivosť", text: "Keby si bol/a neviditeľný/á na 24 hodín, kam by si sa šiel/šla pozrieť?" },
+      { id: 129, category: "Predstavivosť", text: "Ak by si mohol/mohla postaviť dom z akéhokoľvek netradičného materiálu (napr. čokoláda, sklo), z čoho by bol?" },
+      { id: 130, category: "Predstavivosť", text: "Keby si bol/a kráľom/kráľovnou na jeden deň, aký prvý zákon by si schválil/a?" },
+      { id: 131, category: "Predstavivosť", text: "Predstav si, že tvoj život je videohra. Aké by boli tvoje tri hlavné zručnosti (vlastnosti)?" },
+      { id: 132, category: "Predstavivosť", text: "Keby si mohol/mohla oživiť jedného dinosaura a mať ho ako domáceho miláčika, ktorý by to bol?" },
+      { id: 133, category: "Predstavivosť", text: "Ak by si mal/a vymyslieť nový sviatok pre celú krajinu, kedy by bol a ako by sa oslavoval?" },
+      { id: 134, category: "Predstavivosť", text: "Keby si mohol/mohla hovoriť s mimozemšťanom, čo by mu o našej planéte povedal/a ako prvé?" },
+      { id: 135, category: "Predstavivosť", text: "Predstav si, že môžeš ovládať počasie. Aké počasie by u nás bolo najčastejšie?" },
+      { id: 136, category: "Predstavivosť", text: "Keby si mal/a stroj na splnenie jedného želania (okrem peňazí a ďalších želaní), čo by to bolo?" },
+      { id: 137, category: "Predstavivosť", text: "Ak by si mohol/mohla vstúpiť do akéhokoľvek obrazu a prežiť tam nejaký čas, ktorý by to bol?" },
+      { id: 138, category: "Predstavivosť", text: "Keby si mohol/mohla vymyslieť novú farbu, ako by si ju opísal/a a ako by sa volala?" },
+      { id: 139, category: "Predstavivosť", text: "Predstav si, že sa prebudíš s tým, že vieš lietať. Kam by viedol tvoj prvý let?" },
+      { id: 140, category: "Predstavivosť", text: "Keby si mal/a možnosť navrhnúť nový šport, ktorý by sa hral na olympiáde, aké by mal pravidlá?" },
+      { id: 141, category: "Predstavivosť", text: "Ak by si mohol/mohla premeniť akúkoľvek bežnú domácu činnosť na mágiu, čo by to bolo?" },
+      { id: 142, category: "Predstavivosť", text: "Keby si sa mal/a premeniť na nejaký strom alebo kvet, čím by si chcel/a byť?" },
+      { id: 143, category: "Predstavivosť", text: "Predstav si, že nájdeš dvere, ktoré ťa prenesú na akékoľvek miesto na svete. Kam by si chcel/a, aby viedli?" },
+      { id: 144, category: "Predstavivosť", text: "Keby si mohol/mohla prežiť týždeň ako postava z tvojho obľúbeného filmu, kto by to bol?" },
+      { id: 145, category: "Predstavivosť", text: "Ak by si mal/a možnosť rozprávať sa so svojím budúcim ja o 20 rokov, na čo by si sa spýtal/a?" },
+      { id: 146, category: "Predstavivosť", text: "Keby tvoje sny mali premietačku a všetci by sme ich mohli vidieť, aký film by sme dnes pozerali?" },
+      { id: 147, category: "Predstavivosť", text: "Predstav si, že môžeš vdýchnuť život neživému predmetu u nás doma. Ktorý by to bol?" },
+      { id: 148, category: "Predstavivosť", text: "Keby si mal/a navrhnúť nového robota, ktorý by nám pomáhal v domácnosti, čo by mal na starosti?" },
+      { id: 149, category: "Predstavivosť", text: "Ak by si mohol/mohla zmeniť veľkosť akéhokoľvek zvieraťa na veľkosť mačky, čo by to bolo?" },
+      { id: 150, category: "Predstavivosť", text: "Keby si mal/a vytvoriť nový druh ovocia, ako by chutilo a ako by vyzeralo?" },
+      { id: 151, category: "Predstavivosť", text: "Predstav si, že sa ocitneš v rozprávkovom lese. Aké čarovné bytosti by si tam chcel/a stretnúť?" },
+      { id: 152, category: "Predstavivosť", text: "Keby sme všetci mali osobné zvieracie totemy, ktoré zviera by reprezentovalo koho v našej rodine?" },
+      { id: 153, category: "Predstavivosť", text: "Ak by si mohol/mohla zmeniť jednu fyzikálnu vlastnosť sveta (napr. spomaliť čas), čo by to bolo?" },
+      { id: 154, category: "Predstavivosť", text: "Keby si mal/a možnosť navrhnúť nový zábavný park, aká by bola jeho hlavná atrakcia?" },
+      { id: 155, category: "Predstavivosť", text: "Predstav si, že vieš čítať myšlienky, ale iba vtedy, keď sa dotýkaš niekoho ramena. Využíval/a by si to?" },
+      { id: 156, category: "Predstavivosť", text: "Keby si bol/a slávnym objaviteľom, aké záhadné miesto na Zemi by si chcel/a preskúmať?" },
+      { id: 157, category: "Predstavivosť", text: "Ak by si mohol/mohla žiť v akomkoľvek fantasy svete, vybral/a by si si ho namiesto nášho sveta?" },
+      { id: 158, category: "Predstavivosť", text: "Keby si mal/a navrhnúť vlajku a znak pre seba ako osobu, aké symboly by tam boli?" },
+      { id: 159, category: "Predstavivosť", text: "Predstav si, že máš možnosť prežiť rok na inej obývateľnej planéte. Vzal/a by si so sebou celú rodinu?" },
+      { id: 160, category: "Predstavivosť", text: "Keby si mohol/mohla zastaviť starnutie pre jednu osobu na svete, kto by to bol?" },
+
+      // 161-200: Rodina
+      { id: 161, category: "Rodina", text: "Čo na našej rodine najviac oceňuješ a robí ťa to hrdým/hrdou?" },
+      { id: 162, category: "Rodina", text: "Aká je tvoja najkrajšia spomienka na naše spoločné rodinné Vianoce?" },
+      { id: 163, category: "Rodina", text: "Ktorú našu rodinnú tradíciu alebo rituál máš najradšej a prečo?" },
+      { id: 164, category: "Rodina", text: "Čo je podľa teba najdôležitejšie pravidlo, ktoré udržuje našu rodinu pokope a v harmónii?" },
+      { id: 165, category: "Rodina", text: "Ktorá vlastnosť maminy a ktorá tatinova ti v živote najviac imponuje?" },
+      { id: 166, category: "Rodina", text: "Aký najvtipnejší moment sme spolu ako rodina zažili a radi naň spomíname?" },
+      { id: 167, category: "Rodina", text: "Čo by si chcel/a, aby sme ako rodina robili častejšie?" },
+      { id: 168, category: "Rodina", text: "V čom sa podľa teba najviac podobáš na svojich rodičov alebo súrodencov?" },
+      { id: 169, category: "Rodina", text: "Keby si mal/a naposledy pocit, že naša rodina drží naozaj pevne spolu ako jeden tím?" },
+      { id: 170, category: "Rodina", text: "Aký najlepší tip alebo radu si kedy dostal/a od niekoho z rodiny?" },
+      { id: 171, category: "Rodina", text: "Ktorý spoločný výlet alebo dovolenka boli pre teba tie najlepšie a prečo?" },
+      { id: 172, category: "Rodina", text: "Za čo by si chcel/a dnes úprimne poďakovať človeku po tvojej ľavici?" },
+      { id: 173, category: "Rodina", text: "Aké rodinné jedlo ti najviac evokuje pocit domova a pohody?" },
+      { id: 174, category: "Rodina", text: "Čo na našich spoločných víkendoch máš najradšej?" },
+      { id: 175, category: "Rodina", text: "Ktorá spoločná aktivita (napr. stolné hry, prechádzky, pozeranie filmov) ťa najviac baví?" },
+      { id: 176, category: "Rodina", text: "Ak by sme mali postaviť rodinný dom snov, akú jednu spoločnú izbu by sme tam určite museli mať?" },
+      { id: 177, category: "Rodina", text: "V čom cítiš, že ťa naša rodina najviac podporuje?" },
+      { id: 178, category: "Rodina", text: "Ktorý zvyk alebo vlastnosť každého z nás ťa vie občas vyviesť z miery, no aj tak ho máš rád/rada?" },
+      { id: 179, category: "Rodina", text: "Keby si mal/a vybrať jednu fotku z nášho rodinného albumu ako najvzácnejšiu, ktorá by to bola?" },
+      { id: 180, category: "Rodina", text: "Čo je pre teba tou najdôležitejšou hodnotou, ktorú sa v našej rodine učíme?" },
+      { id: 181, category: "Rodina", text: "Ktorá spoločná nedeľa bola pre teba za poslednú dobu tá najkrajšia?" },
+      { id: 182, category: "Rodina", text: "Čo ťa tvoja rodina naučila o láske a odpúšťaní?" },
+      { id: 183, category: "Rodina", text: "Aká bola najlepšia rodinná oslava, na ktorú si pamätáš?" },
+      { id: 184, category: "Rodina", text: "Ktorý rodinný inside joke (vnútorný vtip) ťa vždy zaručene rozosmeje?" },
+      { id: 185, category: "Rodina", text: "Ako by si opísal/a každého člena našej rodiny jedným pozitívnym slovom?" },
+      { id: 186, category: "Rodina", text: "V akej chvíli si si uvedomil/a, aké veľké šťastie je mať takúto rodinu?" },
+      { id: 187, category: "Rodina", text: "Ak by sme mali vytvoriť rodinný erb, aké tri zvieratá alebo symboly by v ňom boli?" },
+      { id: 188, category: "Rodina", text: "Ktoré spoločné práce v dome/záhrade ťa bavia najviac, keď ich robíme spolu?" },
+      { id: 189, category: "Rodina", text: "Čo ťa naučili tvoji súrodenci (alebo rodičia)?" },
+      { id: 190, category: "Rodina", text: "Ktorý večer u nás doma bol pre teba za posledné obdobie najpokojnejší?" },
+      { id: 191, category: "Rodina", text: "Aké je tvoje najväčšie prianie pre našu rodinu na tento rok?" },
+      { id: 192, category: "Rodina", text: "Ktoré spoločné miesto v našom okolí (napr. les, park, chata) máš najradšej?" },
+      { id: 193, category: "Rodina", text: "Čo pre teba znamená slovo „domov“?" },
+      { id: 194, category: "Rodina", text: "Ako sa naša rodina podľa teba zmenila za posledných 5 rokov?" },
+      { id: 195, category: "Rodina", text: "Ktorý darček, čo si kedy od niekoho z nás dostal/a, ti urobil najväčšiu radosť?" },
+      { id: 196, category: "Rodina", text: "Ktorú hru (spoločenskú alebo športovú) hráš s rodinou najradšej?" },
+      { id: 197, category: "Rodina", text: "V čom si myslíš, že je naša rodina výnimočná v porovnaní s ostatnými?" },
+      { id: 198, category: "Rodina", text: "Aké vlastnosti si vážiš na našich predkoch (starých rodičoch), o ktorých doma rozprávame?" },
+      { id: 199, category: "Rodina", text: "Akú radu by si dal/a našej rodine, aby sme sa mali ešte radšej a lepšie si rozumeli?" },
+      { id: 200, category: "Rodina", text: "Čo by si odkázal/a našej rodine do budúcnosti?" }
+    ];
+
+    // ==========================================
+    // 3. GLOBÁLNY STAV APLIKÁCIE
+    // ==========================================
+    const state = {
+      // Používateľské nastavenia lokálne
+      myRole: '',            // 'tatino' | 'mamina' | 'ivo' | 'majo'
+      roomCode: '',          // 4-miestny kód izby
+      isDemoMode: false,     // Beží bez Firebase (len ako lokálne testovanie)
+
+      // Stav synchronizovaný z databázy
+      mode: 'live',          // 'live' | 'async'
+      currentCardId: 0,      // ID aktuálnej karty (1-200)
+      skipped: false,        // Či bola karta preskočená ("Pas")
+      categoryFilter: 'all', // 'all' | 'zmysly' | 'hudba' | 'knihy' | 'predstavivost' | 'rodina'
+      
+      // Prítomnosť a odpovede
+      presence: {
+        tatino: false,
+        mamina: false,
+        ivo: false,
+        majo: false
+      },
+      answers: {}            // Odpovede na aktuálnu kartu: { tatino: 'text', ... }
+    };
+
+    // Firebase inštancia a referencie
+    let db = null;
+    let databaseInitialized = false;
+    let myPresenceRef = null;
+    let infoRef = null;
+    let presenceRef = null;
+    let answersRef = null;
+
+    // ==========================================
+    // 4. INICIALIZÁCIA A NAČÍTANIE NASTAVENÍ
+    // ==========================================
+    document.addEventListener('DOMContentLoaded', () => {
+      loadFirebaseConfig();
+      setupUI();
+      setupEventListeners();
+      checkFirebaseStatus();
+    });
+
+    // Načíta konfiguráciu Firebase z localStorage, inak použije predvolené prázdne
+    function loadFirebaseConfig() {
+      const savedConfig = localStorage.getItem('rodinna_clovecina_fb_config');
+      if (savedConfig) {
+        try {
+          const parsed = JSON.parse(savedConfig);
+          Object.assign(firebaseConfig, parsed);
+        } catch (e) {
+          console.error("Chyba pri čítaní uloženej konfigurácie Firebase.", e);
+        }
+      }
+
+      // Predvyplniť polia v nastaveniach
+      document.getElementById('fb-api-key').value = firebaseConfig.apiKey || '';
+      document.getElementById('fb-auth-domain').value = firebaseConfig.authDomain || '';
+      document.getElementById('fb-database-url').value = firebaseConfig.databaseURL || '';
+      document.getElementById('fb-project-id').value = firebaseConfig.projectId || '';
+    }
+
+    // Inicializuje Firebase ak sú vyplnené hlavné údaje
+    function initFirebase() {
+      if (databaseInitialized) return true;
+      
+      // Vyžadujeme aspoň apiKey a databaseURL pre Realtime Database
+      if (!firebaseConfig.apiKey || !firebaseConfig.databaseURL) {
+        return false;
+      }
+
+      try {
+        // Inicializovať iba raz
+        if (firebase.apps.length === 0) {
+          firebase.initializeApp(firebaseConfig);
+        }
+        db = firebase.database();
+        databaseInitialized = true;
+        return true;
+      } catch (e) {
+        console.error("Chyba pri inicializácii Firebase:", e);
+        showToast("Inicializácia Firebase zlyhala. Skontrolujte nastavenia.");
+        return false;
+      }
+    }
+
+    function checkFirebaseStatus() {
+      const banner = document.getElementById('fb-config-warning');
+      const hasConfig = firebaseConfig.apiKey && firebaseConfig.databaseURL;
+      
+      if (hasConfig) {
+        banner.style.display = 'none';
+      } else {
+        banner.style.display = 'flex';
+      }
+    }
+
+    // ==========================================
+    // 5. NASTAVENIE UZLOV A EVENT LISTENERS
+    // ==========================================
+    function setupUI() {
+      // Lobby obrazovka je na začiatku zobrazená, herná skrytá
+      document.getElementById('screen-lobby').style.display = 'flex';
+      document.getElementById('screen-game').style.display = 'none';
+    }
+
+    function setupEventListeners() {
+      // Výber roly
+      document.querySelectorAll('.role-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          state.myRole = btn.dataset.role;
+        });
+      });
+
+      // Modálne okno nastavení
+      const settingsModal = document.getElementById('settings-modal');
+      document.getElementById('btn-settings').addEventListener('click', () => {
+        settingsModal.classList.add('active');
+      });
+
+      document.getElementById('btn-close-settings').addEventListener('click', () => {
+        settingsModal.classList.remove('active');
+      });
+
+      // Uloženie nastavení Firebase
+      document.getElementById('btn-save-settings').addEventListener('click', () => {
+        const config = {
+          apiKey: document.getElementById('fb-api-key').value.trim(),
+          authDomain: document.getElementById('fb-auth-domain').value.trim(),
+          databaseURL: document.getElementById('fb-database-url').value.trim(),
+          projectId: document.getElementById('fb-project-id').value.trim()
+        };
+
+        localStorage.setItem('rodinna_clovecina_fb_config', JSON.stringify(config));
+        showToast("Nastavenia Firebase boli uložené. Stránka sa obnoví pre načítanie.");
+        settingsModal.classList.remove('active');
+        
+        setTimeout(() => {
+          window.location.reload();
+        }, 1200);
+      });
+
+      // Vymazanie nastavení Firebase
+      document.getElementById('btn-clear-settings').addEventListener('click', () => {
+        localStorage.removeItem('rodinna_clovecina_fb_config');
+        showToast("Nastavenia Firebase boli vymazané. Obnovujem stránku.");
+        settingsModal.classList.remove('active');
+        setTimeout(() => {
+          window.location.reload();
+        }, 1200);
+      });
+
+      // Vytvorenie izby
+      document.getElementById('btn-create-room').addEventListener('click', () => {
+        if (!state.myRole) {
+          showToast("Najprv si zvoľ svoju rodinnú rolu!");
+          return;
+        }
+        
+        // Generovanie 4-miestneho náhodného kódu (napr. A3D9)
+        const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789'; // Bez mätúcich znakov I, O, 0, 1
+        let randomCode = '';
+        for (let i = 0; i < 4; i++) {
+          randomCode += chars.charAt(Math.floor(Math.random() * chars.length));
+        }
+        
+        joinRoomWorkflow(randomCode, true);
+      });
+
+      // Vstup do existujúcej izby
+      document.getElementById('btn-join-room').addEventListener('click', () => {
+        if (!state.myRole) {
+          showToast("Najprv si zvoľ svoju rodinnú rolu!");
+          return;
+        }
+
+        const roomInput = document.getElementById('input-room-code').value.trim().toUpperCase();
+        if (roomInput.length !== 4) {
+          showToast("Zadaj správny 4-miestny kód izby!");
+          return;
+        }
+
+        joinRoomWorkflow(roomInput, false);
+      });
+
+      // Odchod z izby
+      document.getElementById('btn-leave-room').addEventListener('click', () => {
+        leaveRoomWorkflow();
+      });
+
+      // Kopírovanie kódu izby
+      document.getElementById('display-room-code').addEventListener('click', () => {
+        if (!state.roomCode) return;
+        navigator.clipboard.writeText(state.roomCode).then(() => {
+          showToast(`Kód izby ${state.roomCode} bol skopírovaný!`);
+        }).catch(err => {
+          console.error("Chyba pri kopírovaní:", err);
+        });
+      });
+
+      // Prepínanie režimov (NAŽIVO vs NAŠE TEMPO)
+      document.querySelectorAll('.mode-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const targetMode = btn.dataset.gameMode;
+          setRoomMode(targetMode);
+        });
+      });
+
+      // Filter kategórií
+      document.querySelectorAll('.category-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          const targetCategory = btn.dataset.category;
+          setCategoryFilter(targetCategory);
+        });
+      });
+
+      // Ťahať novú kartu
+      document.getElementById('btn-draw-card').addEventListener('click', () => {
+        drawNewCard();
+      });
+
+      // Tlačidlo PAS
+      document.getElementById('btn-pass-card').addEventListener('click', () => {
+        passCard();
+      });
+    }
+
+    // ==========================================
+    // 6. PRÁCA S IZBOU (WORKFLOWS)
+    // ==========================================
+    function joinRoomWorkflow(roomCode, isCreatingNew) {
+      state.roomCode = roomCode;
+      
+      const hasFirebase = initFirebase();
+
+      if (hasFirebase) {
+        state.isDemoMode = false;
+        showToast(`Pripájam sa do Firebase izby: ${roomCode}...`);
+
+        // 1. Zabezpečenie prítomnosti (presence) v reálnom čase
+        myPresenceRef = db.ref(`rooms/${roomCode}/presence/${state.myRole}`);
+        myPresenceRef.set(true);
+        myPresenceRef.onDisconnect().remove();
+
+        // 2. Počúvanie prítomnosti
+        presenceRef = db.ref(`rooms/${roomCode}/presence`);
+        presenceRef.on('value', (snapshot) => {
+          const val = snapshot.val() || {};
+          state.presence = {
+            tatino: !!val.tatino,
+            mamina: !!val.mamina,
+            ivo: !!val.ivo,
+            majo: !!val.majo
+          };
+          renderPresenceIndicators();
+        });
+
+        // 3. Počúvanie informácií o stave izby
+        infoRef = db.ref(`rooms/${roomCode}/info`);
+        
+        if (isCreatingNew) {
+          // Ak vytvárame novú izbu, nastavíme počiatočný stav
+          infoRef.set({
+            mode: 'live',
+            currentCardId: 0,
+            skipped: false,
+            categoryFilter: 'all',
+            lastUpdated: firebase.database.ServerValue.TIMESTAMP
+          });
+        }
+
+        infoRef.on('value', (snapshot) => {
+          const val = snapshot.val();
+          if (val) {
+            const cardChanged = state.currentCardId !== val.currentCardId;
+            const skipChanged = state.skipped !== val.skipped;
+            
+            state.mode = val.mode || 'live';
+            state.currentCardId = val.currentCardId || 0;
+            state.skipped = val.skipped || false;
+            state.categoryFilter = val.categoryFilter || 'all';
+
+            // Ak sa zmenila karta, aktualizujeme počúvanie odpovedí na danú kartu
+            if (cardChanged) {
+              setupAnswersListener();
+            }
+
+            renderGameInterface(cardChanged || skipChanged);
+          } else {
+            // Izba v DB prestala existovať, alebo sme v neplatnom stave
+            if (!isCreatingNew) {
+              showToast("Táto izba nebola na Firebase nájdená. Spúšťam v lokálnom režime.");
+              startLocalDemoMode();
+            }
+          }
+        });
+      } else {
+        // Lokálny offline režim (demo)
+        startLocalDemoMode();
+      }
+
+      // Prechod na hernú obrazovku
+      document.getElementById('screen-lobby').style.display = 'none';
+      document.getElementById('screen-game').style.display = 'block';
+    }
+
+    function startLocalDemoMode() {
+      state.isDemoMode = true;
+      state.presence = {
+        tatino: false,
+        mamina: false,
+        ivo: false,
+        majo: false
+      };
+      // Nastavíme aktívnu aspoň našu rolu
+      state.presence[state.myRole] = true;
+      
+      showToast(`Hráte lokálne (Demo) v miestnosti: ${state.roomCode}`);
+      renderPresenceIndicators();
+      renderGameInterface(true);
+    }
+
+    function leaveRoomWorkflow() {
+      // 1. Zmazať presence a odhlásiť listenery
+      if (myPresenceRef) {
+        myPresenceRef.remove();
+        myPresenceRef = null;
+      }
+      if (presenceRef) {
+        presenceRef.off();
+        presenceRef = null;
+      }
+      if (infoRef) {
+        infoRef.off();
+        infoRef = null;
+      }
+      if (answersRef) {
+        answersRef.off();
+        answersRef = null;
+      }
+
+      // 2. Reset stavu
+      state.roomCode = '';
+      state.currentCardId = 0;
+      state.skipped = false;
+      state.answers = {};
+
+      // 3. Prechod na lobby
+      document.getElementById('screen-game').style.display = 'none';
+      document.getElementById('screen-lobby').style.display = 'flex';
+      
+      showToast("Opustili ste miestnosť.");
+    }
+
+    // ==========================================
+    // 7. LISTENERY PRE ODPOVEDE (NAŠE TEMPO)
+    // ==========================================
+    function setupAnswersListener() {
+      if (answersRef) {
+        answersRef.off();
+      }
+
+      state.answers = {};
+
+      if (state.isDemoMode || !state.currentCardId) {
+        renderAnswersPanel();
+        return;
+      }
+
+      // Počúvanie odpovedí pre aktuálnu kartu
+      answersRef = db.ref(`rooms/${state.roomCode}/answers/${state.currentCardId}`);
+      answersRef.on('value', (snapshot) => {
+        state.answers = snapshot.val() || {};
+        renderAnswersPanel();
+      });
+    }
+
+    // ==========================================
+    // 8. SYNC AKCIE (ODOSLANIE ZMIEN DO DB)
+    // ==========================================
+    function setRoomMode(mode) {
+      if (state.isDemoMode) {
+        state.mode = mode;
+        renderGameInterface(false);
+        showToast(`Režim zmenený na: ${mode === 'live' ? 'NAŽIVO' : 'NAŠE TEMPO'}`);
+      } else {
+        infoRef.update({ mode: mode })
+          .then(() => showToast(`Režim úspešne zmenený na ${mode === 'live' ? 'NAŽIVO' : 'NAŠE TEMPO'}`))
+          .catch(err => console.error("Chyba zmeny režimu:", err));
+      }
+    }
+
+    function setCategoryFilter(category) {
+      if (state.isDemoMode) {
+        state.categoryFilter = category;
+        renderCategoryFilterTabs();
+        showToast(`Kategória nastavená na: ${getCategorySlovakName(category)}`);
+      } else {
+        infoRef.update({ categoryFilter: category })
+          .then(() => renderCategoryFilterTabs())
+          .catch(err => console.error("Chyba zmeny kategórie:", err));
+      }
+    }
+
+    function drawNewCard() {
+      // 1. Filtrovanie otázok podľa kategórie
+      let filtered = [];
+      if (state.categoryFilter === 'all') {
+        filtered = QUESTIONS;
+      } else if (state.categoryFilter === 'zmysly') {
+        filtered = QUESTIONS.filter(q => q.id >= 1 && q.id <= 40);
+      } else if (state.categoryFilter === 'hudba') {
+        filtered = QUESTIONS.filter(q => q.id >= 41 && q.id <= 80);
+      } else if (state.categoryFilter === 'knihy') {
+        filtered = QUESTIONS.filter(q => q.id >= 81 && q.id <= 120);
+      } else if (state.categoryFilter === 'predstavivost') {
+        filtered = QUESTIONS.filter(q => q.id >= 121 && q.id <= 160);
+      } else if (state.categoryFilter === 'rodina') {
+        filtered = QUESTIONS.filter(q => q.id >= 161 && q.id <= 200);
+      }
+
+      if (filtered.length === 0) {
+        showToast("Žiadne otázky v tejto kategórii!");
+        return;
+      }
+
+      // 2. Náhodný výber karty (odlišnej od aktuálnej, ak je to možné)
+      let newCard;
+      if (filtered.length > 1) {
+        do {
+          newCard = filtered[Math.floor(Math.random() * filtered.length)];
+        } while (newCard.id === state.currentCardId);
+      } else {
+        newCard = filtered[0];
+      }
+
+      // 3. Odoslanie do Firebase / Lokálneho stavu
+      if (state.isDemoMode) {
+        state.currentCardId = newCard.id;
+        state.skipped = false;
+        state.answers = {};
+        renderGameInterface(true);
+        setupAnswersListener();
+      } else {
+        // Ak sa ťahá nová karta, vymažeme z databázy prípadné staré odpovede na túto konkrétnu kartu
+        db.ref(`rooms/${state.roomCode}/answers/${newCard.id}`).remove();
+        
+        infoRef.update({
+          currentCardId: newCard.id,
+          skipped: false,
+          lastUpdated: firebase.database.ServerValue.TIMESTAMP
+        }).catch(err => console.error("Chyba pri ťahaní karty:", err));
+      }
+    }
+
+    function passCard() {
+      if (state.currentCardId === 0) {
+        showToast("Najprv musíte potiahnuť kartu!");
+        return;
+      }
+
+      if (state.isDemoMode) {
+        state.skipped = true;
+        renderGameInterface(true);
+      } else {
+        infoRef.update({
+          skipped: true,
+          lastUpdated: firebase.database.ServerValue.TIMESTAMP
+        }).catch(err => console.error("Chyba pri preskakovaní:", err));
+      }
+    }
+
+    function submitMyAnswer(text) {
+      const cleanText = text.trim();
+      if (!cleanText) {
+        showToast("Nemožno odoslať prázdnu odpoveď!");
+        return;
+      }
+
+      if (state.isDemoMode) {
+        state.answers[state.myRole] = cleanText;
+        renderAnswersPanel();
+        showToast("Odpoveď uložená lokálne.");
+      } else {
+        db.ref(`rooms/${state.roomCode}/answers/${state.currentCardId}/${state.myRole}`).set(cleanText)
+          .then(() => showToast("Tvoja odpoveď bola úspešne odoslaná!"))
+          .catch(err => console.error("Chyba pri odosielaní odpovede:", err));
+      }
+    }
+
+    // ==========================================
+    // 9. VIZUÁLNE RENDER FUNKCIE (UI UPDATES)
+    // ==========================================
+    
+    // Zobrazuje zelené / sivé indikátory online stavu pripojených rolí
+    function renderPresenceIndicators() {
+      const container = document.getElementById('presence-indicators');
+      const roles = ['tatino', 'mamina', 'ivo', 'majo'];
+      
+      roles.forEach(role => {
+        const item = container.querySelector(`[data-presence-role="${role}"]`);
+        if (item) {
+          const dot = item.querySelector('.status-dot');
+          const isOnline = state.presence[role];
+          
+          if (isOnline) {
+            dot.classList.add('active');
+            item.classList.add('online');
+          } else {
+            dot.classList.remove('active');
+            item.classList.remove('online');
+          }
+        }
+      });
+    }
+
+    // Nastavuje aktívny filter kategórií na základe stavu
+    function renderCategoryFilterTabs() {
+      document.querySelectorAll('.category-tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.category === state.categoryFilter);
+      });
+    }
+
+    // Vykresľuje celú hernú plochu
+    function renderGameInterface(shouldAnimate) {
+      // 1. Zobrazenie kódu izby
+      document.getElementById('display-room-code').innerHTML = `MIESTNOSŤ: ${state.roomCode} <i class="fas fa-copy" style="font-size: 0.75rem;"></i>`;
+
+      // 2. Nastavenie tlačidiel pre režim hry
+      document.querySelectorAll('.mode-tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.gameMode === state.mode);
+      });
+
+      // 3. Nastavenie filtrov
+      renderCategoryFilterTabs();
+
+      // 4. Panel s odpoveďami pre "NAŠE TEMPO"
+      const answersPanel = document.getElementById('answers-panel-section');
+      if (state.mode === 'async' && state.currentCardId > 0 && !state.skipped) {
+        answersPanel.style.display = 'flex';
+      } else {
+        answersPanel.style.display = 'none';
+      }
+
+      // 5. Renderovanie karty a animácia plynulého prechodu
+      const card = document.getElementById('game-card');
+      const headerElements = document.getElementById('card-header-elements');
+      const textWrapper = document.getElementById('card-text-wrapper');
+      const skippedWrapper = document.getElementById('card-skipped-wrapper');
+      const footerText = document.getElementById('card-footer-text');
+
+      if (shouldAnimate) {
+        card.classList.add('fade-out');
+        card.classList.remove('fade-in');
+        
+        setTimeout(() => {
+          updateCardContentDOM(headerElements, textWrapper, skippedWrapper, footerText);
+          card.classList.remove('fade-out');
+          card.classList.add('fade-in');
+        }, 300); // Čas na dokončenie fade-out
+      } else {
+        updateCardContentDOM(headerElements, textWrapper, skippedWrapper, footerText);
+      }
+    }
+
+    // Pomocná funkcia pre priamu aktualizáciu obsahu karty v DOM
+    function updateCardContentDOM(headerElements, textWrapper, skippedWrapper, footerText) {
+      if (state.currentCardId === 0) {
+        // Ešte nebola vytiahnutá žiadna karta
+        headerElements.style.visibility = 'hidden';
+        textWrapper.style.display = 'block';
+        skippedWrapper.style.display = 'none';
+        document.getElementById('card-question-text').innerHTML = "Kliknutím na <strong>Ťahať novú kartu</strong> môžete začať spoločnú hru.";
+        footerText.style.visibility = 'hidden';
+      } else if (state.skipped) {
+        // Karta bola preskočená ("Pas")
+        headerElements.style.visibility = 'hidden';
+        textWrapper.style.display = 'none';
+        skippedWrapper.style.display = 'flex';
+        footerText.style.visibility = 'visible';
+        footerText.textContent = "Žiadny tlak, ideme ďalej";
+      } else {
+        // Štandardná karta s otázkou
+        const question = QUESTIONS.find(q => q.id === state.currentCardId);
+        if (question) {
+          headerElements.style.visibility = 'visible';
+          textWrapper.style.display = 'block';
+          skippedWrapper.style.display = 'none';
+          document.getElementById('card-category-name').textContent = question.category;
+          document.getElementById('card-question-number').textContent = `Karta #${question.id}`;
+          document.getElementById('card-question-text').textContent = question.text;
+          footerText.style.visibility = 'visible';
+          footerText.textContent = "Rodinná Človečina";
+        }
+      }
+    }
+
+    // Vykresľuje panel odpovedí v asynchrónnom režime ("NAŠE TEMPO")
+    function renderAnswersPanel() {
+      const container = document.getElementById('answers-container');
+      container.innerHTML = '';
+
+      if (!state.currentCardId) return;
+
+      const roles = ['tatino', 'mamina', 'ivo', 'majo'];
+      
+      // Zistíme, či aktuálny prihlásený používateľ už odovzdal odpoveď
+      const hasMyAnswer = !!state.answers[state.myRole];
+
+      roles.forEach(role => {
+        const answerText = state.answers[role] || '';
+        const hasAnswered = !!answerText;
+        
+        const isMe = role === state.myRole;
+
+        const block = document.createElement('div');
+        block.className = 'answer-block';
+
+        // Hlavička bloku odpovede
+        const header = document.createElement('div');
+        header.className = 'answer-block-header';
+        
+        let roleIcon = 'fa-child';
+        if (role === 'tatino') roleIcon = 'fa-user-tie';
+        if (role === 'mamina') roleIcon = 'fa-user-circle';
+        if (role === 'ivo') roleIcon = 'fa-child-reaching';
+
+        header.innerHTML = `
+          <span class="answer-role-badge badge-${role}">
+            <i class="fas ${roleIcon}"></i> ${role} ${isMe ? '(Ty)' : ''}
+          </span>
+          <span class="answer-status-label ${hasAnswered ? 'done' : 'waiting'}">
+            ${hasAnswered ? '<i class="fas fa-check-circle"></i> Odpovedal/a' : '<i class="far fa-circle"></i> Čaká sa'}
+          </span>
+        `;
+        block.appendChild(header);
+
+        // Telo bloku odpovede (odpoveď, písanie alebo zámok)
+        const body = document.createElement('div');
+
+        if (isMe) {
+          // Naša vlastná sekcia
+          if (hasAnswered) {
+            // Už sme odpovedali, zobrazíme text
+            body.innerHTML = `<p class="answer-content">${escapeHTML(answerText)}</p>`;
+          } else {
+            // Ešte sme neodpovedali, zobrazíme formulár na písanie
+            const compose = document.createElement('div');
+            compose.className = 'answer-compose-area';
+            
+            const textarea = document.createElement('textarea');
+            textarea.className = 'answer-textarea';
+            textarea.placeholder = "Sem napíš svoju úprimnú odpoveď na túto kartu...";
+            textarea.id = `textarea-compose-${role}`;
+            
+            const submitBtn = document.createElement('button');
+            submitBtn.className = 'btn-primary';
+            submitBtn.style.padding = '0.5rem 1rem';
+            submitBtn.style.fontSize = '0.85rem';
+            submitBtn.style.alignSelf = 'flex-end';
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Odoslať odpoveď';
+            
+            submitBtn.addEventListener('click', () => {
+              submitMyAnswer(textarea.value);
+            });
+
+            compose.appendChild(textarea);
+            compose.appendChild(submitBtn);
+            body.appendChild(compose);
+          }
+        } else {
+          // Ostatní členovia rodiny
+          if (!hasAnswered) {
+            // Ešte neodpovedal/a
+            body.innerHTML = `<p class="answer-empty">Ešte neodpovedal/a... 💬</p>`;
+          } else {
+            // Odpovedal/a
+            if (hasMyAnswer) {
+              // Ak sme my už odpovedali, môžeme vidieť odpoveď druhého
+              body.innerHTML = `<p class="answer-content">${escapeHTML(answerText)}</p>`;
+            } else {
+              // Ak sme my neodpovedali, odpoveď druhého je bezpečne skrytá (zámok)
+              body.innerHTML = `
+                <div class="answer-locked">
+                  <i class="fas fa-lock"></i>
+                  <span>Odpoveď od <strong>${role}</strong> je skrytá. Odomkne sa, keď odošleš svoju odpoveď.</span>
+                </div>
+              `;
+            }
+          }
+        }
+
+        block.appendChild(body);
+        container.appendChild(block);
+      });
+    }
+
+    // ==========================================
+    // 10. POMOCNÉ FUNKCIE
+    // ==========================================
+    function getCategorySlovakName(category) {
+      switch (category) {
+        case 'zmysly': return 'Zmysly';
+        case 'hudba': return 'Hudba';
+        case 'knihy': return 'Knihy';
+        case 'predstavivost': return 'Predstavivosť';
+        case 'rodina': return 'Rodina';
+        default: return 'Všetky kategórie';
+      }
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast-message');
+      document.getElementById('toast-text-content').textContent = message;
+      toast.classList.add('active');
+      
+      setTimeout(() => {
+        toast.classList.remove('active');
+      }, 3000);
+    }
+
+    function escapeHTML(str) {
+      return str.replace(/[&<>'"]/g, 
+        tag => ({
+          '&': '&amp;',
+          '<': '&lt;',
+          '>': '&gt;',
+          "'": '&#39;',
+          '"': '&quot;'
+        }[tag] || tag)
+      );
+    }
+  </script>
+
 </body>
 </html>
