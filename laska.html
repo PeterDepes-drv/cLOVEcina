@@ -1,0 +1,1657 @@
+<!DOCTYPE html>
+<html lang="sk">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Partnerská čLOVEčina - komunikačná hra pre dvoch na prehĺbenie vzťahu.">
+  <title>Partnerská čLOVEčina</title>
+  
+  <!-- Google Fonts: Quicksand pre mäkké rodinné písmo a Inter pre čitateľnosť -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
+  
+  <!-- FontAwesome pre ikony -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+  <style>
+    /* DESIGN SYSTEM & GLOBAL STYLES */
+    :root {
+      --bg-dark: #0f172a;       /* Hlboká tmavomodrá */
+      --bg-card: #1e293b;       /* Tmavosivá pre karty */
+      --bg-card-inner: #334155; /* Vnútorné prvky a sekcie */
+      --text-primary: #f8fafc;  /* Mäkká biela */
+      --text-secondary: #cbd5e1;/* Svetlosivá pre čitateľnosť */
+      --text-muted: #64748b;    /* Tlmená sivá */
+      
+      --accent-gold: #d97706;   /* Matná zlatá */
+      --accent-gold-hover: #f59e0b;
+      --accent-gold-light: rgba(217, 119, 6, 0.15);
+      
+      --color-tatino: #3b82f6;  /* Modrá */
+      --color-mamina: #ec4899;  /* Ružová */
+
+      --transition-calm: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Inter', sans-serif;
+    }
+
+    body {
+      background-color: var(--bg-dark);
+      color: var(--text-secondary);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: flex-start;
+      padding: 1rem;
+      overflow-x: hidden;
+    }
+
+    h1, h2, h3, h4, .font-soft {
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 700;
+      color: var(--text-primary);
+    }
+
+    /* HLAVIČKA APLIKÁCIE */
+    header {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      padding: 1rem 0.5rem;
+      margin-bottom: 1rem;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .logo-container {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .logo-heart {
+      color: var(--accent-gold);
+      font-size: 1.5rem;
+      animation: pulse 3s infinite ease-in-out;
+    }
+
+    @keyframes pulse {
+      0%, 100% { transform: scale(1); opacity: 0.9; }
+      50% { transform: scale(1.15); opacity: 1; text-shadow: 0 0 10px var(--accent-gold); }
+    }
+
+    .logo-text {
+      font-size: 1.4rem;
+      letter-spacing: -0.5px;
+    }
+
+    .btn-icon {
+      background: transparent;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-secondary);
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: var(--transition-calm);
+    }
+
+    .btn-icon:hover {
+      border-color: var(--accent-gold);
+      color: var(--accent-gold);
+      background-color: var(--accent-gold-light);
+    }
+
+    /* HLAVNÝ KONTAJNER */
+    main {
+      width: 100%;
+      max-width: 600px;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      flex-grow: 1;
+    }
+
+    /* LOBBY OBRAZOVKA */
+    .lobby-card {
+      background-color: var(--bg-card);
+      border-radius: 1.5rem;
+      padding: 2rem 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+      display: flex;
+      flex-direction: column;
+      gap: 1.5rem;
+    }
+
+    .lobby-title {
+      font-size: 1.6rem;
+      text-align: center;
+      color: var(--text-primary);
+    }
+
+    .lobby-description {
+      color: var(--text-secondary);
+      font-size: 0.95rem;
+      text-align: center;
+      line-height: 1.5;
+    }
+
+    /* Výber roly */
+    .role-section-title {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      text-align: center;
+      color: var(--accent-gold);
+    }
+
+    .role-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.75rem;
+    }
+
+    .role-btn {
+      background-color: var(--bg-card-inner);
+      border: 2px solid transparent;
+      border-radius: 1rem;
+      padding: 1.25rem 1rem;
+      color: var(--text-primary);
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.5rem;
+      transition: var(--transition-calm);
+    }
+
+    .role-btn i {
+      font-size: 1.8rem;
+    }
+
+    .role-btn span {
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    .role-btn[data-role="tatino"]:hover, .role-btn[data-role="tatino"].active {
+      border-color: var(--color-tatino);
+      background-color: rgba(59, 130, 246, 0.05);
+      box-shadow: 0 0 15px rgba(59, 130, 246, 0.15);
+    }
+    .role-btn[data-role="tatino"] i { color: var(--color-tatino); }
+
+    .role-btn[data-role="mamina"]:hover, .role-btn[data-role="mamina"].active {
+      border-color: var(--color-mamina);
+      background-color: rgba(236, 72, 153, 0.05);
+      box-shadow: 0 0 15px rgba(236, 72, 153, 0.15);
+    }
+    .role-btn[data-role="mamina"] i { color: var(--color-mamina); }
+
+    /* Pripojenie izby */
+    .room-action-container {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-top: 0.5rem;
+      padding-top: 1rem;
+      border-top: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .room-input-group {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .room-input {
+      flex-grow: 1;
+      background-color: var(--bg-card-inner);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 0.75rem;
+      padding: 0.75rem 1rem;
+      color: var(--text-primary);
+      font-size: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 2px;
+      text-align: center;
+      transition: var(--transition-calm);
+    }
+
+    .room-input:focus {
+      outline: none;
+      border-color: var(--accent-gold);
+      box-shadow: 0 0 10px rgba(217, 119, 6, 0.2);
+    }
+
+    /* TLAČIDLÁ */
+    .btn-primary {
+      background-color: var(--accent-gold);
+      color: var(--bg-dark);
+      border: none;
+      border-radius: 0.75rem;
+      padding: 0.85rem 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: var(--transition-calm);
+    }
+
+    .btn-primary:hover {
+      background-color: var(--accent-gold-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 4px 12px rgba(217, 119, 6, 0.3);
+    }
+
+    .btn-secondary {
+      background-color: transparent;
+      color: var(--text-secondary);
+      border: 1px solid rgba(255, 255, 255, 0.15);
+      border-radius: 0.75rem;
+      padding: 0.85rem 1.5rem;
+      font-size: 0.95rem;
+      font-weight: 500;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      transition: var(--transition-calm);
+    }
+
+    .btn-secondary:hover {
+      background-color: rgba(255, 255, 255, 0.05);
+      border-color: var(--text-secondary);
+    }
+
+    .btn-danger {
+      background-color: rgba(239, 68, 68, 0.2);
+      color: #ef4444;
+      border: 1px solid rgba(239, 68, 68, 0.4);
+    }
+
+    .btn-danger:hover {
+      background-color: #ef4444;
+      color: var(--text-primary);
+      box-shadow: 0 4px 12px rgba(239, 68, 68, 0.3);
+    }
+
+    /* UPOZORNENIE PRE FIREBASE */
+    .firebase-alert-banner {
+      background-color: rgba(217, 119, 6, 0.08);
+      border: 1px dashed var(--accent-gold);
+      border-radius: 1rem;
+      padding: 1rem;
+      display: flex;
+      align-items: flex-start;
+      gap: 0.75rem;
+      font-size: 0.85rem;
+      line-height: 1.4;
+    }
+
+    .firebase-alert-banner i {
+      color: var(--accent-gold);
+      font-size: 1.2rem;
+      margin-top: 0.1rem;
+    }
+
+    /* HERNÁ OBRAZOVKA */
+    .game-board {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .game-info-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background-color: var(--bg-card);
+      padding: 0.75rem 1rem;
+      border-radius: 1rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .btn-back-lobby {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      font-size: 0.9rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+      transition: var(--transition-calm);
+    }
+
+    .btn-back-lobby:hover {
+      color: var(--accent-gold);
+    }
+
+    .room-code-indicator {
+      font-family: 'Quicksand', sans-serif;
+      font-weight: 700;
+      color: var(--accent-gold);
+      font-size: 0.95rem;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      cursor: pointer;
+    }
+
+    .room-code-indicator:hover {
+      text-decoration: underline;
+    }
+
+    /* Prítomnosť */
+    .family-presence-row {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5rem;
+      margin-top: 0.25rem;
+    }
+
+    .family-member-status {
+      background-color: var(--bg-card);
+      border-radius: 0.75rem;
+      padding: 0.6rem;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 0.25rem;
+      border: 1px solid rgba(255, 255, 255, 0.03);
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .status-indicator {
+      display: flex;
+      align-items: center;
+      gap: 0.35rem;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background-color: var(--text-muted);
+    }
+
+    .status-dot.active {
+      background-color: #10b981;
+      box-shadow: 0 0 8px #10b981;
+    }
+
+    /* Režimy a kategórie */
+    .mode-tab-bar {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 0.5rem;
+      background-color: var(--bg-card);
+      padding: 0.35rem;
+      border-radius: 0.75rem;
+    }
+
+    .mode-tab-btn {
+      background: transparent;
+      border: none;
+      color: var(--text-secondary);
+      padding: 0.65rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      border-radius: 0.5rem;
+      transition: var(--transition-calm);
+    }
+
+    .mode-tab-btn.active {
+      background-color: var(--bg-card-inner);
+      color: var(--accent-gold);
+      box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.05);
+    }
+
+    .category-filter-container {
+      display: flex;
+      gap: 0.4rem;
+      overflow-x: auto;
+      padding: 0.25rem 0.1rem;
+      scrollbar-width: thin;
+      scrollbar-color: var(--accent-gold-light) transparent;
+    }
+
+    .category-filter-container::-webkit-scrollbar {
+      height: 4px;
+    }
+    .category-filter-container::-webkit-scrollbar-thumb {
+      background-color: var(--accent-gold-light);
+      border-radius: 2px;
+    }
+
+    .category-tab-btn {
+      background-color: var(--bg-card);
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      color: var(--text-secondary);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.8rem;
+      font-weight: 500;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: var(--transition-calm);
+    }
+
+    .category-tab-btn.active {
+      background-color: var(--accent-gold-light);
+      border-color: var(--accent-gold);
+      color: var(--accent-gold);
+    }
+
+    /* KARTA HRA */
+    .card-scene {
+      perspective: 1000px;
+      margin: 0.5rem 0;
+    }
+
+    .card-container {
+      background-color: var(--bg-card);
+      border-radius: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.5);
+      min-height: 250px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      padding: 2rem;
+      position: relative;
+      transition: var(--transition-calm);
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .card-container.fade-out {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+
+    .card-container.fade-in {
+      animation: cardFadeIn 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    @keyframes cardFadeIn {
+      from { opacity: 0; transform: translateY(20px) scale(0.98); }
+      to { opacity: 1; transform: translateY(0) scale(1); }
+    }
+
+    .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .card-category-badge {
+      background-color: var(--bg-card-inner);
+      color: var(--accent-gold);
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 0.35rem 0.85rem;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+      border: 1px solid rgba(217, 119, 6, 0.2);
+    }
+
+    .card-id-label {
+      font-size: 0.85rem;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .card-body {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-grow: 1;
+      margin: 1.5rem 0;
+      text-align: center;
+    }
+
+    .card-text {
+      font-family: 'Quicksand', sans-serif;
+      font-size: 1.25rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+
+    .card-skipped-container {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      text-align: center;
+      padding: 1rem 0;
+    }
+
+    .card-skipped-icon {
+      font-size: 2.5rem;
+      color: var(--accent-gold);
+      animation: calm-spin 10s infinite linear;
+    }
+
+    @keyframes calm-spin {
+      from { transform: rotate(0deg); }
+      to { transform: rotate(360deg); }
+    }
+
+    .card-skipped-text {
+      font-family: 'Quicksand', sans-serif;
+      font-size: 1.2rem;
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.5;
+    }
+
+    .card-footer {
+      display: flex;
+      justify-content: center;
+      color: var(--text-muted);
+      font-size: 0.75rem;
+      font-weight: 500;
+      border-top: 1px solid rgba(255, 255, 255, 0.03);
+      padding-top: 0.85rem;
+    }
+
+    .game-actions {
+      display: grid;
+      grid-template-columns: 2fr 1fr;
+      gap: 0.75rem;
+    }
+
+    /* ODPASOVAŤ A ODPOVEDAŤ (Naše tempo) */
+    .answers-panel {
+      background-color: var(--bg-card);
+      border-radius: 1.5rem;
+      padding: 1.5rem;
+      border: 1px solid rgba(255, 255, 255, 0.05);
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .answers-title {
+      font-size: 1.1rem;
+      color: var(--accent-gold);
+      border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+      padding-bottom: 0.5rem;
+    }
+
+    .answers-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 0.75rem;
+    }
+
+    .answer-block {
+      background-color: var(--bg-card-inner);
+      border-radius: 0.85rem;
+      padding: 1rem;
+      border: 1px solid transparent;
+      transition: var(--transition-calm);
+    }
+
+    .answer-block-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 0.5rem;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .answer-role-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      font-size: 0.95rem;
+    }
+
+    .badge-tatino { color: var(--color-tatino); }
+    .badge-mamina { color: var(--color-mamina); }
+
+    .answer-status-label {
+      font-size: 0.75rem;
+      font-weight: 500;
+    }
+
+    .answer-status-label.done { color: #10b981; }
+    .answer-status-label.waiting { color: var(--text-muted); }
+
+    .answer-compose-area {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+    }
+
+    .answer-textarea {
+      width: 100%;
+      background-color: var(--bg-dark);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      border-radius: 0.75rem;
+      padding: 0.75rem;
+      color: var(--text-primary);
+      font-size: 0.9rem;
+      resize: vertical;
+      min-height: 80px;
+    }
+
+    .answer-textarea:focus {
+      outline: none;
+      border-color: var(--accent-gold);
+    }
+
+    .answer-locked {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 1.5rem 0.5rem;
+      border: 1px dashed rgba(255, 255, 255, 0.1);
+      border-radius: 0.5rem;
+      background-color: rgba(15, 23, 42, 0.3);
+      color: var(--text-muted);
+      font-size: 0.85rem;
+      text-align: center;
+    }
+
+    .answer-locked i {
+      font-size: 1.5rem;
+      color: var(--accent-gold);
+    }
+
+    .answer-content {
+      color: var(--text-primary);
+      font-size: 0.95rem;
+      line-height: 1.5;
+      white-space: pre-wrap;
+    }
+
+    .answer-empty {
+      color: var(--text-muted);
+      font-style: italic;
+      font-size: 0.85rem;
+    }
+
+    /* TOAST NOTIFIKÁCIA */
+    .toast {
+      position: fixed;
+      bottom: 2rem;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background-color: var(--accent-gold);
+      color: var(--bg-dark);
+      padding: 0.75rem 1.5rem;
+      border-radius: 30px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.3);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      z-index: 2000;
+      opacity: 0;
+      transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    }
+
+    .toast.active {
+      transform: translateX(-50%) translateY(0);
+      opacity: 1;
+    }
+
+    @media (max-width: 480px) {
+      body { padding: 0.5rem; }
+      .lobby-card { padding: 1.5rem 1rem; }
+      .card-container { padding: 1.5rem 1.25rem; min-height: 280px; }
+      .card-text { font-size: 1.15rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- HLAVIČKA -->
+  <header>
+    <div class="logo-container">
+      <i class="fas fa-heart logo-heart"></i>
+      <h1 class="logo-text">Partnerská čLOVEčina</h1>
+    </div>
+  </header>
+
+  <!-- HLAVNÝ OBSAH -->
+  <main>
+    
+    <!-- 1. ÚVODNÁ OBRAZOVKA (LOBBY) -->
+    <section class="lobby-card" id="screen-lobby">
+      <h2 class="lobby-title">Čas pre nás dvoch</h2>
+      <p class="lobby-description">
+        Prehĺbte svoje prepojenie, otvorte témy dôvery, rozprávajte sa o snoch a zažite blízkosť pri sviečkach alebo večernom čaji. Hra je určená len pre vás dvoch.
+      </p>
+
+      <!-- Výber roly -->
+      <div>
+        <h3 class="role-section-title">1. Vyber si svoju rolu:</h3>
+        <div class="role-grid">
+          <button class="role-btn" data-role="tatino">
+            <i class="fas fa-user-tie"></i>
+            <span>tatino</span>
+          </button>
+          <button class="role-btn" data-role="mamina">
+            <i class="fas fa-user-circle"></i>
+            <span>mamina</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Pripojenie a izba -->
+      <div class="room-action-container">
+        <h3 class="role-section-title">2. Pripojte sa k sebe:</h3>
+        
+        <div class="room-input-group">
+          <input type="text" class="room-input" id="input-room-code" placeholder="Kód izby" maxlength="4">
+          <button class="btn-primary" id="btn-join-room">
+            <i class="fas fa-sign-in-alt"></i> Vstúpiť
+          </button>
+        </div>
+
+        <div style="text-align: center; color: var(--text-muted); font-size: 0.8rem; margin: 0.2rem 0;">— ALEBO —</div>
+
+        <button class="btn-secondary" id="btn-create-room">
+          <i class="fas fa-plus"></i> Vytvoriť novú izbu pre rande
+        </button>
+      </div>
+
+      <!-- Firebase Alert -->
+      <div class="firebase-alert-banner" id="fb-config-warning" style="display: none;">
+        <i class="fas fa-exclamation-triangle"></i>
+        <div>
+          <strong>Firebase nie je nastavený.</strong> Nastavte si ho v rodinnej hre na hlavnej adrese a v tomto telefóne sa načíta automaticky. Dovtedy hra pobeží v lokálnom demo režime.
+        </div>
+      </div>
+    </section>
+
+    <!-- 2. HERNÁ OBRAZOVKA -->
+    <section class="game-board" id="screen-game" style="display: none;">
+      
+      <div class="game-info-bar">
+        <button class="btn-back-lobby" id="btn-leave-room">
+          <i class="fas fa-chevron-left"></i> Späť
+        </button>
+        
+        <span class="room-code-indicator" id="display-room-code" title="Klikni pre skopírovanie kódu">
+          KÓD: -- <i class="fas fa-copy" style="font-size: 0.75rem;"></i>
+        </span>
+      </div>
+
+      <!-- Zoznam prítomných rodinných príslušníkov -->
+      <div class="family-presence-row" id="presence-indicators">
+        <div class="family-member-status" data-presence-role="tatino">
+          <span class="status-indicator"><div class="status-dot"></div> <span class="badge-tatino"><i class="fas fa-user-tie"></i> tatino</span></span>
+        </div>
+        <div class="family-member-status" data-presence-role="mamina">
+          <span class="status-indicator"><div class="status-dot"></div> <span class="badge-mamina"><i class="fas fa-user-circle"></i> mamina</span></span>
+        </div>
+      </div>
+
+      <!-- Prepínač režimu hry -->
+      <div class="mode-tab-bar">
+        <button class="mode-tab-btn active" data-game-mode="live">
+          <i class="fas fa-bolt"></i> NAŽIVO (Synchrónne)
+        </button>
+        <button class="mode-tab-btn" data-game-mode="async">
+          <i class="fas fa-clock"></i> NAŠE TEMPO (Asynchrónne)
+        </button>
+      </div>
+
+      <!-- Filter kategórií -->
+      <div class="category-filter-container">
+        <button class="category-tab-btn active" data-category="all">Všetky kategórie</button>
+        <button class="category-tab-btn" data-category="komfort">Komfort (1-52)</button>
+        <button class="category-tab-btn" data-category="rozvoj">Rozvoj (53-103)</button>
+        <button class="category-tab-btn" data-category="sny">Sny (104-154)</button>
+        <button class="category-tab-btn" data-category="intimita">Intimita (155-205)</button>
+        <button class="category-tab-btn" data-category="nocna">Nočná 🌙 (206-256)</button>
+      </div>
+
+      <!-- Herná karta -->
+      <div class="card-scene">
+        <div class="card-container" id="game-card">
+          
+          <div class="card-header" id="card-header-elements">
+            <span class="card-category-badge" id="card-category-name">Kategória</span>
+            <span class="card-id-label" id="card-question-number">Karta #--</span>
+          </div>
+
+          <div class="card-body">
+            <div id="card-text-wrapper">
+              <p class="card-text" id="card-question-text">Pre začiatok kliknite na Ťahať novú kartu.</p>
+            </div>
+            <div id="card-skipped-wrapper" class="card-skipped-container" style="display: none;">
+              <i class="fas fa-dove card-skipped-icon"></i>
+              <p class="card-skipped-text">V poriadku, túto kartu preskakujeme. Žiadny tlak, ideme ďalej! 😊</p>
+            </div>
+          </div>
+
+          <div class="card-footer" id="card-footer-text">
+            Partnerská čLOVEčina
+          </div>
+
+        </div>
+      </div>
+
+      <!-- Akčné tlačidlá pod kartou -->
+      <div class="game-actions">
+        <button class="btn-primary" id="btn-draw-card">
+          <i class="fas fa-random"></i> Ťahať novú kartu
+        </button>
+        <button class="btn-secondary btn-danger" id="btn-pass-card" title="Preskočiť túto otázku">
+          <i class="fas fa-hand-peace"></i> Pas
+        </button>
+      </div>
+
+      <!-- Panel s odpoveďami pre "NAŠE TEMPO" -->
+      <div class="answers-panel" id="answers-panel-section" style="display: none;">
+        <h3 class="answers-title">Naše odpovede na Kartu rande</h3>
+        
+        <div class="answers-grid" id="answers-container">
+          <!-- Dynamicky tatino, mamina -->
+        </div>
+      </div>
+
+    </section>
+
+  </main>
+
+  <!-- TOAST NOTIFIKÁCIA -->
+  <div class="toast" id="toast-message">
+    <i class="fas fa-info-circle"></i>
+    <span id="toast-text-content">Notifikácia</span>
+  </div>
+
+  <!-- FIREBASE COMPAT SDK Z CDN -->
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/10.8.0/firebase-database-compat.js"></script>
+
+  <script>
+    // ==========================================
+    // 1. ZDIEĽANÁ KONFIGURÁCIA FIREBASE
+    // ==========================================
+    const firebaseConfig = {
+      apiKey: "AIzaSyB5VwMNMTPeQprg_97tqR1EkNymzG8MYFY",
+      authDomain: "clovecina-c22a8.firebaseapp.com",
+      databaseURL: "https://clovecina-c22a8-default-rtdb.firebaseio.com",
+      projectId: "clovecina-c22a8",
+      storageBucket: "clovecina-c22a8.firebasestorage.app",
+      messagingSenderId: "486927023849",
+      appId: "1:486927023849:web:c414501d5ee10b95f17a78"
+    };
+
+    // ==========================================
+    // 2. DATABÁZA 252 PARTNERSKÝCH OTÁZOK
+    // ==========================================
+    const QUESTIONS = [
+      // 1-52: Komfort
+      { id: 1, category: "Komfort", text: "Aká bola tvoja obľúbená hračka alebo predmet v detstve a prečo?" },
+      { id: 2, category: "Komfort", text: "Keby si mohol/mohla mať akékoľvek zvieratko ako domáceho miláčika (aj mýtické), čo by to bolo?" },
+      { id: 3, category: "Komfort", text: "Na aký najvtipnejší spoločný zážitok si spomínaš?" },
+      { id: 4, category: "Komfort", text: "Keby si mal/a popísať svoj dnešný deň ako filmový žáner, aký by to bol?" },
+      { id: 5, category: "Komfort", text: "Aká je tvoja najobľúbenejšia vôňa a akú spomienku ti evokuje?" },
+      { id: 6, category: "Komfort", text: "Keby sme mali zajtra vyraziť na spontánny výlet, kam by si chcel/a ísť?" },
+      { id: 7, category: "Komfort", text: "Ktorá pesnička ťa zaručene roztancuje alebo ti zlepší náladu?" },
+      { id: 8, category: "Komfort", text: "Keby si mohol/mohla ovládať jednu superschopnosť, čo by to bolo?" },
+      { id: 9, category: "Komfort", text: "Aké jedlo ti najviac pripomína detstvo a domov?" },
+      { id: 10, category: "Komfort", text: "Ktorá kniha, film alebo seriál ťa v poslednom čase najviac zaujal a prečo?" },
+      { id: 11, category: "Komfort", text: "Čo ťa dnes v práci alebo počas dňa úprimne rozosmialo?" },
+      { id: 12, category: "Komfort", text: "Aký najbizarnejší talent máš, o ktorom veľa ľudí nevie?" },
+      { id: 13, category: "Komfort", text: "Keby si mal/a zjesť jedno jedlo po zvyšok svojho života, čo by to bolo?" },
+      { id: 14, category: "Komfort", text: "Ktoré ročné obdobie máš najradšej a aká aktivita k nemu pre teba neodmysliteľne patrí?" },
+      { id: 15, category: "Komfort", text: "Keby sme mali večer len pre seba bez technológií, čo by sme robili?" },
+      { id: 16, category: "Komfort", text: "Aká bola tvoja prvá kazeta, CD alebo pesnička, ktorú si si kúpil/a alebo obľúbil/a?" },
+      { id: 17, category: "Komfort", text: "Ktorú krajinu na svete by si chcel/a navštíviť len kvôli jej jedlu?" },
+      { id: 18, category: "Komfort", text: "Čo je tvoj najväčší 'guilty pleasure' (skrytá neresť/potešenie)?" },
+      { id: 19, category: "Komfort", text: "Aká bola tvoja najobľúbenejšia rozprávka, keď si bol/a malý/á?" },
+      { id: 20, category: "Komfort", text: "Keby si mohol/mohla stráviť 24 hodín v koži niekoho iného, kto by to bol?" },
+      { id: 21, category: "Komfort", text: "Keby si mal/a možnosť vrátiť sa v čase a dať svojmu 18-ročnému ja jednu radu, čo by to bolo?" },
+      { id: 22, category: "Komfort", text: "Aké najťažšie alebo najvtipnejšie jedlo si kedy v živote ochutnal/a a ako to chutilo?" },
+      { id: 23, category: "Komfort", text: "Ktorý film alebo seriál by si dokázal/a pozerať stále dokola a nikdy ťa neomrzí?" },
+      { id: 24, category: "Komfort", text: "Ak by si mohol/mohla okamžite začať hovoriť akýmkoľvek cudzím jazykom, ktorý by to bol?" },
+      { id: 25, category: "Komfort", text: "Čo je tvoj najväčší zlozvyk, o ktorom vieš, ale nedokážeš ho (alebo nechceš) zmeniť?" },
+      { id: 26, category: "Komfort", text: "Aká je tvoja najstaršia spomienka z detstva, ktorú si stále jasne pamätáš?" },
+      { id: 27, category: "Komfort", text: "Keby si si mal/a vybrať jednu pieseň, ktorá bude hrať zakaždým, keď vstúpiš do miestnosti, čo by to bolo?" },
+      { id: 28, category: "Komfort", text: "Aká bola tvoja najobľúbenejska školská aktivita alebo predmet a prečo?" },
+      { id: 29, category: "Komfort", text: "Ak by si mohol/mohla stráviť večer s akoukoľvek historickou osobnosťou, kto by to bol?" },
+      { id: 30, category: "Komfort", text: "Čo ťa zaručene dokáže upokojiť po naozaj stresujúcom dni?" },
+      { id: 31, category: "Komfort", text: "Ktorá domáca práca je tvoja najmenej obľúbená a ktorú naopak robíš celkom rád/rada?" },
+      { id: 32, category: "Komfort", text: "Ak by si vyhral/a v lotérii 10 000 eur, čo je prvá vec, ktorú by si si kúpil/a (len pre radosť)?" },
+      { id: 33, category: "Komfort", text: "Máš nejakú obľúbenú spomienku na to, ako sme spolu trávili čas v prírode?" },
+      { id: 34, category: "Komfort", text: "Ktorý zmysel (zrak, sluch, čuch, hmat, chuť) považuješ za svoj najsilnejší?" },
+      { id: 35, category: "Komfort", text: "Aký najlepší darček si v živote dostal/a a od koho to bolo?" },
+      { id: 36, category: "Komfort", text: "Ak by si mohol/mohla prežiť jeden deň ako postava z videohry alebo knihy, kto by to bol?" },
+      { id: 37, category: "Komfort", text: "Ktorá kaviareň, reštaurácia alebo miesto v našom meste má pre teba najlepšiu atmosféru?" },
+      { id: 38, category: "Komfort", text: "Čo je tá najdivnejšia vec, ktorej sa iracionálne bojíš?" },
+      { id: 39, category: "Komfort", text: "Keby si mal/a napísať zoznam troch vecí, ktoré ťa dnes urobili šťastným/šťastnou, čo by tam bolo?" },
+      { id: 40, category: "Komfort", text: "Akú najzábavnejšiu SMS správu si odo mňa kedy dostal/a alebo si na ňu pamätáš?" },
+      { id: 41, category: "Komfort", text: "Ktorý šport alebo fyzickú aktivitu by si chcel/a v živote vyskúšať, ale doteraz si na to nemal/a odvahu?" },
+      { id: 42, category: "Komfort", text: "Aká je tvoja najobľúbenejšia spoločenská hra a kedy sme ju naposledy hrali?" },
+      { id: 43, category: "Komfort", text: "Keby si mohol/mohla zmeniť jednu vec na našom byte/dome bez ohľadu na peniaze, čo by to bolo?" },
+      { id: 44, category: "Komfort", text: "Aká bola tvoja najobľúbenejšia kniha v detstve a koľkokrát si ju čítal/a?" },
+      { id: 45, category: "Komfort", text: "Keby sme mali zajtra vyraziť na piknik, aké tri dobroty by si určite zabalil/a?" },
+      { id: 46, category: "Komfort", text: "Čo je pre teba najlepšia definícia 'pohodového víkendu'?" },
+      { id: 47, category: "Komfort", text: "Ak by si mal/a možnosť stráviť deň s nejakým slávnym športovcom alebo umelcom, kto by to bol?" },
+      { id: 48, category: "Komfort", text: "Aká je tvoja najobľúbenejšia sladkosť alebo dezert, ktorému nikdy neodoláš?" },
+      { id: 49, category: "Komfort", text: "Máš radšej prekvapenia, alebo máš rád/rada veci vopred naplánované?" },
+      { id: 50, category: "Komfort", text: "Ktorá spoločná fotka nás dvoch je tvoja najobľúbenejšia a prečo?" },
+      { id: 51, category: "Komfort", text: "Keby si mal/a možnosť vyskúšať jedno extrémne povolanie na týždeň, čo by to bolo?" },
+      { id: 52, category: "Komfort", text: "Ktorý moment dňa považuješ za svoj najobľúbenejší a prečo?" },
+
+      // 53-103: Rozvoj
+      { id: 53, category: "Rozvoj", text: "Čo pre teba znamená naša láska a ako cítiš, že ťa osobnostne rozvíja?" },
+      { id: 54, category: "Rozvoj", text: "Čo je momentálne tvoja najväčšia osobná výzva, s ktorou vnútorne zápasíš?" },
+      { id: 55, category: "Rozvoj", text: "Ktorá tvoja vlastnosť ti v živote najviac pomáha a ktorá ti naopak najviac prekáža?" },
+      { id: 56, category: "Rozvoj", text: "Aké najdôležitejšie životné poučenie si si odniesol/odniesla z nejakého minulého neúspechu?" },
+      { id: 57, category: "Rozvoj", text: "Čo robíš, keď cítiš, že si pod veľkým stresom? Ako ti vtedy môžem najlepšie pomôcť?" },
+      { id: 58, category: "Rozvoj", text: "Ktorá udalosť v tvojom živote najviac formovala to, kým si dnes?" },
+      { id: 59, category: "Rozvoj", text: "Aké správanie alebo reakciu u seba by si chcel/a v budúcnosti zlepšiť?" },
+      { id: 60, category: "Rozvoj", text: "Čo pre teba znamená pojem 'úspešný život' a ako sa táto predstava časom zmenila?" },
+      { id: 61, category: "Rozvoj", text: "Kedy sa cítiš najviac nepochopený/á a čo by ti pomohlo cítiť sa lepšie?" },
+      { id: 62, category: "Rozvoj", text: "Aké hodnoty sú pre teba v živote najdôležitejšie a ako sa odrážajú v našom vzťahu?" },
+      { id: 63, category: "Rozvoj", text: "Existuje niečo, čo sa učíš prijať sám/a na sebe v tomto období?" },
+      { id: 64, category: "Rozvoj", text: "Aké tvoje najväčšie ponaučenie z nášho spoločného života za posledný rok?" },
+      { id: 65, category: "Rozvoj", text: "Ktorá kniha alebo myšlienka ti v poslednom čase zmenila pohľad na svet?" },
+      { id: 66, category: "Rozvoj", text: "Akú vlastnosť alebo zručnosť by si si chcel/a v najbližších mesiacoch osvojiť?" },
+      { id: 67, category: "Rozvoj", text: "V čom cítiš, že sme sa ako pár za poslednú dobu najviac posunuli?" },
+      { id: 68, category: "Rozvoj", text: "Aké správanie druhých ľudí ťa vie najrýchlejšie vyviesť z miery a čo to hovorí o tebe?" },
+      { id: 69, category: "Rozvoj", text: "Na čo si vo svojom živote doteraz najviac hrdý/á?" },
+      { id: 70, category: "Rozvoj", text: "Čo pre teba znamená byť naozaj slobodný/á?" },
+      { id: 71, category: "Rozvoj", text: "Existuje nejaký strach, ktorého by si sa chcel/a zbaviť?" },
+      { id: 72, category: "Rozvoj", text: "Ako vnímaš starnutie a čoho sa na ňom (ne)obávaš?" },
+      { id: 73, category: "Rozvoj", text: "V čom sa tvoj pohľad na náš vzťah najviac zmenil od chvíle, keď sme spolu začali chodiť?" },
+      { id: 74, category: "Rozvoj", text: "Aké najťažšie rozhodnutie si musel/a v živote urobiť a ako ťa to ovplyvnilo?" },
+      { id: 75, category: "Rozvoj", text: "Existuje nejaká vec, ktorou by si chcel/a vo svojom živote začať brať viac vážne?" },
+      { id: 76, category: "Rozvoj", text: "Čo pre teba znamená pojem 'emocionálna zrelosť' a kedy máš pocit, že ju najviac prejavujeme?" },
+      { id: 77, category: "Rozvoj", text: "V akej chvíli nášho spoločného života si mal/a pocit, že sme naozaj silný a zohraný tím?" },
+      { id: 78, category: "Rozvoj", text: "V akej oblasti nášho života by sme mali podľa teba viac komunikovať alebo byť otvorenejší?" },
+      { id: 79, category: "Rozvoj", text: "Aká je najlepšia rada o vzťahoch, akú si kedy počul/a alebo dostal/a?" },
+      { id: 80, category: "Rozvoj", text: "Čo ťa v našom vzťahu najviac učí trpezlivosti a ako sa s tým vyrovnávaš?" },
+      { id: 81, category: "Rozvoj", text: "Aký osobný úspech mimo práce za posledný rok ťa najviac potešil?" },
+      { id: 82, category: "Rozvoj", text: "Existuje niečo, čo na mne obdivuješ, no málokedy mi to hovoríš nahlas?" },
+      { id: 83, category: "Rozvoj", text: "Como vnímaš našu schopnosť riešiť konflikty? V čom sme sa zlepšili a kde máme rezervy?" },
+      { id: 84, category: "Rozvoj", text: "Ktorá tvoja vlastnosť ti v minulosti spôsobila najviac problémov a ako na nej pracuješ?" },
+      { id: 85, category: "Rozvoj", text: "Čo je pre teba najväčším zdrojom vnútornej motivácie, keď prežívaš náročné obdobie?" },
+      { id: 86, category: "Rozvoj", text: "Ako se zmenil tvoj vzťah k vlastnému telu a zdraviu za posledné roky?" },
+      { id: 87, category: "Rozvoj", text: "Čo pre teba znamená 'podpora partnera' a kedy si ju odo mňa najsilnejšie cítil/a?" },
+      { id: 88, category: "Rozvoj", text: "Existuje nejaká chyba z minulosti, ktorú si ešte stále úplne neodpustil/a sám/a sebe?" },
+      { id: 89, category: "Rozvoj", text: "Ktorá životná etapa bola pre teba doteraz najnáročnejšia a čo ťa naučila o tebe samotnom/samej?" },
+      { id: 90, category: "Rozvoj", text: "Aké správanie vo vzťahu považuješ za absolútne neakceptovateľné a prečo?" },
+      { id: 91, category: "Rozvoj", text: "V čom cítiš, že ti dávam najväčší priestor a slobodu byť sám/a sebou?" },
+      { id: 92, category: "Rozvoj", text: "Čo ťa v poslednom čase najviac prinútilo zamyslieť sa nad tvojimi životnými prioritami?" },
+      { id: 93, category: "Rozvoj", text: "Ako vyzerá tvoja predstava ideálneho prepojenia medzi prácou a osobným životom?" },
+      { id: 94, category: "Rozvoj", text: "Ktorá tvoja reakcia počas nášho posledného nedorozumenia ťa mrzí a ako by si ju chcel/a nabudúce zmeniť?" },
+      { id: 95, category: "Rozvoj", text: "Čo ťa najviac napĺňa pocitom vďačnosti, keď sa večer obzrieš za celým dňom?" },
+      { id: 96, category: "Rozvoj", text: "Ako by si definoval/a slovo 'dôvera' a čo ju v našom vzťahu najviac upevňuje?" },
+      { id: 97, category: "Rozvoj", text: "V čom si myslíš, že sme najviac rozdielni, a ako tieto rozdiely obohacujú náš vzťah?" },
+      { id: 98, category: "Rozvoj", text: "Čo je tvoja najväčšia túžba v oblasti tvojho osobného rastu v tomto roku?" },
+      { id: 99, category: "Rozvoj", text: "Akú zmenu vo mojom správaní za posledné obdobie si postrehol/postrehla?" },
+      { id: 100, category: "Rozvoj", text: "Ako najradšej dobíjaš svoju psychickú energiu, keď sa cítiš úplne vyčerpaný/á?" },
+      { id: 101, category: "Rozvoj", text: "Ktorá oblasť nášho spoločného narábania s peniazmi by si zaslúžila viac diskusie?" },
+      { id: 102, category: "Rozvoj", text: "Čo je podľa teba najkrajšia odmena za to, že spoločne prekonávame ťažké chvíle?" },
+      { id: 103, category: "Rozvoj", text: "Existuje nejaká oblasť nášho života, kde sa cítiš neisto, hoci mi to nepriznávaš?" },
+
+      // 104-154: Sny
+      { id: 104, category: "Sny", text: "Keby sme mali neobmedzené množstvo peňazí a času, kde a ako by sme prežili nasledujúci rok?" },
+      { id: 105, category: "Sny", text: "Ako vyzerá tvoja predstava nášho spoločného života o 10 rokov?" },
+      { id: 106, category: "Sny", text: "Máš nejaký tajný sen alebo túžbu, o ktorej sme sa ešte nikdy podrobne nerozprávali?" },
+      { id: 107, category: "Sny", text: "Aké spoločné dobrodružstvo alebo cestu by si chcel/a v najbližších rokoch podniknúť?" },
+      { id: 108, category: "Sny", text: "Ako si predstavuješ náš spoločný ideálny domov? Kde by sa nachádzal a ako by to tam vyzeralo?" },
+      { id: 109, category: "Sny", text: "Čo by si si prial/a, aby sme ako pár dokázali spoločne vybudovať alebo vytvoriť?" },
+      { id: 110, category: "Sny", text: "Aký odkaz alebo stopy by si chcel/a, aby sme tu po sebe zanechali?" },
+      { id: 111, category: "Sny", text: "Keby sme si mohli kúpiť spoločne nejakú chatku na samote, ako by sme tam trávili čas?" },
+      { id: 112, category: "Sny", text: "Aký bláznivý alebo netradičný nápad by si chcel/a so mnou zrealizovať?" },
+      { id: 113, category: "Sny", text: "Čo je tvoj najväčší sen pre mňa ako jednotlivca a ako ťa v ňom môžem podporiť?" },
+      { id: 114, category: "Sny", text: "Ako vyzerá tvoja predstava nášho ideálneho spoločného víkendu o 20 rokov?" },
+      { id: 115, category: "Sny", text: "Aké tradície alebo rituály by si chcel/a, aby sme v našom vzťahu zaviedli alebo zachovali?" },
+      { id: 116, category: "Sny", text: "Keby sme mali spoločne napísať knihu, o čom by bola?" },
+      { id: 117, category: "Sny", text: "V akej krajine alebo meste by si si chcel/a vyskúšať bývať na pol roka?" },
+      { id: 118, category: "Sny", text: "Čo je tvoj najväčší osobný profesijný alebo kreatívny sen, ktorý chceš ešte dosiahnuť?" },
+      { id: 119, category: "Sny", text: "Aké spoločné hobby alebo aktivitu by si chcel/a, aby sme začali robiť?" },
+      { id: 120, category: "Sny", text: "Čo by bolo na zozname tvojich 'top 5 vecí, ktoré chcem zažiť pred smrťou'?" },
+      { id: 121, category: "Sny", text: "Ako vyzerá tvoj ideálny dôchodok s nami dvoma?" },
+      { id: 122, category: "Sny", text: "Ak by sme mohli zmeniť jednu vec na našom životnom štýle hneď teraz, čo by to bolo?" },
+      { id: 123, category: "Sny", text: "Čo ťa najviac napĺňa optimizmom, keď myslíš na našu spoločnú budúcnosť?" },
+      { id: 124, category: "Sny", text: "Keby sme si mali kúpiť karavan a cestovať po Európe pol roka, akú trasu by si chcel/a zvoliť?" },
+      { id: 125, category: "Sny", text: "Aké je tvoje najväčšie spoločné želanie pre našu rodinu na najbližšie tri roky?" },
+      { id: 126, category: "Sny", text: "Ak by sme mali možnosť postaviť si ekologický domček v lese, chcel/a by si to vyskúšať?" },
+      { id: 127, category: "Sny", text: "Existuje nejaká krajina, ktorú by si chcel/a navštíviť len preto, aby sme tam spoločne videli polárnu žiaru?" },
+      { id: 128, category: "Sny", text: "Čo by si chcel/a, aby sme spoločne dosiahli v oblasti našich osobných kariér a ako sa podporovať?" },
+      { id: 129, category: "Sny", text: "Ak by sme mali napísať zoznam piatich miest, ktoré musíme navštíviť, kým zostarneme, ktoré by to boli?" },
+      { id: 130, category: "Sny", text: "Máš nejaký bláznivý sen o tom, že by sme spoločne skočili s padákom alebo skúsili adrenalínový šport?" },
+      { id: 131, category: "Sny", text: "Ak by sme mali možnosť adoptovať si zvieratko z útulku, aké by to bolo a ako by sme sa starali?" },
+      { id: 132, category: "Sny", text: "Aká je tvoja predstava o našich spoločných vianociach o 15 rokov? Kde a s kým by sme ich trávili?" },
+      { id: 133, category: "Sny", text: "Čo je tvoj najväčší tajný sen týkajúci sa nášho bývania a dizajnu interiéru?" },
+      { id: 134, category: "Sny", text: "Ak by sme mali vytvoriť spoločný charitatívny projekt alebo niekomu pomôcť, aká oblasť by to bola?" },
+      { id: 135, category: "Sny", text: "Keby sme si mohli vybrať akékoľvek miesto na svete a prežiť tam jedno leto, kde by to bolo?" },
+      { id: 136, category: "Sny", text: "Aký spoločný projekt (napr. prerábka záhrady, maľovanie izby) by si chcel/a začať v najbližších mesiacoch?" },
+      { id: 137, category: "Sny", text: "Ako si predstavuješ naše oslavy narodenín o 10 rokov? Čo by si si prial/a zažiť?" },
+      { id: 138, category: "Sny", text: "Existuje nejaké umelecké hobby (keramika, maľovanie, stolárstvo), ktoré by si chcel/a so mnou začať?" },
+      { id: 139, category: "Sny", text: "Čo by pre teba znamenalo, keby sme si spoločne kúpili malú vinicu alebo ovocný sad?" },
+      { id: 140, category: "Sny", text: "Ak by sme mali možnosť prežiť rok na plachetnici, išiel/išla by si do toho so mnou?" },
+      { id: 141, category: "Sny", text: "Aké vzdelanie alebo kurz (jazykový, kuchársky, odborný) by si si chcel/a v budúcnosti urobiť?" },
+      { id: 142, category: "Sny", text: "Čo ťa najviac napĺňa radosťou, keď si predstavíš, že budeme vychovávať deti (alebo sa starať o budúcich vnukov)?" },
+      { id: 143, category: "Sny", text: "Ktorý náš spoločný materiálny sen by si chcel/a splniť ako prvý a prečo?" },
+      { id: 144, category: "Sny", text: "Aká je tvoja predstava o ideálnom cestovaní na dôchodku? Viac spoznávať svet, alebo oddychovať?" },
+      { id: 145, category: "Sny", text: "Ak by sme mali možnosť otvoriť si malú kaviareň alebo penzión, aký štýl a atmosféru by si tomu chcel/a dať?" },
+      { id: 146, category: "Sny", text: "Keby sme mali napísať zoznam vecí, ktoré chceme spoločne zažiť za najbližší rok, čo by tam nesmelo chýbať?" },
+      { id: 147, category: "Sny", text: "Aká je tvoja najväčšia osobná túžba, ktorú by si chcel/a dosiahnuť s mojou podporou?" },
+      { id: 148, category: "Sny", text: "Ako vyzerá tvoja predstava o našom zdravom životnom štýle v budúcnosti? Čo by sme mali zmeniť?" },
+      { id: 149, category: "Sny", text: "Čo by pre teba znamenalo, keby sme si spoločne kúpili starú chalupu a prerábali ju?" },
+      { id: 150, category: "Sny", text: "Aký druh spomienok chceš, aby sme si odniesli z každej našej spoločnej dovolenky?" },
+      { id: 151, category: "Sny", text: "Keby sme mali možnosť urobiť si polročný sabatikal (voľno z práce) a venovať sa len sebe, ako ten čas strávime?" },
+      { id: 152, category: "Sny", text: "Aká je tvoja predstava o tom, ako budeme oslavovať naše 25. výročie vzťahu/manželstva?" },
+      { id: 153, category: "Sny", text: "Čo je podľa teba ten najdôležitejší spoločný cieľ, na ktorom by sme mali každý deň pracovať?" },
+      { id: 154, category: "Sny", text: "Ktorá spoločná túžba z minulosti sa nám už splnila a veľmi ťa to teší?" },
+
+      // 155-205: Intimita
+      { id: 155, category: "Intimita", text: "Kedy sa v mojej prítomnosti cítiš najviac milovaný/á a prijatý/á?" },
+      { id: 156, category: "Intimita", text: "Aké moje gesto, dotyk alebo slovo v tebe najrýchlejšie vyvolá pocit bezpečia a pokoja?" },
+      { id: 157, category: "Intimita", text: "Čo je pre teba najintímnejší moment, ktorý sme spolu doteraz zažili?" },
+      { id: 158, category: "Intimita", text: "Existuje niečo, čo by si chcel/a vyskúšať v našej fyzickej intimite, ale doteraz si to nepovedal/a?" },
+      { id: 159, category: "Intimita", text: "Čo je tvoj najobľúbenejší jazyk lásky a ako najradšej vyjadruješ lásku ty mne?" },
+      { id: 160, category: "Intimita", text: "Ktorá moja časť tela ťa najviac priťahuje a prečo?" },
+      { id: 161, category: "Intimita", text: "Como sa zmenilo tvoje vnímanie fyzickej blízkosti od začiatku nášho vzťahu?" },
+      { id: 162, category: "Intimita", text: "Čo pre teba znamená slovo 'zraniteľnosť' a kedy je pre teba ťažké ju predo mnou ukázať?" },
+      { id: 163, category: "Intimita", text: "Kedy na mňa najviac myslíš, keď sme od seba ďaleko?" },
+      { id: 164, category: "Intimita", text: "Aké sú tvoje najčastejšie romantické fantázie v poslednom čase?" },
+      { id: 165, category: "Intimita", text: "Čo môžem urobiť pre to, aby si sa v našom milostnom živote cítil/a ešte bezpečnejšie a uvoľnenejšie?" },
+      { id: 166, category: "Intimita", text: "Ktorý spoločný moment fyzického kontaktu (mimo sexu) ti priniesol najviac radosti?" },
+      { id: 167, category: "Intimita", text: "Ako sa cítiš, keď sa na teba dlho dívam bez slov?" },
+      { id: 168, category: "Intimita", text: "Existuje nejaké zranenie z minulosti, o ktorom vieš, že ovplyvňuje to, ako dnes prežívaš blízkosť?" },
+      { id: 169, category: "Intimita", text: "Aké slovo alebo kompliment, ktorý som ti kedy povedal/a, ti najviac uviazol v pamäti?" },
+      { id: 170, category: "Intimita", text: "Čo ťa na mne dokáže stále najviac očariť alebo pritiahnuť?" },
+      { id: 171, category: "Intimita", text: "Ako vnímaš rovnováhu medzi našou fyzickou a emocionálnou intimitou?" },
+      { id: 172, category: "Intimita", text: "V akej chvíli dňa cítiš najsilnejšie prepojenie medzi nami?" },
+      { id: 173, category: "Intimita", text: "Čo ťa dokáže najspoľahlivejšie naladiť na romantickú vlnu?" },
+      { id: 174, category: "Intimita", text: "Čo je pre teba najkrajšia forma vyjadrenia dôvery?" },
+      { id: 175, category: "Intimita", text: "Ktorá časť nášho rituálu (túlenie pri káve, bozk na privítanie) je pre teba najdôležitejšia?" },
+      { id: 176, category: "Intimita", text: "Aké slovo alebo prezývku odo mňa najradšej počúvaš a vyvoláva v tebe hrejivý pocit?" },
+      { id: 177, category: "Intimita", text: "Existuje nejaký moment, kedy si sa pri mne cítil/a neuveriteľne bezpečne a chránene?" },
+      { id: 178, category: "Intimita", text: "Ako sa zmenil tvoj pohľad na moju príťažlivosť od chvíle, keď sme sa prvýkrát spoznali?" },
+      { id: 179, category: "Intimita", text: "Čo pre teba znamená 'emocionálne prepojenie' pred tým, ako sa začneme milovať?" },
+      { id: 180, category: "Intimita", text: "Aký kompliment o tvojej osobnosti alebo povahe ťa odo mňa najviac zahrial pri srdci?" },
+      { id: 181, category: "Intimita", text: "Ktoré naše spoločné ráno bolo pre teba najkrajšie a prečo?" },
+      { id: 182, category: "Intimita", text: "Ak by sme si mali dať 10-sekundový hlboký objatie zakaždým, keď prídeme domov, ako by to zmenilo náš deň?" },
+      { id: 183, category: "Intimita", text: "Existuje nejaká obava alebo citlivá téma, ktorú si sa mi doteraz bál/a zveriť, no chcel/a by si?" },
+      { id: 184, category: "Intimita", text: "Čo ťa na mne najviac fascinuje, keď ma pozoruješ bez toho, aby som o tom vedel/a?" },
+      { id: 185, category: "Intimita", text: "Aká forma nečakaného prejavu pozornosti (kvetina, odkaz v taške) ťa najviac poteší?" },
+      { id: 186, category: "Intimita", text: "Ako môžem lepšie oceniť tvoju zraniteľnosť, keď mi dôveruješ so svojimi pocitmi?" },
+      { id: 187, category: "Intimita", text: "Ktorá spomienka na náš spoločný intímny moment ťa sprevádza, keď sme cez deň od seba?" },
+      { id: 188, category: "Intimita", text: "Ako vyzerá tvoja predstava o dokonalej emocionálnej blízkosti medzi nami?" },
+      { id: 189, category: "Intimita", text: "Čo ťa na mojich dotykoch najviac upokojuje, keď si smutný/á alebo rozrušený/á?" },
+      { id: 190, category: "Intimita", text: "Ktoré spoločné ticho bolo pre teba najpríjemnejšie a kedy sa pri mne cítiš dobre aj bez slov?" },
+      { id: 191, category: "Intimita", text: "Keby sme mali jeden večer stráviť len masážou a rozhovorom, aký olej alebo vôňu by si vybral/a?" },
+      { id: 192, category: "Intimita", text: "Aké správanie z mojej strany v tebe najviac prebúdza pocit, že som tvoj bezpečný prístav?" },
+      { id: 193, category: "Intimita", text: "Ako vnímaš našu úprimnosť vo vzťahu? Existuje téma, o ktorej obchádzame pravdu?" },
+      { id: 194, category: "Intimita", text: "Čo pre teba znamená naša vernosť a akú hodnotu jej pripisuješ v dnešnom svete?" },
+      { id: 195, category: "Intimita", text: "Ktorý spoločný moment, kedy sme sa smiali až k slzám, ťa najviac priblížil ku mne?" },
+      { id: 196, category: "Intimita", text: "Čo ťa na mojom dotyku na verejnosti (držanie za ruku, ruka na ramene) najviac teší?" },
+      { id: 197, category: "Intimita", text: "Existuje nejaký moment z našich začiatkov, kedy si si prvýkrát uvedomil/a, že ťa naozaj milujem?" },
+      { id: 198, category: "Intimita", text: "Como môžem dať najavo, že ťa počúvam celým srdcom, keď mi hovoríš o svojich trápeniach?" },
+      { id: 199, category: "Intimita", text: "Ktorá časť nášho rozhovoru o budúcnosti v tebe vyvoláva najväčší pocit bezpečia?" },
+      { id: 200, category: "Intimita", text: "Čo ťa na mojom správaní najviac utvrdzuje v tom, že ťa považujem za najdôležitejšieho človeka?" },
+      { id: 201, category: "Intimita", text: "Keby sme si mali napísať zoznam piatich vecí, ktoré na druhom milujeme, čo by bolo tvoje číslo jedna?" },
+
+      // 202-252: Nočná 🌙
+      { id: 202, category: "Nočná 🌙", text: "Ktorá časť tvojho tela je najcitlivejšia na môj dotyk a chcel/a by si, aby som sa jej venoval/a viac?" },
+      { id: 203, category: "Nočná 🌙", text: "Čo ťa na mne v posteli dokáže najrýchlejšie a najspoľahlivejšie vzrušiť?" },
+      { id: 204, category: "Nočná 🌙", text: "Máš nejakú erotickú fantáziu, o ktorej sme sa ešte nikdy nerozprávali, ale chcel/a by si ju vyskúšať?" },
+      { id: 205, category: "Nočná 🌙", text: "Ktorý náš spoločný intímny moment alebo milovanie považuješ za najvášnivejšie?" },
+      { id: 206, category: "Nočná 🌙", text: "Čo môžem urobiť pre to, aby si sa počas našich intímnych chvíľ cítil/a úplne uvoľnene a slobodne?" },
+      { id: 207, category: "Nočná 🌙", text: "Aká vôňa, osvetlenie alebo hudba v tebe najspoľahlivejšie prebúdza chuť na milovanie?" },
+      { id: 208, category: "Nočná 🌙", text: "Čo je podľa teba najdôležitejšie na to, aby sme si udržali vášeň a sexuálnu iskru aj po rokoch?" },
+      { id: 209, category: "Nočná 🌙", text: "Ktorý druh dotyku alebo pohladenia ti najviac chýba, keď sme od seba dlhšie preč?" },
+      { id: 210, category: "Nočná 🌙", text: "Existuje nejaké neobvyklé miesto (mimo spálne), kde by si chcel/a zažiť spontánnu blízkosť?" },
+      { id: 211, category: "Nočná 🌙", text: "Ako vyzerá tvoja predstava dokonalej, vášnivej noci pre nás dvoch?" },
+      { id: 212, category: "Nočná 🌙", text: "Aký typ spodnej bielizne, oblečenia alebo vzhľadu na mne považuješ za najviac sexy?" },
+      { id: 213, category: "Nočná 🌙", text: "Kedy si si naposledy uvedomil/a, že ma divoko túžiš pobozkať a dotknúť sa ma?" },
+      { id: 214, category: "Nočná 🌙", text: "Čo sa ti na našom milostnom živote najviac páči a v akej oblasti by si chcel/a experimentovať?" },
+      { id: 215, category: "Nočná 🌙", text: "Čo pre teba znamená spojenie medzi citovou blízkosťou a telesnou intimitou? Sú pre teba prepojené?" },
+      { id: 216, category: "Nočná 🌙", text: "Existuje nejaké zranenie z minulosti alebo obava, ktorá ti bráni plne sa uvoľniť v našej intimite?" },
+      { id: 217, category: "Nočná 🌙", text: "Aká bola tvoja prvá reakcia alebo myšlienka, keď sme spolu prvýkrát spali?" },
+      { id: 218, category: "Nočná 🌙", text: "Čo pre teba znamená pojem „vášeň“ v našom dlhodobom vzťahu?" },
+      { id: 219, category: "Nočná 🌙", text: "Ak by sme mali dnes večer vytvoriť novú intímnu tradíciu, čo by to bolo?" },
+      { id: 220, category: "Nočná 🌙", text: "Ktorú časť môjho tela najradšej bozkávaš a prečo?" },
+      { id: 221, category: "Nočná 🌙", text: "Ako môžem dať najavo, že po tebe túžim, bez toho, aby som musel/a čokoľvek povedať?" },
+      { id: 222, category: "Nočná 🌙", text: "Čo ťa na mne najviac priťahuje, keď sme v spoločnosti iných ľudí?" },
+      { id: 223, category: "Nočná 🌙", text: "Existuje nejaká hra alebo aktivita pre dospelých, ktorú by si si so mnou chcel/a zahrať?" },
+      { id: 224, category: "Nočná 🌙", text: "Aký je tvoj najobľúbenejší spôsob, ako ma priviesť k vzrušeniu?" },
+      { id: 225, category: "Nočná 🌙", text: "Ako by si opísal/a náš intímny život tromi slovami?" },
+      { id: 226, category: "Nočná 🌙", text: "Čo je pre teba dôležitejšie: pomalé milovanie, alebo divoká a nečakaná vášeň?" },
+      { id: 227, category: "Nočná 🌙", text: "Akú emóciu v tebe najviac vyvoláva naša fyzická blízkosť?" },
+      { id: 228, category: "Nočná 🌙", text: "Čo je najbláznivejšia vec, ktorú by si chcel/a zažiť v spálni (alebo mimo nej)?" },
+      { id: 229, category: "Nočná 🌙", text: "Aká doterajšia intímna spomienka na nás dvoch ti vie najrýchlejšie vyčariť úsmev na tvári?" },
+      { id: 230, category: "Nočná 🌙", text: "Ak by sme mali na jeden večer hrať role dvoch cudzincov, aké by boli naše postavy?" },
+      { id: 231, category: "Nočná 🌙", text: "Ako vnímaš moju iniciatívu v intímnom živote? Chcel/a by si častejšie?" },
+      { id: 232, category: "Nočná 🌙", text: "Čo ťa na mne najviac priťahovalo na začiatku a čo ťa najviac priťahuje dnes?" },
+      { id: 233, category: "Nočná 🌙", text: "Existuje nejaká pieseň alebo hudobný album, ktorý v tebe prebúdza romatickú alebo vášnivú náladu?" },
+      { id: 234, category: "Nočná 🌙", text: "Kedy sa cítiš najviac sexy a príťažlivo? Čo k tomu prispieva?" },
+      { id: 235, category: "Nočná 🌙", text: "Aká je tvoja najobľúbenejšia poloha pri milovaní a prečo?" },
+      { id: 236, category: "Nočná 🌙", text: "Ako najradšej odpočívaš bezprostredne po milovaní?" },
+      { id: 237, category: "Nočná 🌙", text: "Čo je pre teba najlepší spôsob, ako sa znova prepojiť po období vysokej vyťaženosti?" },
+      { id: 238, category: "Nočná 🌙", text: "Keby si mal/a opísať moju zmyselnosť jedným slovom, aké by to bolo?" },
+      { id: 239, category: "Nočná 🌙", text: "Aký druh bozku máš najradšej? (napr. jemný na pery, vášnivý, bozky na krk)" },
+      { id: 240, category: "Nočná 🌙", text: "Máš radšej milovanie ráno, cez deň, alebo neskoro v noci?" },
+      { id: 241, category: "Nočná 🌙", text: "Čo môžem urobiť, aby si sa po náročnom dni cítil/a rozmaznávaný/á a fyzicky milovaný/á?" },
+      { id: 242, category: "Nočná 🌙", text: "Ktorá tvoja intímna túžba sa v našom vzťahu už splnila a veľmi ťa to potešilo?" },
+      { id: 243, category: "Nočná 🌙", text: "Ako vnímaš našu nahotu? Cítiš sa predo mnou úplne pohodlne a bezpečne bez oblečenia?" },
+      { id: 244, category: "Nočná 🌙", text: "Ktoré miesto na mojom tele ťa najviac fascinuje a prečo?" },
+      { id: 245, category: "Nočná 🌙", text: "Akú najzmyselnejšiu správu by si odo mňa chcel/a dostať počas dňa, keď sme v práci?" },
+      { id: 246, category: "Nočná 🌙", text: "Ktoré gesto ti dáva najavo, že po tebe túžim ako po partnerovi, nie len ako po spolubývajúcom?" },
+      { id: 247, category: "Nočná 🌙", text: "Ak by sme si mali naplánovať víkend plný len zmyselnosti a oddychu, ako by vyzeral?" },
+      { id: 248, category: "Nočná 🌙", text: "Čo ťa dokáže najrýchlejšie odpútať od milovania? (napr. práca, únava, rušivé zvuky)" },
+      { id: 249, category: "Nočná 🌙", text: "Aký kompliment ohľadom tvojho tela alebo intímneho vyžarovania ťa odo mňa najviac poteší?" },
+      { id: 250, category: "Nočná 🌙", text: "Keby sme mali natočiť náš vlastný, súkromný romantický film, aká scéna by v ňom nesmela chýbať?" },
+      { id: 251, category: "Nočná 🌙", text: "Existuje nejaká intímna téma, o ktorej sa ti so mnou rozpráva ťažko, ale chcel/a by si ju prekonať?" },
+      { id: 252, category: "Nočná 🌙", text: "Čo pre teba znamená naša vernosť v oblasti sexu a ako o nej premýšľaš?" }
+    ];
+
+    // ==========================================
+    // 3. GLOBÁLNY STAV APLIKÁCIE
+    // ==========================================
+    const state = {
+      myRole: '',
+      roomCode: '',
+      isDemoMode: false,
+      mode: 'live',
+      currentCardId: 0,
+      skipped: false,
+      categoryFilter: 'all',
+      presence: { tatino: false, mamina: false },
+      answers: {}
+    };
+
+    let db = null;
+    let databaseInitialized = false;
+    let myPresenceRef = null;
+    let infoRef = null;
+    let presenceRef = null;
+    let answersRef = null;
+
+    // ==========================================
+    // 4. INICIALIZÁCIA A NAČÍTANIE NASTAVENÍ
+    // ==========================================
+    document.addEventListener('DOMContentLoaded', () => {
+      loadFirebaseConfig();
+      setupUI();
+      setupEventListeners();
+      checkFirebaseStatus();
+    });
+
+    function loadFirebaseConfig() {
+      const savedConfig = localStorage.getItem('rodinna_clovecina_fb_config');
+      if (savedConfig) {
+        try {
+          const parsed = JSON.parse(savedConfig);
+          Object.assign(firebaseConfig, parsed);
+        } catch (e) {
+          console.error("Chyba pri čítaní uloženej konfigurácie Firebase.", e);
+        }
+      }
+    }
+
+    function initFirebase() {
+      if (databaseInitialized) return true;
+      if (!firebaseConfig.apiKey || !firebaseConfig.databaseURL) return false;
+      try {
+        if (firebase.apps.length === 0) firebase.initializeApp(firebaseConfig);
+        db = firebase.database();
+        databaseInitialized = true;
+        return true;
+      } catch (e) {
+        console.error("Chyba Firebase:", e);
+        return false;
+      }
+    }
+
+    function checkFirebaseStatus() {
+      const banner = document.getElementById('fb-config-warning');
+      const hasConfig = firebaseConfig.apiKey && firebaseConfig.databaseURL;
+      banner.style.display = hasConfig ? 'none' : 'flex';
+    }
+
+    function setupUI() {
+      document.getElementById('screen-lobby').style.display = 'flex';
+      document.getElementById('screen-game').style.display = 'none';
+    }
+
+    function setupEventListeners() {
+      // Výber roly
+      document.querySelectorAll('.role-btn').forEach(btn => {
+        btn.addEventListener('click', () => {
+          document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+          btn.classList.add('active');
+          state.myRole = btn.dataset.role;
+        });
+      });
+
+      // Vytvorenie izby
+      document.getElementById('btn-create-room').addEventListener('click', () => {
+        if (!state.myRole) { showToast("Najprv si zvoľ svoju rolu!"); return; }
+        const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+        let randomCode = '';
+        for (let i = 0; i < 4; i++) randomCode += chars.charAt(Math.floor(Math.random() * chars.length));
+        joinRoomWorkflow(randomCode, true);
+      });
+
+      // Vstup do existujúcej izby
+      document.getElementById('btn-join-room').addEventListener('click', () => {
+        if (!state.myRole) { showToast("Najprv si zvoľ svoju rolu!"); return; }
+        const roomInput = document.getElementById('input-room-code').value.trim().toUpperCase();
+        if (roomInput.length !== 4) { showToast("Zadaj správny 4-miestny kód izby!"); return; }
+        joinRoomWorkflow(roomInput, false);
+      });
+
+      // Odchod z izby
+      document.getElementById('btn-leave-room').addEventListener('click', leaveRoomWorkflow);
+
+      // Kopírovanie kódu
+      document.getElementById('display-room-code').addEventListener('click', () => {
+        if (!state.roomCode) return;
+        navigator.clipboard.writeText(state.roomCode).then(() => {
+          showToast(`Kód izby ${state.roomCode} bol skopírovaný!`);
+        });
+      });
+
+      // Prepínanie režimov
+      document.querySelectorAll('.mode-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => { setRoomMode(btn.dataset.gameMode); });
+      });
+
+      // Filter kategórií
+      document.querySelectorAll('.category-tab-btn').forEach(btn => {
+        btn.addEventListener('click', () => { setCategoryFilter(btn.dataset.category); });
+      });
+
+      // Ťahať novú kartu
+      document.getElementById('btn-draw-card').addEventListener('click', drawNewCard);
+
+      // Tlačidlo PAS
+      document.getElementById('btn-pass-card').addEventListener('click', passCard);
+    }
+
+    // ==========================================
+    // 5. PRÁCA S IZBOU (WORKFLOWS)
+    // ==========================================
+    function joinRoomWorkflow(roomCode, isCreatingNew) {
+      state.roomCode = roomCode;
+      const hasFirebase = initFirebase();
+
+      if (hasFirebase) {
+        state.isDemoMode = false;
+        showToast(`Pripájam sa do izby pre rande: ${roomCode}...`);
+
+        // Presence
+        myPresenceRef = db.ref(`rooms/${roomCode}/couplesPresence/${state.myRole}`);
+        myPresenceRef.set(true);
+        myPresenceRef.onDisconnect().remove();
+
+        presenceRef = db.ref(`rooms/${roomCode}/couplesPresence`);
+        presenceRef.on('value', (snapshot) => {
+          const val = snapshot.val() || {};
+          state.presence = { tatino: !!val.tatino, mamina: !!val.mamina };
+          renderPresenceIndicators();
+        });
+
+        // State info
+        infoRef = db.ref(`rooms/${roomCode}/couplesInfo`);
+        if (isCreatingNew) {
+          infoRef.set({
+            mode: 'live',
+            currentCardId: 0,
+            skipped: false,
+            categoryFilter: 'all',
+            lastUpdated: firebase.database.ServerValue.TIMESTAMP
+          });
+        }
+
+        infoRef.on('value', (snapshot) => {
+          const val = snapshot.val();
+          if (val) {
+            const cardChanged = state.currentCardId !== val.currentCardId;
+            const skipChanged = state.skipped !== val.skipped;
+            state.mode = val.mode || 'live';
+            state.currentCardId = val.currentCardId || 0;
+            state.skipped = val.skipped || false;
+            state.categoryFilter = val.categoryFilter || 'all';
+
+            if (cardChanged) setupAnswersListener();
+            renderGameInterface(cardChanged || skipChanged);
+          } else if (!isCreatingNew) {
+            showToast("Izba nebola nájdená. Spúšťam v lokálnom demo režime.");
+            startLocalDemoMode();
+          }
+        });
+      } else {
+        startLocalDemoMode();
+      }
+
+      document.getElementById('screen-lobby').style.display = 'none';
+      document.getElementById('screen-game').style.display = 'block';
+    }
+
+    function startLocalDemoMode() {
+      state.isDemoMode = true;
+      state.presence = { tatino: false, mamina: false };
+      state.presence[state.myRole] = true;
+      showToast(`Lokálne demo v miestnosti: ${state.roomCode}`);
+      renderPresenceIndicators();
+      renderGameInterface(true);
+    }
+
+    function leaveRoomWorkflow() {
+      if (myPresenceRef) { myPresenceRef.remove(); myPresenceRef = null; }
+      if (presenceRef) { presenceRef.off(); presenceRef = null; }
+      if (infoRef) { infoRef.off(); infoRef = null; }
+      if (answersRef) { answersRef.off(); answersRef = null; }
+      state.roomCode = '';
+      state.currentCardId = 0;
+      state.skipped = false;
+      state.answers = {};
+      document.getElementById('screen-game').style.display = 'none';
+      document.getElementById('screen-lobby').style.display = 'flex';
+      showToast("Opustili ste izbu.");
+    }
+
+    function setupAnswersListener() {
+      if (answersRef) answersRef.off();
+      state.answers = {};
+      if (state.isDemoMode || !state.currentCardId) { renderAnswersPanel(); return; }
+      answersRef = db.ref(`rooms/${state.roomCode}/couplesAnswers/${state.currentCardId}`);
+      answersRef.on('value', (snapshot) => {
+        state.answers = snapshot.val() || {};
+        renderAnswersPanel();
+      });
+    }
+
+    function setRoomMode(mode) {
+      if (state.isDemoMode) {
+        state.mode = mode;
+        renderGameInterface(false);
+      } else {
+        infoRef.update({ mode: mode });
+      }
+    }
+
+    function setCategoryFilter(category) {
+      if (state.isDemoMode) {
+        state.categoryFilter = category;
+        renderCategoryFilterTabs();
+      } else {
+        infoRef.update({ categoryFilter: category });
+      }
+    }
+
+    function drawNewCard() {
+      let filtered = [];
+      if (state.categoryFilter === 'all') {
+        filtered = QUESTIONS;
+      } else if (state.categoryFilter === 'komfort') {
+        filtered = QUESTIONS.filter(q => q.id >= 1 && q.id <= 52);
+      } else if (state.categoryFilter === 'rozvoj') {
+        filtered = QUESTIONS.filter(q => q.id >= 53 && q.id <= 103);
+      } else if (state.categoryFilter === 'sny') {
+        filtered = QUESTIONS.filter(q => q.id >= 104 && q.id <= 154);
+      } else if (state.categoryFilter === 'intimita') {
+        filtered = QUESTIONS.filter(q => q.id >= 155 && q.id <= 201);
+      } else if (state.categoryFilter === 'nocna') {
+        filtered = QUESTIONS.filter(q => q.id >= 202 && q.id <= 252);
+      }
+
+      if (filtered.length === 0) return;
+
+      let newCard;
+      if (filtered.length > 1) {
+        do {
+          newCard = filtered[Math.floor(Math.random() * filtered.length)];
+        } while (newCard.id === state.currentCardId);
+      } else {
+        newCard = filtered[0];
+      }
+
+      if (state.isDemoMode) {
+        state.currentCardId = newCard.id;
+        state.skipped = false;
+        state.answers = {};
+        renderGameInterface(true);
+        setupAnswersListener();
+      } else {
+        db.ref(`rooms/${state.roomCode}/couplesAnswers/${newCard.id}`).remove();
+        infoRef.update({
+          currentCardId: newCard.id,
+          skipped: false,
+          lastUpdated: firebase.database.ServerValue.TIMESTAMP
+        });
+      }
+    }
+
+    function passCard() {
+      if (state.currentCardId === 0) return;
+      if (state.isDemoMode) {
+        state.skipped = true;
+        renderGameInterface(true);
+      } else {
+        infoRef.update({
+          skipped: true,
+          lastUpdated: firebase.database.ServerValue.TIMESTAMP
+        });
+      }
+    }
+
+    function submitMyAnswer(text) {
+      const cleanText = text.trim();
+      if (!cleanText) return;
+      if (state.isDemoMode) {
+        state.answers[state.myRole] = cleanText;
+        renderAnswersPanel();
+      } else {
+        db.ref(`rooms/${state.roomCode}/couplesAnswers/${state.currentCardId}/${state.myRole}`).set(cleanText);
+      }
+    }
+
+    function renderPresenceIndicators() {
+      const container = document.getElementById('presence-indicators');
+      const roles = ['tatino', 'mamina'];
+      roles.forEach(role => {
+        const item = container.querySelector(`[data-presence-role="${role}"]`);
+        if (item) {
+          const dot = item.querySelector('.status-dot');
+          const isOnline = state.presence[role];
+          dot.classList.toggle('active', isOnline);
+          item.classList.toggle('online', isOnline);
+        }
+      });
+    }
+
+    function renderCategoryFilterTabs() {
+      document.querySelectorAll('.category-tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.category === state.categoryFilter);
+      });
+    }
+
+    function renderGameInterface(shouldAnimate) {
+      document.getElementById('display-room-code').innerHTML = `RANDE: ${state.roomCode} <i class="fas fa-copy" style="font-size: 0.75rem;"></i>`;
+      document.querySelectorAll('.mode-tab-btn').forEach(btn => {
+        btn.classList.toggle('active', btn.dataset.gameMode === state.mode);
+      });
+      renderCategoryFilterTabs();
+
+      const answersPanel = document.getElementById('answers-panel-section');
+      answersPanel.style.display = (state.mode === 'async' && state.currentCardId > 0 && !state.skipped) ? 'flex' : 'none';
+
+      const card = document.getElementById('game-card');
+      const headerElements = document.getElementById('card-header-elements');
+      const textWrapper = document.getElementById('card-text-wrapper');
+      const skippedWrapper = document.getElementById('card-skipped-wrapper');
+      const footerText = document.getElementById('card-footer-text');
+
+      if (shouldAnimate) {
+        card.classList.add('fade-out');
+        card.classList.remove('fade-in');
+        setTimeout(() => {
+          updateCardContentDOM(headerElements, textWrapper, skippedWrapper, footerText);
+          card.classList.remove('fade-out');
+          card.classList.add('fade-in');
+        }, 300);
+      } else {
+        updateCardContentDOM(headerElements, textWrapper, skippedWrapper, footerText);
+      }
+    }
+
+    function updateCardContentDOM(headerElements, textWrapper, skippedWrapper, footerText) {
+      if (state.currentCardId === 0) {
+        headerElements.style.visibility = 'hidden';
+        textWrapper.style.display = 'block';
+        skippedWrapper.style.display = 'none';
+        document.getElementById('card-question-text').innerHTML = "Kliknutím na <strong>Ťahať novú kartu</strong> môžete začať partnerské rande.";
+        footerText.style.visibility = 'hidden';
+      } else if (state.skipped) {
+        headerElements.style.visibility = 'hidden';
+        textWrapper.style.display = 'none';
+        skippedWrapper.style.display = 'flex';
+        footerText.style.visibility = 'visible';
+        footerText.textContent = "Žiadny tlak, ideme ďalej";
+      } else {
+        const question = QUESTIONS.find(q => q.id === state.currentCardId);
+        if (question) {
+          headerElements.style.visibility = 'visible';
+          textWrapper.style.display = 'block';
+          skippedWrapper.style.display = 'none';
+          document.getElementById('card-category-name').textContent = question.category;
+          document.getElementById('card-question-number').textContent = `Karta #${question.id}`;
+          document.getElementById('card-question-text').textContent = question.text;
+          footerText.style.visibility = 'visible';
+          footerText.textContent = "Partnerská čLOVEčina";
+        }
+      }
+    }
+
+    function renderAnswersPanel() {
+      const container = document.getElementById('answers-container');
+      container.innerHTML = '';
+      if (!state.currentCardId) return;
+
+      const roles = ['tatino', 'mamina'];
+      const hasMyAnswer = !!state.answers[state.myRole];
+
+      roles.forEach(role => {
+        const answerText = state.answers[role] || '';
+        const hasAnswered = !!answerText;
+        const isMe = role === state.myRole;
+
+        const block = document.createElement('div');
+        block.className = 'answer-block';
+
+        const header = document.createElement('div');
+        header.className = 'answer-block-header';
+        
+        let roleIcon = role === 'tatino' ? 'fa-user-tie' : 'fa-user-circle';
+
+        header.innerHTML = `
+          <span class="answer-role-badge badge-${role}">
+            <i class="fas ${roleIcon}"></i> ${role} ${isMe ? '(Ty)' : ''}
+          </span>
+          <span class="answer-status-label ${hasAnswered ? 'done' : 'waiting'}">
+            ${hasAnswered ? '<i class="fas fa-check-circle"></i> Odpovedal/a' : '<i class="far fa-circle"></i> Čaká sa'}
+          </span>
+        `;
+        block.appendChild(header);
+
+        const body = document.createElement('div');
+
+        if (isMe) {
+          if (hasAnswered) {
+            body.innerHTML = `<p class="answer-content">${escapeHTML(answerText)}</p>`;
+          } else {
+            const compose = document.createElement('div');
+            compose.className = 'answer-compose-area';
+            
+            const textarea = document.createElement('textarea');
+            textarea.className = 'answer-textarea';
+            textarea.placeholder = "Sem napíš svoju úprimnú odpoveď partnerovi...";
+            
+            const submitBtn = document.createElement('button');
+            submitBtn.className = 'btn-primary';
+            submitBtn.style.padding = '0.5rem 1rem';
+            submitBtn.style.fontSize = '0.85rem';
+            submitBtn.style.alignSelf = 'flex-end';
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Odoslať';
+            
+            submitBtn.addEventListener('click', () => {
+              submitMyAnswer(textarea.value);
+            });
+
+            compose.appendChild(textarea);
+            compose.appendChild(submitBtn);
+            body.appendChild(compose);
+          }
+        } else {
+          if (!hasAnswered) {
+            body.innerHTML = `<p class="answer-empty">Čaká sa na odpoveď partnera... 💬</p>`;
+          } else {
+            if (hasMyAnswer) {
+              body.innerHTML = `<p class="answer-content">${escapeHTML(answerText)}</p>`;
+            } else {
+              body.innerHTML = `
+                <div class="answer-locked">
+                  <i class="fas fa-lock"></i>
+                  <span>Odpoveď partnera je skrytá. Odomkne sa, keď odošleš svoju odpoveď.</span>
+                </div>
+              `;
+            }
+          }
+        }
+
+        block.appendChild(body);
+        container.appendChild(block);
+      });
+    }
+
+    function showToast(message) {
+      const toast = document.getElementById('toast-message');
+      document.getElementById('toast-text-content').textContent = message;
+      toast.classList.add('active');
+      setTimeout(() => { toast.classList.remove('active'); }, 3000);
+    }
+
+    function escapeHTML(str) {
+      return str.replace(/[&<>'"]/g, 
+        tag => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', "'": '&#39;', '"': '&quot;' }[tag] || tag)
+      );
+    }
+  </script>
+
+</body>
+</html>
