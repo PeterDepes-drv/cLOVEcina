@@ -221,6 +221,46 @@
     }
     .role-btn[data-role="majo"] i { color: var(--color-majo); }
 
+    /* Selektor aktívnych hráčov */
+    .active-players-selector {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 0.5rem;
+      margin-top: 0.5rem;
+    }
+
+    .player-select-tag {
+      background-color: var(--bg-card-inner);
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      color: var(--text-secondary);
+      padding: 0.5rem 0.85rem;
+      border-radius: 20px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 0.4rem;
+      user-select: none;
+      transition: var(--transition-calm);
+    }
+
+    .player-select-tag.active {
+      border-color: var(--accent-gold);
+      background-color: var(--accent-gold-light);
+      color: var(--text-primary);
+    }
+
+    .player-select-tag.active i {
+      color: var(--accent-gold);
+    }
+
+    .player-select-tag i {
+      font-size: 0.95rem;
+      color: var(--text-muted);
+    }
+
     /* Pripojenie izby */
     .room-action-container {
       display: flex;
@@ -975,9 +1015,32 @@
         </div>
       </div>
 
-      <!-- Pripojenie a izba -->
-      <div class="room-action-container">
-        <h3 class="role-section-title">2. Pripoj sa do izby</h3>
+      <!-- Kto bude dnes hrať? -->
+      <div>
+        <h3 class="role-section-title">2. Kto všetko bude dnes hrať? (Aktívni hráči)</h3>
+        <div class="active-players-selector">
+          <label class="player-select-tag active" data-player-role="tatino">
+            <input type="checkbox" id="chk-play-tatino" checked style="display: none;">
+            <i class="fas fa-check-square"></i> tatino
+          </label>
+          <label class="player-select-tag active" data-player-role="mamina">
+            <input type="checkbox" id="chk-play-mamina" checked style="display: none;">
+            <i class="fas fa-check-square"></i> mamina
+          </label>
+          <label class="player-select-tag active" data-player-role="ivo">
+            <input type="checkbox" id="chk-play-ivo" checked style="display: none;">
+            <i class="fas fa-check-square"></i> Ivo
+          </label>
+          <label class="player-select-tag active" data-player-role="majo">
+            <input type="checkbox" id="chk-play-majo" checked style="display: none;">
+            <i class="fas fa-check-square"></i> Majo
+          </label>
+        </div>
+      </div>
+ 
+       <!-- Pripojenie a izba -->
+       <div class="room-action-container">
+         <h3 class="role-section-title">3. Pripoj sa do izby</h3>
         
         <div class="room-input-group">
           <input type="text" class="room-input" id="input-room-code" placeholder="Kód izby" maxlength="4">
@@ -1413,6 +1476,12 @@
       currentCardId: 0,      // ID aktuálnej karty (1-200)
       skipped: false,        // Či bola karta preskočená ("Pas")
       categoryFilter: 'all', // 'all' | 'zmysly' | 'hudba' | 'knihy' | 'predstavivost' | 'rodina'
+      activePlayers: {       // Ktoré roly hrajú v tejto relácii
+        tatino: true,
+        mamina: true,
+        ivo: true,
+        majo: true
+      },
       
       // Prítomnosť a odpovede
       presence: {
@@ -1515,6 +1584,24 @@
         });
       });
 
+      // Výber aktívnych hráčov (toggles)
+      document.querySelectorAll('.player-select-tag').forEach(tag => {
+        tag.addEventListener('click', (e) => {
+          const chk = tag.querySelector('input');
+          if (e.target !== chk) {
+            chk.checked = !chk.checked;
+          }
+          tag.classList.toggle('active', chk.checked);
+          
+          const icon = tag.querySelector('i');
+          if (chk.checked) {
+            icon.className = 'fas fa-check-square';
+          } else {
+            icon.className = 'far fa-square';
+          }
+        });
+      });
+
       // Modálne okno nastavení
       const settingsModal = document.getElementById('settings-modal');
       document.getElementById('btn-settings').addEventListener('click', () => {
@@ -1557,6 +1644,21 @@
       document.getElementById('btn-create-room').addEventListener('click', () => {
         if (!state.myRole) {
           showToast("Najprv si zvoľ svoju rodinnú rolu!");
+          return;
+        }
+
+        // Načítanie vybraných hráčov
+        state.activePlayers = {
+          tatino: document.getElementById('chk-play-tatino').checked,
+          mamina: document.getElementById('chk-play-mamina').checked,
+          ivo: document.getElementById('chk-play-ivo').checked,
+          majo: document.getElementById('chk-play-majo').checked
+        };
+
+        // Kontrola, či hrá aspoň jeden hráč
+        const activeCount = Object.values(state.activePlayers).filter(Boolean).length;
+        if (activeCount < 1) {
+          showToast("Musí hrať aspoň 1 hráč!");
           return;
         }
         
@@ -1668,6 +1770,7 @@
             currentCardId: 0,
             skipped: false,
             categoryFilter: 'all',
+            activePlayers: state.activePlayers,
             lastUpdated: firebase.database.ServerValue.TIMESTAMP
           });
         }
@@ -1682,6 +1785,13 @@
             state.currentCardId = val.currentCardId || 0;
             state.skipped = val.skipped || false;
             state.categoryFilter = val.categoryFilter || 'all';
+            state.activePlayers = val.activePlayers || { tatino: true, mamina: true, ivo: true, majo: true };
+
+            // Self-healing: ak sa pripojíme a nie sme označení ako aktívni, pridáme sa
+            if (state.myRole && !state.activePlayers[state.myRole]) {
+              state.activePlayers[state.myRole] = true;
+              infoRef.child('activePlayers').update({ [state.myRole]: true });
+            }
 
             // Ak sa zmenila karta, aktualizujeme počúvanie odpovedí na danú kartu
             if (cardChanged) {
@@ -1709,6 +1819,13 @@
 
     function startLocalDemoMode() {
       state.isDemoMode = true;
+      state.activePlayers = {
+        tatino: document.getElementById('chk-play-tatino').checked,
+        mamina: document.getElementById('chk-play-mamina').checked,
+        ivo: document.getElementById('chk-play-ivo').checked,
+        majo: document.getElementById('chk-play-majo').checked
+      };
+
       state.presence = {
         tatino: false,
         mamina: false,
@@ -1905,13 +2022,19 @@
         if (item) {
           const dot = item.querySelector('.status-dot');
           const isOnline = state.presence[role];
+          const isActivePlayer = state.activePlayers && state.activePlayers[role] !== false;
           
-          if (isOnline) {
-            dot.classList.add('active');
-            item.classList.add('online');
+          if (isActivePlayer) {
+            item.style.display = 'flex';
+            if (isOnline) {
+              dot.classList.add('active');
+              item.classList.add('online');
+            } else {
+              dot.classList.remove('active');
+              item.classList.remove('online');
+            }
           } else {
-            dot.classList.remove('active');
-            item.classList.remove('online');
+            item.style.display = 'none';
           }
         }
       });
@@ -2011,6 +2134,9 @@
       const hasMyAnswer = !!state.answers[state.myRole];
 
       roles.forEach(role => {
+        const isActivePlayer = state.activePlayers && state.activePlayers[role] !== false;
+        if (!isActivePlayer) return;
+        
         const answerText = state.answers[role] || '';
         const hasAnswered = !!answerText;
         
