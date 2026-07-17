@@ -1205,6 +1205,51 @@
       color: var(--accent-gold);
     }
 
+    /* Tlačidlá pre výber posuvníkov Manžela a Manželky v režime Spolu */
+    input[id="mood-slider-manzel"]::-webkit-slider-thumb {
+      background: linear-gradient(135deg, var(--color-manzel), #1d4ed8) !important;
+      box-shadow: 0 0 10px rgba(75, 163, 227, 0.8) !important;
+    }
+    input[id="mood-slider-manzelka"]::-webkit-slider-thumb {
+      background: linear-gradient(135deg, var(--color-manzelka), #be185d) !important;
+      box-shadow: 0 0 10px rgba(242, 109, 158, 0.8) !important;
+    }
+    input[id="mood-slider-manzel"]::-moz-range-thumb {
+      background: linear-gradient(135deg, var(--color-manzel), #1d4ed8) !important;
+      box-shadow: 0 0 10px rgba(75, 163, 227, 0.8) !important;
+    }
+    input[id="mood-slider-manzelka"]::-moz-range-thumb {
+      background: linear-gradient(135deg, var(--color-manzelka), #be185d) !important;
+      box-shadow: 0 0 10px rgba(242, 109, 158, 0.8) !important;
+    }
+
+    /* INDIKÁTOR ŤAHU */
+    .turn-indicator-bar {
+      background: rgba(255, 255, 255, 0.02);
+      border: 1px solid rgba(231, 84, 128, 0.15);
+      border-radius: 16px;
+      padding: 0.7rem 1.2rem;
+      font-size: 0.95rem;
+      font-weight: 600;
+      text-align: center;
+      width: 100%;
+      margin-bottom: 0.8rem;
+      transition: var(--transition-calm);
+      display: none;
+    }
+    
+    .turn-indicator-bar.manzel {
+      border-color: rgba(75, 163, 227, 0.3);
+      background: rgba(75, 163, 227, 0.04);
+      box-shadow: 0 0 15px rgba(75, 163, 227, 0.08);
+    }
+    
+    .turn-indicator-bar.manzelka {
+      border-color: rgba(242, 109, 158, 0.3);
+      background: rgba(242, 109, 158, 0.04);
+      box-shadow: 0 0 15px rgba(242, 109, 158, 0.08);
+    }
+
     /* ZÁKLADNÉ RESPOND SIZES */
     @media (max-width: 500px) {
       .vault-revealed-grid {
@@ -1250,28 +1295,40 @@
 
     <!-- 1. OBRAZOVKA: LOBBY -->
     <section class="screen-card" id="screen-lobby">
-      <h2 class="font-romantic" style="font-size: 1.8rem; margin-bottom: 0.5rem;">Intímne chvíle na diaľku</h2>
-      <p class="lobby-subtitle">Prehĺbte svoje prepojenie, otvorte tajné komnaty svojich túžob a dotknite sa slovami, aj keď ste ďaleko jeden od druhého.</p>
+      <h2 class="font-romantic" style="font-size: 1.8rem; margin-bottom: 0.5rem;" id="lobby-main-title">Intímne chvíle na diaľku</h2>
+      <p class="lobby-subtitle" id="lobby-sub-title">Prehĺbte svoje prepojenie, otvorte tajné komnaty svojich túžob a dotknite sa slovami, aj keď ste ďaleko jeden od druhého.</p>
       
-      <div class="section-title">
-        <i class="fas fa-user-hearts"></i> Zvoľ si svoju rolu pre dnešný večer
-      </div>
-      <div class="role-selection-grid">
-        <button class="role-btn" data-role="manzel">
-          <i class="fas fa-venus-mars"></i>
-          <span>Manžel</span>
+      <!-- Prepínač typu hry (Na diaľku / Spolu) -->
+      <div class="mode-tab-bar" style="margin-bottom: 1.5rem; width: 100%;">
+        <button class="mode-tab-btn active" id="tab-type-remote" data-game-type="remote" style="padding: 0.8rem 0.5rem; font-size: 0.85rem; width: 100%;">
+          <i class="fas fa-globe"></i> NA DIAĽKU (Online)
         </button>
-        <button class="role-btn" data-role="manzelka">
-          <i class="fas fa-venus-mars" style="transform: rotate(90deg);"></i>
-          <span>Manželka</span>
+        <button class="mode-tab-btn" id="tab-type-physical" data-game-type="physical" style="padding: 0.8rem 0.5rem; font-size: 0.85rem; width: 100%;">
+          <i class="fas fa-heart-pulse"></i> SPOLU (Fyzický kontakt)
         </button>
       </div>
 
-      <div class="input-group">
-        <label class="input-label" for="room-code-input">
-          <i class="fas fa-key"></i> Zadajte kód izby (rovnaký pre oboch)
-        </label>
-        <input type="text" class="room-input" id="room-code-input" placeholder="Napr. Srdce" maxlength="8">
+      <div id="remote-setup-area" style="width: 100%;">
+        <div class="section-title">
+          <i class="fas fa-user-hearts"></i> Zvoľ si svoju rolu pre dnešný večer
+        </div>
+        <div class="role-selection-grid">
+          <button class="role-btn" data-role="manzel">
+            <i class="fas fa-venus-mars"></i>
+            <span>Manžel</span>
+          </button>
+          <button class="role-btn" data-role="manzelka">
+            <i class="fas fa-venus-mars" style="transform: rotate(90deg);"></i>
+            <span>Manželka</span>
+          </button>
+        </div>
+
+        <div class="input-group">
+          <label class="input-label" for="room-code-input">
+            <i class="fas fa-key"></i> Zadajte kód izby (rovnaký pre oboch)
+          </label>
+          <input type="text" class="room-input" id="room-code-input" placeholder="Napr. Srdce" maxlength="8">
+        </div>
       </div>
 
       <div class="action-row">
@@ -1286,30 +1343,15 @@
       <h2 class="font-romantic" style="font-size: 1.8rem; margin-bottom: 0.5rem; color: var(--accent-gold);">Naladenie atmosféry</h2>
       <p class="lobby-subtitle" style="margin-bottom: 1.2rem;">Než vstúpite do hry, venujte chvíľu nastaveniu svojho osobného priestoru. Intimita si vyžaduje pokoj.</p>
 
-      <div class="preparation-checklist">
-        <label class="check-item">
-          <input type="checkbox" id="check-privacy">
-          <span class="check-text">Mám vytvorené úplné súkromie a viem, že nás nikto nebude rušiť 🚪</span>
-        </label>
-        <label class="check-item">
-          <input type="checkbox" id="check-lighting">
-          <span class="check-text">Naladil/a som svetlo (zapálená sviečka, šero alebo tlmené osvetlenie) 🕯️</span>
-        </label>
-        <label class="check-item">
-          <input type="checkbox" id="check-drink">
-          <span class="check-text">Mám pripravený obľúbený nápoj (pohár vína, čaj, čerstvú vodu) 🍷</span>
-        </label>
-        <label class="check-item">
-          <input type="checkbox" id="check-mood">
-          <span class="check-text">Som rozhodnutý/á venovať tento čas naplno svojej polovičke a počúvať bez hodnotenia ❤️</span>
-        </label>
+      <div class="preparation-checklist" id="prep-checklist-container">
+        <!-- Zoznam sa plní dynamicky cez JS -->
       </div>
 
       <button class="btn-primary" id="btn-ready-confirm" disabled>
         <i class="fas fa-heart"></i> Som naladený/á a pripravený/á
       </button>
 
-      <div class="prep-status-box">
+      <div class="prep-status-box" id="prep-status-box-container">
         <div class="partner-prep-status" id="status-me-row">
           <span>Tvoja pripravenosť:</span>
           <span class="status-badge not-ready" id="status-badge-me"><i class="fas fa-clock"></i> Čaká sa</span>
@@ -1348,15 +1390,54 @@
         </div>
       </div>
 
+      <!-- Indikátor ťahu v kontaktnom režime -->
+      <div class="turn-indicator-bar" id="game-turn-bar">
+        <span id="game-turn-text">Na rade je: <strong>Manžel</strong></span>
+      </div>
+
       <!-- NÁLADOMETER (PLAMIENOK TÚŽBY) -->
       <div class="mood-tuner-card">
-        <div class="mood-tuner-header">
-          <span><i class="fa-solid fa-fire"></i> Plamienok túžby (Tvoj náladometer)</span>
-          <span id="display-my-mood-val">1 - Pokojná romantika 🌹</span>
+        <!-- 1. JEDEN POSUVNÍK (PRE REŽIM NA DIAĽKU) -->
+        <div id="mood-tuner-single" style="display: block; width: 100%;">
+          <div class="mood-tuner-header">
+            <span><i class="fa-solid fa-fire"></i> Plamienok túžby (Tvoj náladometer)</span>
+            <span id="display-my-mood-val">1 - Pokojná romantika 🌹</span>
+          </div>
+          <div class="mood-slider-container">
+            <input type="range" class="mood-slider" id="mood-range-slider" min="1" max="10" value="1">
+            <div class="mood-labels">
+              <span>Romantika</span>
+              <span>Dotyky</span>
+              <span>Hravosť</span>
+              <span>Vášeň</span>
+            </div>
+          </div>
         </div>
-        <div class="mood-slider-container">
-          <input type="range" class="mood-slider" id="mood-range-slider" min="1" max="10" value="1">
-          <div class="mood-labels">
+
+        <!-- 2. DVA POSUVNÍKY (PRE REŽIM SPOLU) -->
+        <div id="mood-tuner-double" style="display: none; width: 100%; flex-direction: column; gap: 1rem;">
+          <!-- Posuvník Manžela -->
+          <div style="width: 100%;">
+            <div class="mood-tuner-header" style="color: var(--color-manzel); font-size: 0.85rem;">
+              <span><i class="fa-solid fa-fire"></i> Manželov plamienok</span>
+              <span id="display-mood-manzel-val">1 - Pokojná romantika 🌹</span>
+            </div>
+            <div class="mood-slider-container" style="margin-top: 0.2rem;">
+              <input type="range" class="mood-slider" id="mood-slider-manzel" min="1" max="10" value="1">
+            </div>
+          </div>
+          <!-- Posuvník Manželky -->
+          <div style="width: 100%;">
+            <div class="mood-tuner-header" style="color: var(--color-manzelka); font-size: 0.85rem;">
+              <span><i class="fa-solid fa-fire"></i> Manželkin plamienok</span>
+              <span id="display-mood-manzelka-val">1 - Pokojná romantika 🌹</span>
+            </div>
+            <div class="mood-slider-container" style="margin-top: 0.2rem;">
+              <input type="range" class="mood-slider" id="mood-slider-manzelka" min="1" max="10" value="1">
+            </div>
+          </div>
+          <!-- Popisky pre oba -->
+          <div class="mood-labels" style="margin-top: -0.4rem; font-size: 0.7rem;">
             <span>Romantika</span>
             <span>Dotyky</span>
             <span>Hravosť</span>
@@ -1506,9 +1587,9 @@
 
   <script>
     // =========================================================================
-    // 1. DATABÁZA 80 ZMYSELNÝCH KARIET A VÝZIEV PRE PÁRY NA DIAĽKU
+    // 1A. DATABÁZA 80 ZMYSELNÝCH KARIET A VÝZIEV PRE PÁRY NA DIAĽKU
     // =========================================================================
-    const QUESTIONS = [
+    const ONLINE_QUESTIONS = [
       // 1-20: Naladenie
       { id: 1, category: "Naladenie", text: "Čo ti na mne najviac chýba, keď sme takto ďaleko od seba?" },
       { id: 2, category: "Naladenie", text: "Spomeň si na naše najromantickejšie spoločné ráno. Čo ho robilo výnimočným?" },
@@ -1599,6 +1680,101 @@
     ];
 
     // =========================================================================
+    // 1B. DATABÁZA 80 ZMYSELNÝCH KARIET A VÝZIEV PRE PÁRY NAŽIVO (KONTAKTNÉ)
+    // =========================================================================
+    const CONTACT_QUESTIONS = [
+      // 1-20: Naladenie (Prepojenie srdcom)
+      { id: 1, category: "Naladenie", text: "Posaďte sa oproti sebe a prepleťte si prsty na rukách. Pozerajte sa jeden druhému do očí bez prerušenia a bez hovorenia po dobu 30 sekúnd." },
+      { id: 2, category: "Naladenie", text: "Zlaďte svoj dych. Položte si ruky na hrudník toho druhého, zatvorte oči a skúste dýchať synchrónne po dobu 1 minúty." },
+      { id: 3, category: "Naladenie", text: "Povedz partnerovi tri veci, za ktoré si mu vo vašom manželstve najviac vďačný/á." },
+      { id: 4, category: "Naladenie", text: "Pobozkaj partnera na čelo a zašepkaj mu kompliment, ktorý si mu ešte nikdy predtým nepovedal/a." },
+      { id: 5, category: "Naladenie", text: "Čo pre teba znamená, keď povieme, že naša láska prekoná akúkoľvek vzdialenosť?" },
+      { id: 6, category: "Naladenie", text: "Opíš moment za posledný mesiac, kedy si sa pri partnerovi cítil/a najbezpečnejšie a najmilovanejšie." },
+      { id: 7, category: "Naladenie", text: "Polož si hlavu na partnerovo rameno alebo hruď a nechaj sa ním pevne objímať 1 minútu. Počúvaj tlukot jeho srdca." },
+      { id: 8, category: "Naladenie", text: "Aká spoločná spomienka ti vždy vráti úsmev na tvár, keď zažívate ťažšie chvíle?" },
+      { id: 9, category: "Naladenie", text: "Zašepkaj partnerovi do ucha jedno slovo, ktoré pre teba symbolizuje náš domov." },
+      { id: 10, category: "Naladenie", text: "Čo na partnerovi najviac oceňuješ v roli tvojho životného partnera?" },
+      { id: 11, category: "Naladenie", text: "Podeľ sa o jednu malú obavu alebo stres, ktorý máš aktuálne v hlave, a nechaj partnera, nech ťa pohladí po ruke ako podporu." },
+      { id: 12, category: "Naladenie", text: "Prejav partnerovi úprimné uznanie za to, ako sa stará o náš vzťah alebo o našu rodinu." },
+      { id: 13, category: "Naladenie", text: "Chyť partnera za tvár oboma rukami a pobozkaj ho jemne na obe líca a na špičku nosa." },
+      { id: 14, category: "Naladenie", text: "Ak by sme mali napísať knihu o našom milostnom príbehu, aký by bol názov prvej a poslednej kapitoly?" },
+      { id: 15, category: "Naladenie", text: "Čo je tá najkrajšia vlastnosť, ktorú si do môjho života priniesol/priniesla a čím ťa to obohacuje?" },
+      { id: 16, category: "Naladenie", text: "Zatvorte obaja oči, držte sa za ruky a povedzte spoločne jedno slovo, ktoré vystihuje váš dnešný spoločný deň." },
+      { id: 17, category: "Naladenie", text: "Povedz partnerovi, v čom ti najviac chýbal za posledný čas a ako veľmi sa tešíš, že ste teraz spolu." },
+      { id: 18, category: "Naladenie", text: "Jemne prejdi prstami po partnerovom obočí, spánkoch a líci. Rob to naozaj pomaly a sústredene." },
+      { id: 19, category: "Naladenie", text: "Čo by si chcel/a, aby sme si navzájom sľúbili pre naše ďalšie spoločné večery, keď sme spolu?" },
+      { id: 20, category: "Naladenie", text: "Doprajte si spoločné dlhé a pevné objatie (aspoň 30 sekúnd), pri ktorom úplne uvoľníte napätie v ramenách a tele." },
+
+      // 21-40: Dotyky (Senzuálne dotyky)
+      { id: 21, category: "Dotyky", text: "Pomaly vyzleč partnerovi jednu časť oblečenia (napr. ponožky, sveter) a pobozkaj čerstvo odhalené miesto." },
+      { id: 22, category: "Dotyky", text: "Chyť partnerovu ruku a pomaly bozkávaj každý jeden prst od končeka až k dlani." },
+      { id: 23, category: "Dotyky", text: "Zatvor oči a nechaj partnera, nech ťa 1 minútu jemne hladí tam, kde to máš najradšej." },
+      { id: 24, category: "Dotyky", text: "Urob partnerovi uvoľňujúcu masáž krku a ramien po dobu 2 minút. Použi jemné krúživé pohyby." },
+      { id: 25, category: "Dotyky", text: "Pomaly prejdi končekmi nechtov po partnerovom chrbte pod tričkom, od krku až po kríže." },
+      { id: 26, category: "Dotyky", text: "Pobozkaj partnera na zadnú časť krku (šiju) a jemne tam fúkni svoj teplý dych." },
+      { id: 27, category: "Dotyky", text: "Chyť partnera za pás, pritiahni si ho k sebe a pobozkaj ho dlhým, zmyselným bozkom bez použitia rúk na jeho tvári." },
+      { id: 28, category: "Dotyky", text: "Urob partnerovi jemnú masáž dlaní a prstov. Môžeš použiť trochu krému alebo oleja, ak ho máte poruke." },
+      { id: 29, category: "Dotyky", text: "Pohlaď partnera po vlasoch a pomaly mu masíruj pokožku hlavy. Sleduj, ako sa pod tvojimi rukami uvoľňuje." },
+      { id: 30, category: "Dotyky", text: "Pobozkaj partnera na miesta, kde najviac pulzuje krv – na zápästia a na oboch stranách krku." },
+      { id: 31, category: "Dotyky", text: "Odtiahni partnerovi vlasy z tváre a pomaly mu prechádzaj prstami po perách a sánke." },
+      { id: 32, category: "Dotyky", text: "Jemne prejdi perami po partnerovom ušnom lalôčiku a zašepkaj mu niečo zvodné." },
+      { id: 33, category: "Dotyky", text: "Pohlaď partnera na vnútornej strane predlaktia a zisti, či mu tým dokážeš vyvolať jemné zimomriavky." },
+      { id: 34, category: "Dotyky", text: "Chyť partnerovu nohu a urob mu zmyselnú masáž chodidla (1 minútu)." },
+      { id: 35, category: "Dotyky", text: "Posaď sa partnerovi na kolená (alebo ho obkroč) a len sa pevne objímte bez slov." },
+      { id: 36, category: "Dotyky", text: "Pobozkaj partnera na kľúčne kosti – zvoľ si na to pomalý, nežný a precítený rytmus." },
+      { id: 37, category: "Dotyky", text: "Prejdi partnerovi prstami po stehnách a zastav sa tesne pred hranicou spodnej bielizne." },
+      { id: 38, category: "Dotyky", text: "Jemne prechádzaj perami a dychom po partnerovej pokožke tváre bez toho, aby si sa jej perami skutočne dotkol/dotkla." },
+      { id: 39, category: "Dotyky", text: "Nechaj partnera, aby ti položil ruku na stehno, a veď jeho ruku na miesto, kde túžiš po jeho dotyku." },
+      { id: 40, category: "Dotyky", text: "Urobte si spoločne zmyselný rituál: nakŕmte sa navzájom kúskom ovocia, čokolády alebo sa napite z jedného pohára." },
+
+      // 41-60: Túžby (Horúce spoznávanie)
+      { id: 41, category: "Túžby", text: "Zaviažte partnerovi oči (napr. šatkou) a dotknite sa ho na troch rôznych miestach tela. Partner musí uhádnuť, čím ste sa ho dotkli (prst, pery, vlasy...)." },
+      { id: 42, category: "Túžby", text: "Zatiaľ čo má partner zaviazané oči, pobozkaj ho na jedno citlivé miesto na tele a čakaj na jeho tichú reakciu." },
+      { id: 43, category: "Túžby", text: "Prezradíš partnerovi, ktoré miesto na tvojom tele túži po bozku práve v tejto sekunde? Partner ti toto prianie ihneď splní." },
+      { id: 44, category: "Túžby", text: "Vyzlečte sa obaja do spodnej bielizne (ak ste tak ešte neurobili) a ľahnite si k sebe tak, aby ste cítili teplo svojej pokožky po celej dĺžke tela." },
+      { id: 45, category: "Túžby", text: "Pomaly prechádzaj kockou ľadu (alebo studeným prstom) po partnerovom dekolte/hrudi, a hneď za ním to miesto zahrej svojimi teplými perami." },
+      { id: 46, category: "Túžby", text: "Preskúmaj prstami partnerovo stehno z vnútornej strany, pohybuj sa veľmi pomaly smerom nahor a sleduj zmeny v jeho dychu." },
+      { id: 47, category: "Túžby", text: "Pobozkaj partnera na bruško, okolo pupka, a prechádzaj jazykom a perami stále nižšie." },
+      { id: 48, category: "Túžby", text: "Zatvor oči a dotykom rúk preskúmaj partnerovu tvár, akoby si ho/ju videl/a úplne prvýkrát v živote." },
+      { id: 49, category: "Túžby", text: "Doprajte si francúzsky bozk, ktorý bude trvať najmenej 30 sekúnd bez akéhokoľvek prerušenia." },
+      { id: 50, category: "Túžby", text: "Ukáž partnerovi jedno citlivé miesto na svojom tele, ktoré pri milovaní často vynechávate, a popros ho, aby ho teraz pomasíroval alebo pobozkal." },
+      { id: 51, category: "Túžby", text: "Ľahni si na chrbát a nechaj partnera, aby ťa obkročil a jemne sa ťa dotýkal bokmi." },
+      { id: 52, category: "Túžby", text: "Chyť partnera jemne za vlasy a pobozkaj ho tak pevne a vášnivo, akoby ste sa videli naposledy v živote." },
+      { id: 53, category: "Túžby", text: "Jemne pohryzkaj partnera na krku alebo ramene (dávaj pozor, aby to bolo príjemné a vzrušujúce)." },
+      { id: 54, category: "Túžby", text: "Prejdi perami po partnerovom dekolte a urob mu/jej tam malý, zmyselný bozk so satím (cucflek len ak partner výslovne súhlasí!)." },
+      { id: 55, category: "Túžby", text: "Polož si ruku na partnerov podbrušok a cíť jeho/jej teplo, kým sa zhlboka pozeráte do očí." },
+      { id: 56, category: "Túžby", text: "Partner leží so zatvorenými očami a ty ho pomaly bozkávaš od pier, cez bradu, krk až po hruď." },
+      { id: 57, category: "Túžby", text: "Opíš partnerovi presne to, ako ťa jeho dotyky vzrušujú a čo v tejto sekunde cítiš vo svojom tele." },
+      { id: 58, category: "Túžby", text: "Vymeňte si spodnú bielizeň (ak je to možné a vtipné) alebo pomôž partnerovi vyzliecť jeho spodnú bielizeň len pomocou zubov." },
+      { id: 59, category: "Túžby", text: "Jemne fúkni studený dych na teplú pokožku partnera na mieste, ktoré si sám/sama vyberieš." },
+      { id: 60, category: "Túžby", text: "Posaďte sa tak, aby sa vaše telá dotýkali intímnymi partiami cez oblečenie, a jemne sa o seba otierajte po dobu 1 minúty." },
+
+      // 61-80: Horúce (Vášnivé výzvy)
+      { id: 61, category: "Horúce", text: "Masáž olejom: Nanes na partnerov chrbát alebo hrudník trochu masážneho oleja a zmyselne ho pomasíruj." },
+      { id: 62, category: "Horúce", text: "Prevezmi plnú kontrolu: Urči partnerovi polohu, v ktorej bude ležať, a 1 minútu sa s ním hraj, zatiaľ čo sa on/ona nesmie pohnúť." },
+      { id: 63, category: "Horúce", text: "Zvodný tanec: Zatancuj partnerovi krátky zvodný tanec (30 sekúnd), pričom svetlo v izbe bude veľmi tlmené." },
+      { id: 64, category: "Horúce", text: "Teasing: Dotýkaj sa partnera na intímnych miestach, ale v momente, keď uvidíš, že je veľmi vzrušený/á, prestaň a pobozkaj ho/ju len na pery." },
+      { id: 65, category: "Horúce", text: "Urob partnerovi masáž vnútorných stehien len s použitím svojich pier a jazyka." },
+      { id: 66, category: "Horúce", text: "Povedz partnerovi šeptom do ucha tú najodvážnejšiu fantáziu, ktorú o ňom/nej máš, a začni ju hneď čiastočne realizovať." },
+      { id: 67, category: "Horúce", text: "Vyzleč partnera úplne donaha. Urob to pomaly, sprevádzaj to bozkami a pochvalou na každú odhalenú časť tela." },
+      { id: 68, category: "Horúce", text: "Pomilujte sa v polohe, ktorú vyberie ten, kto je momentálne na rade (ak ste na to obaja v tejto chvíli naladení)." },
+      { id: 69, category: "Horúce", text: "Prejdi perami a jazykom po partnerovej chrbtici od krku až po driek." },
+      { id: 70, category: "Horúce", text: "Nechaj sa partnerom zviazať (napr. ruky opaskom alebo šatkou) a nechaj ho, nech sa s tebou hrá podľa svojich predstáv." },
+      { id: 71, category: "Horúce", text: "Bozkávaj partnera tak hlboko, až stratíte dych. Opakujte to trikrát za sebou." },
+      { id: 72, category: "Horúce", text: "Začni partnera zmyselne vyzliekať pomocou zubov." },
+      { id: 73, category: "Horúce", text: "Zvoľ si rolu dominantného a submisívneho partnera na nasledujúce 3 minúty a správajte sa podľa toho." },
+      { id: 74, category: "Horúce", text: "Pobozkaj partnera na pery a zároveň sa jemne dotýkaj jeho/jej najcitlivejšej zóny." },
+      { id: 75, category: "Horúce", text: "Ukáž partnerovi pohybom panvy, čo by si s ním/ňou chcel/a teraz robiť." },
+      { id: 76, category: "Horúce", text: "Povedz partnerovi presne, ako sa má dotýkať sám seba, zatiaľ čo sa ty budeš pozerať z bezprostrednej blízkosti." },
+      { id: 77, category: "Horúce", text: "Zhlboka pobozkaj partnera a do úst mu prenes kúsok teplého nápoja alebo kocku ľadu." },
+      { id: 78, category: "Horúce", text: "Prejdi partnerovi rukami po celom tele a zisti, kde má najväčšie napätie, ktoré môžeš bozkom uvoľniť." },
+      { id: 79, category: "Horúce", text: "Prešepkaj partnerovi tri zmyselné príkazy, ktoré ti musí v najbližších minútach bezpodmienečne splniť." },
+      { id: 80, category: "Horúce", text: "Dajte voľný priebeh svojej vášnivej túžbe. Táto karta znamená začiatok vášho nerušeného intímneho splynutia..." }
+    ];
+
+    let QUESTIONS = ONLINE_QUESTIONS; // Dynamicky prepínané podľa typu hry
+
+    // =========================================================================
     // 2. KONFIGURÁCIA A STAV REÁLNEHO ČASU (FIREBASE)
     // =========================================================================
     const firebaseConfig = {
@@ -1616,6 +1792,8 @@
 
     // Lokálny stav hry
     const state = {
+      gameType: 'remote',    // 'remote' alebo 'physical'
+      currentTurn: 'manzel', // 'manzel' alebo 'manzelka' v režime spolu
       myRole: '',            // 'manzel' alebo 'manzelka'
       roomCode: '',          // Kód miestnosti (napr. "SRDCE")
       isDemoMode: true,      // fallback na offline demo, ak nie je Firebase
@@ -1687,12 +1865,39 @@
     }
 
     function setupUI() {
+      setGameType('remote');
       document.getElementById('screen-lobby').style.display = 'flex';
       document.getElementById('screen-atmosphere').style.display = 'none';
       document.getElementById('screen-game').style.display = 'none';
     }
 
+    function setGameType(type) {
+      state.gameType = type;
+      document.getElementById('tab-type-remote').classList.toggle('active', type === 'remote');
+      document.getElementById('tab-type-physical').classList.toggle('active', type === 'physical');
+      
+      const remoteSetup = document.getElementById('remote-setup-area');
+      const lobbyTitle = document.getElementById('lobby-main-title');
+      const lobbySubtitle = document.getElementById('lobby-sub-title');
+      
+      if (type === 'remote') {
+        remoteSetup.style.display = 'block';
+        lobbyTitle.textContent = "Intímne chvíle na diaľku";
+        lobbySubtitle.textContent = "Prehĺbte svoje prepojenie, otvorte tajné komnaty svojich túžob a dotknite sa slovami, aj keď ste ďaleko jeden od druhého.";
+        document.getElementById('btn-enter-room').innerHTML = '<i class="fas fa-feather-pointed"></i> Vstúpiť do izby lásky';
+      } else {
+        remoteSetup.style.display = 'none';
+        lobbyTitle.textContent = "Láskanie v objatí";
+        lobbySubtitle.textContent = "Zmyselná kontaktná hra pre spoločné intímne chvíle za zatvorenými dverami. Pripravte sa na vlnu vzájomných dotykov.";
+        document.getElementById('btn-enter-room').innerHTML = '<i class="fas fa-fire"></i> Spustiť hru pre dvoch';
+      }
+    }
+
     function setupEventListeners() {
+      // Prepínanie typov hry v lobby
+      document.getElementById('tab-type-remote').addEventListener('click', () => setGameType('remote'));
+      document.getElementById('tab-type-physical').addEventListener('click', () => setGameType('physical'));
+
       // Výber roly (Manžel / Manželka)
       document.querySelectorAll('.role-btn').forEach(btn => {
         btn.addEventListener('click', () => {
@@ -1704,6 +1909,10 @@
 
       // Vstup do izby (Spustí prípravu atmosféry)
       document.getElementById('btn-enter-room').addEventListener('click', () => {
+        if (state.gameType === 'physical') {
+          startAtmosphereWorkflow('SPOLU');
+          return;
+        }
         const rawCode = document.getElementById('room-code-input').value.trim();
         if (!state.myRole) {
           showToast("Prosím, zvoľte si najprv svoju rolu (Manžel alebo Manželka)!");
@@ -1717,12 +1926,6 @@
         startAtmosphereWorkflow(cleanCode);
       });
 
-      // Kontrola checklistu na potvrdenie pripravenosti
-      const checkBoxes = ['check-privacy', 'check-lighting', 'check-drink', 'check-mood'];
-      checkBoxes.forEach(id => {
-        document.getElementById(id).addEventListener('change', checkChecklistCompletion);
-      });
-
       // Tlačidlo pre potvrdenie pripravenosti
       document.getElementById('btn-ready-confirm').addEventListener('click', confirmMyReadyStatus);
 
@@ -1734,16 +1937,24 @@
 
       // Kopírovanie kódu izby kliknutím
       document.getElementById('display-room-code').addEventListener('click', () => {
+        if (state.gameType === 'physical') return;
         navigator.clipboard.writeText(state.roomCode).then(() => {
           showToast(`Kód izby ${state.roomCode} bol skopírovaný!`);
         });
       });
 
       // Zmena Plamienka túžby (Náladometer)
-      const moodSlider = document.getElementById('mood-range-slider');
-      moodSlider.addEventListener('input', (e) => {
+      document.getElementById('mood-range-slider').addEventListener('input', (e) => {
         const val = parseInt(e.target.value);
         updateMyMoodFlame(val);
+      });
+
+      document.getElementById('mood-slider-manzel').addEventListener('input', (e) => {
+        updatePartnerMoodFlame('manzel', parseInt(e.target.value));
+      });
+
+      document.getElementById('mood-slider-manzelka').addEventListener('input', (e) => {
+        updatePartnerMoodFlame('manzelka', parseInt(e.target.value));
       });
 
       // Prepínanie režimov (Live / Async)
@@ -1764,18 +1975,868 @@
         });
       });
 
-      // Akcia: Ťahať novú zmyselnú kartu
+      // Akcie
       document.getElementById('btn-draw-card').addEventListener('click', drawRandomCard);
-
-      // Akcia: PAS (Preskočiť tému)
       document.getElementById('btn-pass-card').addEventListener('click', passCurrentCard);
-
-      // Akcia: Uzamknúť tajomstvo do trezoru
       document.getElementById('btn-vault-submit').addEventListener('click', submitMySecret);
-
-      // Akcia: Reset Trezoru
       document.getElementById('btn-vault-reset').addEventListener('click', resetSecretVault);
     }
+
+    // =========================================================================
+    // 4. KROK 1: ATMOSFÉRA WORKFLOW (CHECKLIST)
+    // =========================================================================
+    const REMOTE_CHECKLIST = [
+      "Mám vytvorené úplné súkromie a viem, že nás nikto nebude rušiť 🚪",
+      "Naladil/a som svetlo (zapálená sviečka, šero alebo tlmené osvetlenie) 🕯️",
+      "Mám pripravený obľúbený nápoj (pohár vína, čaj, čerstvú vodu) 🍷",
+      "Som rozhodnutý/á venovať tento čas naplno svojej polovičke a počúvať bez hodnotenia ❤️"
+    ];
+
+    const PHYSICAL_CHECKLIST = [
+      "Máme vytvorené úplné súkromie a dvere sú bezpečne zatvorené a zamknuté 🚪",
+      "Zapálili sme sviečku, pustili hudbu a stlmili svetlá v izbe 🕯️🎵",
+      "Máme pripravený zmyselný nápoj, masážny olej alebo iné zmyselné pomôcky 🍷🧴",
+      "Sme naladení spomaliť a venovať tento čas výhradne jeden druhému ❤️"
+    ];
+
+    function renderChecklist() {
+      const container = document.getElementById('prep-checklist-container');
+      container.innerHTML = '';
+      
+      const list = state.gameType === 'remote' ? REMOTE_CHECKLIST : PHYSICAL_CHECKLIST;
+      list.forEach((text, index) => {
+        const label = document.createElement('label');
+        label.className = 'check-item';
+        label.innerHTML = `
+          <input type="checkbox" id="check-item-${index}">
+          <span class="check-text">${text}</span>
+        `;
+        label.querySelector('input').addEventListener('change', checkChecklistCompletion);
+        container.appendChild(label);
+      });
+      document.getElementById('btn-ready-confirm').disabled = true;
+    }
+
+    function checkChecklistCompletion() {
+      const checkboxes = document.querySelectorAll('#prep-checklist-container input[type="checkbox"]');
+      let allChecked = true;
+      checkboxes.forEach(cb => {
+        if (!cb.checked) allChecked = false;
+      });
+      document.getElementById('btn-ready-confirm').disabled = !allChecked || checkboxes.length === 0;
+    }
+
+    function startAtmosphereWorkflow(roomCode) {
+      state.roomCode = roomCode;
+      const hasFirebase = initFirebase();
+
+      document.getElementById('screen-lobby').style.display = 'none';
+      document.getElementById('screen-atmosphere').style.display = 'flex';
+
+      // Dynamické vykreslenie checklistu
+      renderChecklist();
+
+      // Reset pripravenosti
+      state.prepReady = { manzel: false, manzelka: false };
+
+      if (state.gameType === 'physical') {
+        document.getElementById('prep-status-box-container').style.display = 'none';
+        state.isDemoMode = true;
+        return;
+      }
+
+      document.getElementById('prep-status-box-container').style.display = 'flex';
+      renderAtmosphereStatusBadges();
+
+      if (hasFirebase) {
+        state.isDemoMode = false;
+        showToast(`Pripájanie do izby: ${roomCode}...`);
+
+        atmosphereRef = db.ref(`rooms/${roomCode}/laskanieAtmosphere`);
+        atmosphereRef.on('value', (snapshot) => {
+          const val = snapshot.val() || {};
+          state.prepReady = { manzel: !!val.manzel, manzelka: !!val.manzelka };
+          renderAtmosphereStatusBadges();
+
+          if (state.prepReady.manzel && state.prepReady.manzelka) {
+            atmosphereRef.off();
+            joinRoomWorkflow(roomCode, false);
+          }
+        });
+      } else {
+        state.isDemoMode = true;
+        showToast("Demo režim: Firebase nie je pripojený. Hráte offline.");
+        renderAtmosphereStatusBadges();
+      }
+    }
+
+    function confirmMyReadyStatus() {
+      if (state.gameType === 'physical') {
+        showToast("Atmosféra je pripravená! Spúšťam zmyselnú hru... 🕯️");
+        setTimeout(() => {
+          joinRoomWorkflow('SPOLU', true);
+        }, 1000);
+        return;
+      }
+
+      if (state.isDemoMode) {
+        state.prepReady[state.myRole] = true;
+        renderAtmosphereStatusBadges();
+        showToast("Si pripravený/á! V Demo režime ťa prepíname rovno do hry.");
+        setTimeout(() => {
+          joinRoomWorkflow(state.roomCode, true);
+        }, 1000);
+      } else {
+        myAtmosphereRef = db.ref(`rooms/${state.roomCode}/laskanieAtmosphere/${state.myRole}`);
+        myAtmosphereRef.set(true);
+        myAtmosphereRef.onDisconnect().remove();
+        showToast("Nastavenie uložené. Čaká sa na pripravenosť partnera... 🕯️");
+      }
+    }
+
+    function renderAtmosphereStatusBadges() {
+      const badgeMe = document.getElementById('status-badge-me');
+      const badgePartner = document.getElementById('status-badge-partner');
+      const partnerRole = state.myRole === 'manzel' ? 'manzelka' : 'manzel';
+
+      if (state.prepReady[state.myRole]) {
+        badgeMe.className = "status-badge ready";
+        badgeMe.innerHTML = '<i class="fas fa-check-circle"></i> Pripravený/á';
+      } else {
+        badgeMe.className = "status-badge not-ready";
+        badgeMe.innerHTML = '<i class="fas fa-clock"></i> Čaká sa';
+      }
+
+      if (state.prepReady[partnerRole]) {
+        badgePartner.className = "status-badge ready";
+        badgePartner.innerHTML = `<i class="fas fa-check-circle"></i> ${partnerRole === 'manzel' ? 'Pripravený' : 'Pripravená'}`;
+      } else {
+        badgePartner.className = "status-badge not-ready";
+        badgePartner.innerHTML = '<i class="fas fa-clock"></i> Čaká sa';
+      }
+    }
+
+    function leaveAtmosphereWorkflow() {
+      if (myAtmosphereRef) { myAtmosphereRef.remove(); myAtmosphereRef = null; }
+      if (atmosphereRef) { atmosphereRef.off(); atmosphereRef = null; }
+      setupUI();
+    }
+
+    // =========================================================================
+    // 5. KROK 2: VSTUP DO HERNÉHO PRESTREDIA
+    // =========================================================================
+    function joinRoomWorkflow(roomCode, isCreatingNew) {
+      state.roomCode = roomCode;
+      
+      // Nastavenie správnej databázy kariet podľa typu hry
+      QUESTIONS = state.gameType === 'physical' ? CONTACT_QUESTIONS : ONLINE_QUESTIONS;
+
+      document.getElementById('screen-atmosphere').style.display = 'none';
+      document.getElementById('screen-lobby').style.display = 'none';
+      document.getElementById('screen-game').style.display = 'flex';
+
+      if (state.gameType === 'physical') {
+        state.isDemoMode = true;
+        state.presence = { manzel: true, manzelka: true };
+        state.currentCardId = 0;
+        state.skipped = false;
+        state.currentTurn = 'manzel'; // Manžel začína
+        state.flameLevels = { manzel: 1, manzelka: 1 };
+        
+        document.getElementById('mood-slider-manzel').value = 1;
+        document.getElementById('mood-slider-manzelka').value = 1;
+        updatePartnerMoodFlame('manzel', 1);
+        updatePartnerMoodFlame('manzelka', 1);
+
+        renderPresenceIndicators();
+        renderTurnIndicator();
+        renderMoodSliders();
+        renderSecretVault();
+        renderGameInterface(true);
+        return;
+      }
+
+      const hasFirebase = initFirebase();
+      document.getElementById('display-room-code').innerHTML = `KÓD: ${roomCode} <i class="fas fa-copy" style="font-size: 0.75rem;"></i>`;
+
+      if (hasFirebase) {
+        state.isDemoMode = false;
+
+        myPresenceRef = db.ref(`rooms/${roomCode}/laskaniePresence/${state.myRole}`);
+        myPresenceRef.set(true);
+        myPresenceRef.onDisconnect().remove();
+
+        presenceRef = db.ref(`rooms/${roomCode}/laskaniePresence`);
+        presenceRef.on('value', (snapshot) => {
+          const val = snapshot.val() || {};
+          state.presence = { manzel: !!val.manzel, manzelka: !!val.manzelka };
+          renderPresenceIndicators();
+        });
+
+        infoRef = db.ref(`rooms/${roomCode}/laskanieInfo`);
+        if (isCreatingNew || state.myRole === 'manzel') { 
+          infoRef.transaction((currentData) => {
+            if (currentData === null) {
+              return {
+                mode: 'live',
+                currentCardId: 0,
+                skipped: false,
+                categoryFilter: 'all',
+                lastUpdated: firebase.database.ServerValue.TIMESTAMP
+              };
+            }
+            return;
+          });
+        }
+
+        infoRef.on('value', (snapshot) => {
+          const val = snapshot.val();
+          if (val) {
+            const cardChanged = state.currentCardId !== val.currentCardId;
+            const skipChanged = state.skipped !== val.skipped;
+            state.mode = val.mode || 'live';
+            state.currentCardId = val.currentCardId || 0;
+            state.skipped = val.skipped || false;
+            state.categoryFilter = val.categoryFilter || 'all';
+
+            document.querySelectorAll('.category-tab-btn').forEach(b => {
+              b.classList.toggle('active', b.dataset.category === state.categoryFilter);
+            });
+
+            document.querySelectorAll('.mode-tab-btn').forEach(b => {
+              b.classList.toggle('active', b.dataset.gameMode === state.mode);
+            });
+
+            if (cardChanged) setupAnswersListener();
+            renderGameInterface(cardChanged || skipChanged);
+          }
+        });
+
+        myFlameRef = db.ref(`rooms/${roomCode}/laskanieFlame/${state.myRole}`);
+        myFlameRef.onDisconnect().remove();
+
+        flameRef = db.ref(`rooms/${roomCode}/laskanieFlame`);
+        flameRef.on('value', (snapshot) => {
+          const val = snapshot.val() || {};
+          state.flameLevels = {
+            manzel: val.manzel || 1,
+            manzelka: val.manzelka || 1
+          };
+          renderMoodFlameComparison();
+        });
+
+        mySecretsRef = db.ref(`rooms/${roomCode}/laskanieSecrets/${state.myRole}`);
+        
+        secretsRef = db.ref(`rooms/${roomCode}/laskanieSecrets`);
+        secretsRef.on('value', (snapshot) => {
+          const val = snapshot.val() || {};
+          state.secrets = {
+            manzel: val.manzel || '',
+            manzelka: val.manzelka || ''
+          };
+          renderSecretVault();
+        });
+
+      } else {
+        startLocalDemoMode();
+      }
+    }
+
+    function startLocalDemoMode() {
+      state.isDemoMode = true;
+      state.presence = { manzel: false, manzelka: false };
+      state.presence[state.myRole] = true;
+      showToast(`Lokálne demo v izbe: ${state.roomCode}`);
+      renderPresenceIndicators();
+      renderTurnIndicator();
+      renderMoodSliders();
+      renderMoodFlameComparison();
+      renderGameInterface(true);
+      renderSecretVault();
+    }
+
+    function leaveRoomWorkflow() {
+      if (myPresenceRef) { myPresenceRef.remove(); myPresenceRef = null; }
+      if (presenceRef) { presenceRef.off(); presenceRef = null; }
+      if (infoRef) { infoRef.off(); infoRef = null; }
+      if (myAtmosphereRef) { myAtmosphereRef.remove(); myAtmosphereRef = null; }
+      if (atmosphereRef) { atmosphereRef.off(); atmosphereRef = null; }
+      if (myFlameRef) { myFlameRef.remove(); myFlameRef = null; }
+      if (flameRef) { flameRef.off(); flameRef = null; }
+      if (mySecretsRef) { mySecretsRef = null; }
+      if (secretsRef) { secretsRef.off(); secretsRef = null; }
+      if (answersRef) { answersRef.off(); answersRef = null; }
+
+      state.roomCode = '';
+      state.currentCardId = 0;
+      state.skipped = false;
+      state.answers = {};
+      state.secrets = { manzel: '', manzelka: '' };
+
+      document.getElementById('mood-range-slider').value = 1;
+      updateMyMoodFlame(1);
+
+      setupUI();
+      showToast("Opustili ste izbu lásky.");
+    }
+
+    // =========================================================================
+    // 6. RENDER INTERFACE (SYNCHRONIZÁCIA A ZOBRAZOVANIE)
+    // =========================================================================
+    function renderPresenceIndicators() {
+      const container = document.getElementById('presence-indicators');
+      const roles = ['manzel', 'manzelka'];
+      roles.forEach(role => {
+        const item = container.querySelector(`[data-presence-role="${role}"]`);
+        if (item) {
+          item.classList.toggle('online', state.presence[role]);
+        }
+      });
+    }
+
+    function renderTurnIndicator() {
+      const bar = document.getElementById('game-turn-bar');
+      const text = document.getElementById('game-turn-text');
+      if (state.gameType === 'physical') {
+        bar.style.display = 'block';
+        const roleName = state.currentTurn === 'manzel' ? 'Manžel' : 'Manželka';
+        const roleColorClass = state.currentTurn === 'manzel' ? 'manzel' : 'manzelka';
+        
+        bar.className = `turn-indicator-bar ${roleColorClass}`;
+        text.innerHTML = `Na rade je: <strong class="answer-author ${roleColorClass}">${roleName}</strong> 
+          <span style="font-size: 0.8rem; font-weight: normal; color: var(--text-muted);">
+            (vykonáva úlohu alebo odpovedá)
+          </span>`;
+      } else {
+        bar.style.display = 'none';
+      }
+    }
+
+    function renderMoodSliders() {
+      const single = document.getElementById('mood-tuner-single');
+      const double = document.getElementById('mood-tuner-double');
+      if (state.gameType === 'physical') {
+        single.style.display = 'none';
+        double.style.display = 'flex';
+      } else {
+        single.style.display = 'block';
+        double.style.display = 'none';
+      }
+    }
+
+    function renderGameInterface(shouldAnimateCard) {
+      const card = document.getElementById('game-card');
+      const categoryBadge = document.getElementById('card-category-name');
+      const qNumber = document.getElementById('card-question-number');
+      const qText = document.getElementById('card-question-text');
+      const textWrapper = document.getElementById('card-text-wrapper');
+      const skippedWrapper = document.getElementById('card-skipped-wrapper');
+      const answersPanel = document.getElementById('answers-panel-section');
+
+      // Toggles pre fyzický a remote režim
+      const isPhysical = state.gameType === 'physical';
+      document.getElementById('display-room-code').style.display = isPhysical ? 'none' : 'flex';
+      document.getElementById('presence-indicators').style.display = isPhysical ? 'none' : 'flex';
+      document.querySelector('.mode-tab-bar').style.display = isPhysical ? 'none' : 'grid';
+      document.getElementById('card-footer-text').textContent = isPhysical ? "Láskanie - Spolu v objatí" : "Láskanie - Spojenie na diaľku";
+
+      if (shouldAnimateCard) {
+        card.style.transform = 'scale(0.96) rotateX(10deg)';
+        card.style.opacity = '0.7';
+      }
+
+      setTimeout(() => {
+        if (state.currentCardId === 0) {
+          categoryBadge.className = "card-category-badge cat-naladenie";
+          categoryBadge.textContent = "Naladenie";
+          qNumber.textContent = "Úvod";
+          qText.textContent = isPhysical 
+            ? "Položte spoločne telefón pred seba, ťahajte prvú kartu a nechajte sa striedavo sprevádzať zmyselnými dotykmi..."
+            : "Ťahajte prvú kartu a nechajte sa unášať prítomnosťou toho druhého...";
+          textWrapper.style.display = 'block';
+          skippedWrapper.style.display = 'none';
+          card.classList.remove('glowing-card');
+        } else {
+          const currentCard = QUESTIONS.find(q => q.id === state.currentCardId);
+          if (currentCard) {
+            if (state.skipped) {
+              textWrapper.style.display = 'none';
+              skippedWrapper.style.display = 'flex';
+              categoryBadge.textContent = "Preskočené";
+              categoryBadge.className = "card-category-badge";
+              qNumber.textContent = `Karta #${currentCard.id}`;
+              card.classList.remove('glowing-card');
+            } else {
+              textWrapper.style.display = 'block';
+              skippedWrapper.style.display = 'none';
+              qText.textContent = currentCard.text;
+              qNumber.textContent = `Karta #${currentCard.id}`;
+              
+              const catClass = currentCard.category.toLowerCase();
+              
+              // Mapovanie názvu kategórie pre fyzický režim
+              if (isPhysical) {
+                const physicalCatNames = {
+                  'naladenie': 'Prepojenie srdcom 🌹',
+                  'dotyky': 'Senzuálne dotyky 🕯️',
+                  'túžby': 'Horúce spoznávanie 💋',
+                  'horúce': 'Vášnivé výzvy 🔥'
+                };
+                categoryBadge.textContent = physicalCatNames[catClass] || currentCard.category;
+              } else {
+                categoryBadge.textContent = currentCard.category;
+              }
+
+              categoryBadge.className = `card-category-badge cat-${catClass}`;
+
+              if (catClass === 'horúce') {
+                card.classList.add('glowing-card');
+              } else {
+                card.classList.remove('glowing-card');
+              }
+            }
+          }
+        }
+
+        if (state.mode === 'async' && state.currentCardId > 0 && !state.skipped && !isPhysical) {
+          answersPanel.style.display = 'block';
+          renderAnswersPanel();
+        } else {
+          answersPanel.style.display = 'none';
+        }
+
+        if (shouldAnimateCard) {
+          card.style.transform = 'scale(1) rotateX(0)';
+          card.style.opacity = '1';
+        }
+      }, shouldAnimateCard ? 150 : 0);
+    }
+
+    // =========================================================================
+    // 7. NÁLADOMETER (PLAMIENOK TÚŽBY) LOGIKA
+    // =========================================================================
+    function updateMyMoodFlame(val) {
+      const display = document.getElementById('display-my-mood-val');
+      let text = '';
+      if (val <= 3) text = `${val} - Pokojná romantika 🌹`;
+      else if (val <= 6) text = `${val} - Zmyselné naladenie 💋`;
+      else if (val <= 8) text = `${val} - Hravá iskra ✨`;
+      else text = `${val} - Divoká vášeň 🔥`;
+      
+      display.textContent = text;
+      state.flameLevels[state.myRole] = val;
+
+      if (!state.isDemoMode && myFlameRef) {
+        myFlameRef.set(val);
+      } else {
+        renderMoodFlameComparison();
+      }
+    }
+
+    function updatePartnerMoodFlame(role, val) {
+      state.flameLevels[role] = val;
+      const displayId = role === 'manzel' ? 'display-mood-manzel-val' : 'display-mood-manzelka-val';
+      const display = document.getElementById(displayId);
+      
+      let text = '';
+      if (val <= 3) text = `${val} - Romantika 🌹`;
+      else if (val <= 6) text = `${val} - Dotyky 💋`;
+      else if (val <= 8) text = `${val} - Hravosť ✨`;
+      else text = `${val} - Vášeň 🔥`;
+      
+      display.textContent = text;
+      renderMoodFlameComparison();
+    }
+
+    function renderMoodFlameComparison() {
+      const mVal = state.flameLevels.manzel;
+      const fVal = state.flameLevels.manzelka;
+
+      document.getElementById('mood-val-manzel').textContent = mVal;
+      document.getElementById('mood-val-manzelka').textContent = fVal;
+
+      const mIcon = document.getElementById('flame-manzel-icon');
+      const fIcon = document.getElementById('flame-manzelka-icon');
+
+      mIcon.style.transform = `scale(${1 + mVal * 0.12})`;
+      fIcon.style.transform = `scale(${1 + fVal * 0.12})`;
+
+      const getFlameColor = (val) => {
+        if (val <= 3) return '#e0a96d'; // Gold
+        if (val <= 6) return '#ff7e5f'; // Soft orange
+        if (val <= 8) return '#ff4e50'; // Red orange
+        return '#ef4444'; // Hot red
+      };
+
+      mIcon.style.color = getFlameColor(mVal);
+      fIcon.style.color = getFlameColor(fVal);
+    }
+
+    // =========================================================================
+    // 8. ŤAHANIE KARIET A PAS LOGIKA
+    // =========================================================================
+    function drawRandomCard() {
+      let pool = QUESTIONS;
+      if (state.categoryFilter !== 'all') {
+        const catMap = {
+          'naladenie': 'Naladenie',
+          'túžby': 'Túžby',
+          'dotyky': 'Dotyky',
+          'horúce': 'Horúce'
+        };
+        pool = QUESTIONS.filter(q => q.category === catMap[state.categoryFilter]);
+      }
+
+      if (pool.length === 0) return;
+
+      let randomIndex = Math.floor(Math.random() * pool.length);
+      let newCard = pool[randomIndex];
+
+      if (pool.length > 1 && newCard.id === state.currentCardId) {
+        newCard = pool[(randomIndex + 1) % pool.length];
+      }
+
+      // Pre striedanie ťahov v kontaktnom režime spolu
+      if (state.gameType === 'physical') {
+        state.currentTurn = state.currentTurn === 'manzel' ? 'manzelka' : 'manzel';
+        renderTurnIndicator();
+      }
+
+      if (state.isDemoMode) {
+        state.currentCardId = newCard.id;
+        state.skipped = false;
+        state.answers = {};
+        renderGameInterface(true);
+      } else {
+        db.ref(`rooms/${state.roomCode}/laskanieAnswers/${newCard.id}`).remove();
+        
+        infoRef.update({
+          currentCardId: newCard.id,
+          skipped: false,
+          lastUpdated: firebase.database.ServerValue.TIMESTAMP
+        });
+      }
+      showToast("Ťahám novú kartu...");
+    }
+
+    function passCurrentCard() {
+      if (state.currentCardId === 0) return;
+      if (state.isDemoMode) {
+        state.skipped = true;
+        renderGameInterface(true);
+      } else {
+        infoRef.update({
+          skipped: true,
+          lastUpdated: firebase.database.ServerValue.TIMESTAMP
+        });
+      }
+      showToast("Téma bola preskočená.");
+    }
+
+    function setCategoryFilter(category) {
+      if (state.isDemoMode) {
+        state.categoryFilter = category;
+        showToast(`Filtrujem kategóriu: ${category}`);
+      } else {
+        infoRef.update({
+          categoryFilter: category,
+          lastUpdated: firebase.database.ServerValue.TIMESTAMP
+        });
+      }
+    }
+
+    function setRoomMode(mode) {
+      if (state.isDemoMode) {
+        state.mode = mode;
+        renderGameInterface(true);
+        showToast(`Prepnuté do režimu: ${mode === 'live' ? 'Naživo' : 'Naše tempo'}`);
+      } else {
+        infoRef.update({
+          mode: mode,
+          lastUpdated: firebase.database.ServerValue.TIMESTAMP
+        });
+      }
+    }
+
+    // =========================================================================
+    // 9. ASYNCHRÓNNE ODPOVEDE (NAŠE TEMPO) LOGIKA
+    // =========================================================================
+    function setupAnswersListener() {
+      if (answersRef) answersRef.off();
+      state.answers = {};
+      
+      if (state.isDemoMode || !state.currentCardId) { 
+        renderAnswersPanel(); 
+        return; 
+      }
+      
+      answersRef = db.ref(`rooms/${state.roomCode}/laskanieAnswers/${state.currentCardId}`);
+      answersRef.on('value', (snapshot) => {
+        state.answers = snapshot.val() || {};
+        renderAnswersPanel();
+      });
+    }
+
+    function submitMyAnswer(text) {
+      const clean = text.trim();
+      if (!clean) return;
+      
+      if (state.isDemoMode) {
+        state.answers[state.myRole] = clean;
+        renderAnswersPanel();
+      } else {
+        db.ref(`rooms/${state.roomCode}/laskanieAnswers/${state.currentCardId}/${state.myRole}`).set(clean);
+      }
+      showToast("Odpoveď bola zaznamenaná.");
+    }
+
+    function renderAnswersPanel() {
+      const container = document.getElementById('answers-container');
+      container.innerHTML = '';
+
+      const roles = ['manzel', 'manzelka'];
+      
+      roles.forEach(role => {
+        const isMe = role === state.myRole;
+        const authorName = role === 'manzel' ? 'Manžel' : 'Manželka';
+        const answerText = state.answers[role];
+        const hasAnswered = !!answerText;
+        const hasMyAnswer = !!state.answers[state.myRole];
+
+        const block = document.createElement('div');
+        block.className = `answer-block ${role}`;
+
+        const header = document.createElement('div');
+        header.className = 'answer-header';
+
+        const authorSpan = document.createElement('span');
+        authorSpan.className = `answer-author ${role}`;
+        authorSpan.textContent = authorName;
+        header.appendChild(authorSpan);
+        block.appendChild(header);
+
+        const body = document.createElement('div');
+
+        if (isMe) {
+          if (hasAnswered) {
+            body.innerHTML = `<p class="answer-content">${escapeHTML(answerText)}</p>`;
+          } else {
+            const compose = document.createElement('div');
+            compose.className = 'answer-compose-area';
+            
+            const textarea = document.createElement('textarea');
+            textarea.className = 'answer-textarea';
+            textarea.placeholder = "Sem napíš svoju intímnu odpoveď polovičke...";
+            
+            const submitBtn = document.createElement('button');
+            submitBtn.className = 'btn-primary';
+            submitBtn.style.padding = '0.5rem 1rem';
+            submitBtn.style.fontSize = '0.85rem';
+            submitBtn.style.alignSelf = 'flex-end';
+            submitBtn.innerHTML = '<i class="fas fa-paper-plane"></i> Odoslať';
+            
+            submitBtn.addEventListener('click', () => {
+              submitMyAnswer(textarea.value);
+            });
+
+            compose.appendChild(textarea);
+            compose.appendChild(submitBtn);
+            body.appendChild(compose);
+          }
+        } else {
+          if (!hasAnswered) {
+            body.innerHTML = `<p class="answer-empty">Čaká sa na intímnu odpoveď partnera... 💬</p>`;
+          } else {
+            if (hasMyAnswer) {
+              body.innerHTML = `<p class="answer-content">${escapeHTML(answerText)}</p>`;
+            } else {
+              body.innerHTML = `
+                <div class="answer-locked">
+                  <i class="fas fa-lock"></i>
+                  <span>Odpoveď partnera je uzamknutá. Odomkne sa v momente, keď odošleš svoju odpoveď.</span>
+                </div>
+              `;
+            }
+          }
+        }
+
+        block.appendChild(body);
+        container.appendChild(block);
+      });
+    }
+
+    // =========================================================================
+    // 10. TREZOR TAJOMSTIEV (LOGIKA SÚČASNÉHO ODHALENIA)
+    // =========================================================================
+    function submitMySecret() {
+      const text = document.getElementById('vault-my-text').value.trim();
+      if (!text) {
+        showToast("Nemôžeš uzamknúť prázdny trezor!");
+        return;
+      }
+
+      if (state.gameType === 'physical') {
+        if (!state.secrets.manzel) {
+          state.secrets.manzel = text;
+          showToast("Manželovo tajomstvo bolo uzamknuté 🔒");
+        } else if (!state.secrets.manzelka) {
+          state.secrets.manzelka = text;
+          showToast("Manželkino tajomstvo bolo uzamknuté 🔒");
+        }
+        document.getElementById('vault-my-text').value = '';
+        renderSecretVault();
+      } else {
+        if (state.isDemoMode) {
+          state.secrets[state.myRole] = text;
+          renderSecretVault();
+        } else {
+          mySecretsRef.set(text);
+        }
+        showToast("Tvoje tajné želanie bolo uzamknuté v trezore 🔒");
+      }
+    }
+
+    function resetSecretVault() {
+      if (confirm("Naozaj chcete vymazať trezor a začať znova?")) {
+        if (state.gameType === 'physical') {
+          state.secrets = { manzel: '', manzelka: '' };
+          document.getElementById('vault-my-text').value = '';
+          renderSecretVault();
+        } else {
+          if (state.isDemoMode) {
+            state.secrets = { manzel: '', manzelka: '' };
+            document.getElementById('vault-my-text').value = '';
+            renderSecretVault();
+          } else {
+            db.ref(`rooms/${state.roomCode}/laskanieSecrets`).remove();
+            document.getElementById('vault-my-text').value = '';
+          }
+        }
+        showToast("Trezor bol vymazaný.");
+      }
+    }
+
+    function renderSecretVault() {
+      const lockedState = document.getElementById('vault-locked-state');
+      const unlockedState = document.getElementById('vault-unlocked-state');
+      const statusBadge = document.getElementById('vault-status-badge');
+
+      const mSecret = state.secrets.manzel;
+      const fSecret = state.secrets.manzelka;
+
+      const hasM = !!mSecret;
+      const hasF = !!fSecret;
+
+      const bManzel = document.getElementById('vault-badge-manzel');
+      const bManzelka = document.getElementById('vault-badge-manzelka');
+
+      if (hasM) {
+        bManzel.className = "status-badge ready";
+        bManzel.innerHTML = '<i class="fas fa-lock"></i> Uzamknuté';
+      } else {
+        bManzel.className = "status-badge not-ready";
+        bManzel.innerHTML = '<i class="fas fa-times-circle"></i> Nenapísal';
+      }
+
+      if (hasF) {
+        bManzelka.className = "status-badge ready";
+        bManzelka.innerHTML = '<i class="fas fa-lock"></i> Uzamknuté';
+      } else {
+        bManzelka.className = "status-badge not-ready";
+        bManzelka.innerHTML = '<i class="fas fa-times-circle"></i> Nenapísala';
+      }
+
+      if (state.gameType === 'physical') {
+        const myEntryArea = document.getElementById('vault-my-entry-area');
+        const textarea = document.getElementById('vault-my-text');
+        const submitBtn = document.getElementById('btn-vault-submit');
+        const descText = document.getElementById('vault-description-text');
+
+        descText.innerHTML = "Zadajte sem svoje tajné priania pre dnešný večer striedavo na jednom telefóne. <strong style='color: var(--accent-gold);'>Kým jeden píše, druhý sa nedíva! 🙈</strong> Tajomstvá sa odhalia až vtedy, keď budú obe uzamknuté.";
+
+        if (hasM && hasF) {
+          lockedState.style.display = 'none';
+          unlockedState.style.display = 'block';
+          
+          statusBadge.className = "vault-status-badge unlocked";
+          statusBadge.innerHTML = '<i class="fas fa-unlock"></i> ODOMKNUTÝ';
+
+          document.getElementById('vault-text-manzel').textContent = mSecret;
+          document.getElementById('vault-text-manzelka').textContent = fSecret;
+        } else {
+          lockedState.style.display = 'block';
+          unlockedState.style.display = 'none';
+
+          statusBadge.className = "vault-status-badge";
+          statusBadge.innerHTML = '<i class="fas fa-lock"></i> ZAMKNUTÝ';
+          myEntryArea.style.display = 'flex';
+
+          if (!hasM) {
+            textarea.placeholder = "Manžel, napíš svoje tajné želanie... (Manželka zatvorí oči! 🙈)";
+            submitBtn.innerHTML = '<i class="fas fa-lock"></i> Uzamknúť Manželovo tajomstvo';
+          } else {
+            textarea.placeholder = "Manželka, napíš svoje tajné želanie... (Manžel zatvorí oči! 🙈)";
+            submitBtn.innerHTML = '<i class="fas fa-lock"></i> Uzamknúť Manželkino tajomstvo';
+          }
+        }
+      } else {
+        // Online režim na diaľku
+        document.getElementById('vault-description-text').textContent = "Zadajte sem svoje tajné prianie, fantáziu alebo priznanie pre tento večer. Obsah sa odhalí obom naraz až vtedy, keď napíše a uzamkne svoje tajomstvo aj vaša polovička.";
+        
+        if (hasM && hasF) {
+          lockedState.style.display = 'none';
+          unlockedState.style.display = 'block';
+          
+          statusBadge.className = "vault-status-badge unlocked";
+          statusBadge.innerHTML = '<i class="fas fa-unlock"></i> ODOMKNUTÝ';
+
+          document.getElementById('vault-text-manzel').textContent = mSecret;
+          document.getElementById('vault-text-manzelka').textContent = fSecret;
+        } else {
+          lockedState.style.display = 'block';
+          unlockedState.style.display = 'none';
+
+          statusBadge.className = "vault-status-badge";
+          statusBadge.innerHTML = '<i class="fas fa-lock"></i> ZAMKNUTÝ';
+
+          const myEntryArea = document.getElementById('vault-my-entry-area');
+          if (state.secrets[state.myRole]) {
+            myEntryArea.style.display = 'none';
+          } else {
+            myEntryArea.style.display = 'flex';
+            document.getElementById('vault-my-text').placeholder = "Sem napíš svoje tajné želanie pre dnešný večer... (polovička ho zatiaľ neuvidí)";
+            document.getElementById('btn-vault-submit').innerHTML = '<i class="fas fa-lock"></i> Bezpečne uzamknúť tajomstvo';
+          }
+        }
+      }
+    }
+
+    // =========================================================================
+    // 11. POMOCNÉ FUNKCIE (TOAST, ESCAPE HTML)
+    // =========================================================================
+    function showToast(message) {
+      const toast = document.getElementById('toast-message');
+      const text = document.getElementById('toast-text-content');
+      
+      text.textContent = message;
+      toast.classList.add('show');
+      
+      setTimeout(() => {
+        toast.classList.remove('show');
+      }, 3000);
+    }
+
+    function escapeHTML(str) {
+      return str
+        .replace(/&/g, "&amp;")
+        .replace(/</g, "&lt;")
+        .replace(/>/g, "&gt;")
+        .replace(/"/g, "&quot;")
+        .replace(/'/g, "&#039;");
+    }
+  </script>
+</body>
+</html>
 
     // =========================================================================
     // 4. KROK 1: ATMOSFÉRA WORKFLOW (CHECKLIST)
